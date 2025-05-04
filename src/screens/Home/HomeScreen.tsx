@@ -1,0 +1,22 @@
+
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { observer } from 'mobx-react-lite';
+import authStore from '../../stores/authStore';
+
+export const HomeScreen = observer(() => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.welcome}>
+        Добро пожаловать, {authStore.user?.name || 'Пользователь'}!
+      </Text>
+      <Button title="Выйти" onPress={() => authStore.logout()} />
+    </View>
+  );
+});
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 },
+  welcome: { fontSize: 18, marginBottom: 20 },
+});
+

@@ -4,23 +4,17 @@
  *
  * @format
  */
-
 import React from 'react';
-import {View} from 'react-native';
+import AppNavigator from './src/navigation/AppNavigator';
 import {PaperProvider} from 'react-native-paper';
-import {
-  ActivityIndicator,
-  MD2Colors,
-  MD3Colors,
-  Icon,
-} from 'react-native-paper';
-import PaperUI from './src/ui/PaperUI';
+
 function App(): React.JSX.Element {
   return (
     <PaperProvider>
-      <PaperUI/>
+      <AppNavigator />
     </PaperProvider>
   );
 }
 
 export default App;
+
