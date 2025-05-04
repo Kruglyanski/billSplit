@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-vector-icons/common": "^11.0.0",
     "@react-native-vector-icons/material-design-icons": "^7.4.47",
+    "axios": "^1.9.0",
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-paper": "^5.14.0",
