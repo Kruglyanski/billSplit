@@ -4,7 +4,7 @@ import authStore from '../stores/authStore';
 import {RegisterScreenNavigationProps} from '../navigation/types';
 
 interface IProps {
-  navigation: RegisterScreenNavigationProps;
+  navigation: RegisterScreenNavigationProps['navigation'];
 }
 
 export const RegisterScreen: FC<IProps> = ({navigation}) => {

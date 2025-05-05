@@ -8,6 +8,9 @@ import {RegisterScreen} from '../auth/RegisterScreen';
 import {HomeScreen} from '../screens/Home/HomeScreen';
 import authStore from '../stores/authStore';
 import {RootStackParamList} from './types';
+import AddExpenseScreen from '../screens/AddExpense/AddExpenseScreen';
+import {CreateGroupScreen} from '../screens/CreateGroup/CreateGroupScreen';
+import {GroupDetailsScreen} from '../screens/GroupDetails/GroupDetailsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -19,6 +22,9 @@ const AppNavigator = observer(() => {
       {authStore.user ? (
         <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
+          <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
+          <Stack.Screen name="GroupDetails" component={GroupDetailsScreen} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>
