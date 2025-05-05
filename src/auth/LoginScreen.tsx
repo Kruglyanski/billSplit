@@ -1,9 +1,13 @@
-// src/auth/LoginScreen.tsx
-import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
+import React, {FC, useState} from 'react';
+import {View, TextInput, Button, Alert} from 'react-native';
 import authStore from '../stores/authStore';
+import {LoginScreenNavigationProps} from '../navigation/types';
 
-export const  LoginScreen = ({ navigation }: any) => {//TODO: types
+interface IProps {
+  navigation: LoginScreenNavigationProps;
+}
+
+export const LoginScreen: FC<IProps> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,9 +22,17 @@ export const  LoginScreen = ({ navigation }: any) => {//TODO: types
   return (
     <View>
       <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
-      <TextInput placeholder="Пароль" secureTextEntry value={password} onChangeText={setPassword} />
+      <TextInput
+        placeholder="Пароль"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
       <Button title="Войти" onPress={handleLogin} />
-      <Button title="Регистрация" onPress={() => navigation.navigate('Register')} />
+      <Button
+        title="Регистрация"
+        onPress={() => navigation.navigate('Register')}
+      />
     </View>
   );
-}
+};
