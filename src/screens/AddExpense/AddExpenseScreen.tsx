@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {observer} from 'mobx-react-lite';
 import expenseStore from '../../stores/expenseStore';
-import authStore from '../../stores/authStore';
 import groupStore from '../../stores/groupStore';
 import {AddExpenseScreenNavigationProps} from '../../navigation/types';
 
@@ -19,12 +18,13 @@ interface IProps {
   navigation: AddExpenseScreenNavigationProps['navigation'];
 }
 
-const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
+export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const {groupId} = route.params;
 
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [splits, setSplits] = useState<{userId: number; amount: number}[]>([]);
+  const [paidBy, setPaidBy] = useState<{userId: number; amount: number}[]>([]);
 
   const group = groupStore.groups.find(g => g.id === groupId);
   const participants = group?.members || [];
@@ -36,6 +36,20 @@ const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       if (existing) {
         return prev.map(s =>
           s.userId === userId ? {...s, amount: numeric} : s,
+        );
+      } else {
+        return [...prev, {userId, amount: numeric}];
+      }
+    });
+  };
+
+  const handlePaidByChange = (userId: number, value: string) => {
+    const numeric = parseFloat(value) || 0;
+    setPaidBy(prev => {
+      const existing = prev.find(p => p.userId === userId);
+      if (existing) {
+        return prev.map(p =>
+          p.userId === userId ? {...p, amount: numeric} : p,
         );
       } else {
         return [...prev, {userId, amount: numeric}];
@@ -55,12 +69,21 @@ const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       return;
     }
 
+    const paidSum = paidBy.reduce((sum, p) => sum + p.amount, 0);
+    if (paidSum !== numericAmount) {
+      Alert.alert(
+        'Ошибка',
+        `Сумма от плательщиков (${paidSum}) должна равняться общей сумме (${numericAmount})`,
+      );
+      return;
+    }
+
     try {
       await expenseStore.addExpense({
         description,
         amount: numericAmount,
         groupId,
-        paidByUserId: authStore.user!.id,
+        paidByUsers: paidBy,
         splits,
       });
 
@@ -88,7 +111,21 @@ const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
         onChangeText={setAmount}
         style={styles.input}
       />
-      <Text style={styles.label}>Распределение:</Text>
+
+      <Text style={styles.label}>Кто платил:</Text>
+      {participants.map(user => (
+        <View key={user.id} style={styles.splitRow}>
+          <Text style={styles.userName}>{user.name}</Text>
+          <TextInput
+            placeholder="0"
+            keyboardType="numeric"
+            style={styles.splitInput}
+            onChangeText={value => handlePaidByChange(user.id, value)}
+          />
+        </View>
+      ))}
+
+      <Text style={styles.label}>Кто должен:</Text>
       {participants.map(user => (
         <View key={user.id} style={styles.splitRow}>
           <Text style={styles.userName}>{user.name}</Text>
@@ -115,7 +152,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 4,
   },
-  label: {fontSize: 16, fontWeight: 'bold', marginBottom: 8},
+  label: {fontSize: 16, fontWeight: 'bold', marginBottom: 8, marginTop: 16},
   splitRow: {flexDirection: 'row', alignItems: 'center', marginBottom: 8},
   userName: {flex: 1},
   splitInput: {
@@ -127,5 +164,3 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
-export default AddExpenseScreen;

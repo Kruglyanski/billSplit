@@ -5,8 +5,8 @@ type Expense = {
   id: number;
   description: string;
   amount: number;
-  groupId: number;
-  paidByUserId: number;
+  group: {id: number; name: string};
+  paidBy: {userId: number; amount: number}[]; //TODO: вынести
   splits: {userId: number; amount: number}[];
 };
 
@@ -31,7 +31,7 @@ class ExpenseStore {
     description: string;
     amount: number;
     groupId: number;
-    paidByUserId: number;
+    paidByUsers: {userId: number; amount: number}[];
     splits: {userId: number; amount: number}[];
   }) {
     const res = await apiService.createExpense(data);

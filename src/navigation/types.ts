@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
   CreateGroup: undefined;
+  GroupList: undefined;
   AddExpense: {groupId: number};
   GroupDetails: {groupId: number};
 };
@@ -37,4 +38,9 @@ export type GroupDetailScreenNavigationProps = NativeStackScreenProps<
 export type CreateGroupScreenNavigationProps = NativeStackScreenProps<
   RootStackParamList,
   'CreateGroup'
+>;
+
+export type GroupListScreenNavigationProps = NativeStackScreenProps<
+  RootStackParamList,
+  'GroupList'
 >;

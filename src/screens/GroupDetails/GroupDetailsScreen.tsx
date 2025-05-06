@@ -29,13 +29,22 @@ export const GroupDetailsScreen: FC<IProps> = observer(
       );
     }
 
-    const renderExpense = (
-      {item}: any, //Вынести в компонент
-    ) => (
+    const renderExpense = ({item}: any) => (
       <View style={styles.expenseItem}>
-        <Text style={styles.expenseDesc}>{item.description}</Text>
+        <View>
+          <Text style={styles.expenseDesc}>{item.description}</Text>
+          <Text style={styles.paidBy}>
+            Заплатил: {item.paidBy?.name || '—'}
+          </Text>
+        </View>
         <Text style={styles.expenseAmount}>{item.amount} ₽</Text>
       </View>
+    );
+
+    const renderMember = (member: any) => (
+      <Text key={member.id} style={styles.member}>
+        • {member.name}
+      </Text>
     );
 
     return (
@@ -47,7 +56,7 @@ export const GroupDetailsScreen: FC<IProps> = observer(
 
         <Text style={styles.sectionTitle}>Расходы:</Text>
         <FlatList
-          data={expenseStore.expenses.filter(e => e.groupId === group.id)}
+          data={expenseStore.expenses.filter(e => e.group.id === group.id)}
           keyExtractor={item => item.id.toString()}
           renderItem={renderExpense}
           ListEmptyComponent={<Text>Нет расходов</Text>}
@@ -76,4 +85,9 @@ const styles = StyleSheet.create({
   },
   expenseDesc: {fontSize: 16},
   expenseAmount: {fontSize: 16, fontWeight: 'bold'},
+  paidBy: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 2,
+  },
 });

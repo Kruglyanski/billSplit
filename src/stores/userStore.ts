@@ -1,15 +1,15 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import {getAllUsers} from '../api/apiService';
 
-interface User {
+export interface IUser {
   id: number;
   name: string;
   email: string;
 }
 
 class UserStore {
-  users: User[] = [];
-  currentUser: User | null = null;
+  users: IUser[] = [];
+  // currentUser: IUser | null = null;
   token: string | null = null;
 
   constructor() {

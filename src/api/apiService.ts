@@ -9,7 +9,7 @@ export const register = (data: {
 export const login = (data: {email: string; password: string}) =>
   api.post('/auth/login', data);
 
-export const getGroups = () => api.get('/groups');
+export const getUserGroups = () => api.get('/groups');
 
 export const createGroup = (name: string, userIds: any) =>
   api.post('/groups', {name, userIds}); //TODO: types
@@ -26,7 +26,7 @@ export const createExpense = (data: {
   description: string;
   amount: number;
   groupId: number;
-  paidByUserId: number;
+  paidByUsers: {userId: number; amount: number}[];
   splits: {userId: number; amount: number}[];
 }) => api.post('/expenses', data);
 

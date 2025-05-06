@@ -1,22 +1,33 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
+import {IUser} from './userStore';
 
-type Group = {
+interface IGroup {
   id: number;
   name: string;
-};
+  members: IUser[];
+}
 
 class GroupStore {
-  groups: Group[] = [];
+  groups: IGroup[] = [];
   loading = false;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async fetchGroups() {
+  // async fetchGroups() {
+  //   this.loading = true;
+  //   const res = await apiService.getGroups();
+  //   runInAction(() => {
+  //     this.groups = res.data;
+  //     this.loading = false;
+  //   });
+  // }
+
+  async fetchUserGroups() {
     this.loading = true;
-    const res = await apiService.getGroups();
+    const res = await apiService.getUserGroups();
     runInAction(() => {
       this.groups = res.data;
       this.loading = false;
