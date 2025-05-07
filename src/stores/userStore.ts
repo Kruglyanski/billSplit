@@ -8,7 +8,7 @@ export interface IUser {
 }
 
 class UserStore {
-  users: IUser[] = [];
+  users: Map<number, IUser> = new Map();
   // currentUser: IUser | null = null;
   token: string | null = null;
 
@@ -20,7 +20,9 @@ class UserStore {
     try {
       const res = await getAllUsers();
       runInAction(() => {
-        this.users = res.data;
+        console.log('asd res.data', res.data);
+        res.data.forEach((user: IUser) => this.users.set(user.id, user));
+        console.log('asd this.users', this.users);
       });
     } catch (error) {
       console.error('Ошибка при загрузке пользователей', error);

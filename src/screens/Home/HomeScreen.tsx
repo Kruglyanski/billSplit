@@ -1,14 +1,19 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import {observer} from 'mobx-react-lite';
 import authStore from '../../stores/authStore';
 import {HomeScreenNavigationProps} from '../../navigation/types';
+import userStore from '../../stores/userStore';
 
 interface IProps {
   navigation: HomeScreenNavigationProps['navigation'];
 }
 
 export const HomeScreen: FC<IProps> = observer(({navigation}) => {
+  useEffect(() => {
+    userStore.fetchUsers();
+  }, []);
+
   const navigateToGroupCreate = useCallback(() => {
     navigation.navigate('CreateGroup');
   }, [navigation]);

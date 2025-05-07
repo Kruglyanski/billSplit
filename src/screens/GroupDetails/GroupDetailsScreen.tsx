@@ -1,5 +1,12 @@
 import React, {FC, useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList, Button} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import {observer} from 'mobx-react-lite';
 import groupStore from '../../stores/groupStore';
 import expenseStore from '../../stores/expenseStore';
@@ -30,15 +37,20 @@ export const GroupDetailsScreen: FC<IProps> = observer(
     }
 
     const renderExpense = ({item}: any) => (
-      <View style={styles.expenseItem}>
-        <View>
-          <Text style={styles.expenseDesc}>{item.description}</Text>
-          <Text style={styles.paidBy}>
-            Заплатил: {item.paidBy?.name || '—'}
-          </Text>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ExpenseDetails', {expenseId: item.id})
+        }>
+        <View style={styles.expenseItem}>
+          <View>
+            <Text style={styles.expenseDesc}>{item.description}</Text>
+            <Text style={styles.paidBy}>
+              Заплатил: {item.paidBy?.name || '—'}
+            </Text>
+          </View>
+          <Text style={styles.expenseAmount}>{item.amount} ₽</Text>
         </View>
-        <Text style={styles.expenseAmount}>{item.amount} ₽</Text>
-      </View>
+      </TouchableOpacity>
     );
 
     const renderMember = (member: any) => (
@@ -56,7 +68,9 @@ export const GroupDetailsScreen: FC<IProps> = observer(
 
         <Text style={styles.sectionTitle}>Расходы:</Text>
         <FlatList
-          data={expenseStore.expenses.filter(e => e.group.id === group.id)}
+          data={[...expenseStore.expenses.values()].filter(
+            e => e.group.id === group.id,
+          )}
           keyExtractor={item => item.id.toString()}
           renderItem={renderExpense}
           ListEmptyComponent={<Text>Нет расходов</Text>}

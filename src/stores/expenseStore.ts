@@ -1,17 +1,18 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
 
-type Expense = {
+interface IExpense {
   id: number;
   description: string;
   amount: number;
   group: {id: number; name: string};
-  paidBy: {userId: number; amount: number}[]; //TODO: вынести
-  splits: {userId: number; amount: number}[];
-};
+  paidBy: {id: number; userId: number; amount: number}[]; //TODO: вынести
+  splits: {id: number; userId: number; amount: number}[];
+  createdAt: string;
+}
 
 class ExpenseStore {
-  expenses: Expense[] = [];
+  expenses: Map<number, IExpense> = new Map();
   loading = false;
 
   constructor() {
@@ -19,10 +20,14 @@ class ExpenseStore {
   }
 
   async fetchExpenses(groupId: number) {
+    //все сразу?
     this.loading = true;
     const res = await apiService.getExpenses(groupId);
+
     runInAction(() => {
-      this.expenses = res.data;
+      res.data.forEach((expense: IExpense) =>
+        this.expenses.set(expense.id, expense),
+      );
       this.loading = false;
     });
   }
@@ -36,7 +41,7 @@ class ExpenseStore {
   }) {
     const res = await apiService.createExpense(data);
     runInAction(() => {
-      this.expenses.push(res.data);
+      this.expenses.set(res.data.id, res.data);
     });
   }
 }

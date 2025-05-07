@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   View,
   Text,
@@ -20,10 +20,6 @@ interface IProps {
 export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
   const [groupName, setGroupName] = useState('');
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    userStore.fetchUsers();
-  }, []);
 
   const toggleUser = (userId: string) => {
     setSelectedUserIds(prev =>
@@ -68,7 +64,7 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
       <Text style={styles.subtitle}>Выбери участников:</Text>
 
       <FlatList
-        data={userStore.users}
+        data={[...userStore.users.values()]}
         keyExtractor={item => item.id.toString()}
         renderItem={renderUser}
         ListEmptyComponent={<Text>Нет доступных пользователей</Text>}
