@@ -2,7 +2,7 @@ import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
 import {IUser} from './userStore';
 
-interface IGroup {
+export interface IGroup {
   id: number;
   name: string;
   members: IUser[];

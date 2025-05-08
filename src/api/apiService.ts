@@ -50,3 +50,5 @@ export const getSettlements = (groupId: number) =>
   api.get('/expenses/settlements', {params: {groupId}});
 
 export const getAllUsers = () => api.get('/users');
+
+export const getExpenseHistory = () => api.get(`/expenses/history`);

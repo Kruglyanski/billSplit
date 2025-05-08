@@ -10,6 +10,7 @@ export type RootStackParamList = {
   GroupDetails: {groupId: number};
   ExpenseDetails: {expenseId: number};
   EditExpense: {expenseId: number};
+  ExpenseHistory: {expenseId: number};
 };
 
 export type HomeScreenNavigationProps = NativeStackScreenProps<
@@ -55,4 +56,8 @@ export type ExpenseDetailsScreenNavigationProps = NativeStackScreenProps<
 export type EditExpenseScreenNavigationProps = NativeStackScreenProps<
   RootStackParamList,
   'EditExpense'
+>;
+export type ExpenseHistoryScreenNavigationProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ExpenseHistory'
 >;

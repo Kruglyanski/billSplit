@@ -60,6 +60,12 @@ export const ExpenseDetailsScreen: FC<IProps> = observer(
             navigation.navigate('EditExpense', {expenseId: expense.id})
           }
         />
+        <Button
+          title="История"
+          onPress={() =>
+            navigation.navigate('ExpenseHistory', {expenseId: expense.id})
+          }
+        />
       </View>
     );
   },
