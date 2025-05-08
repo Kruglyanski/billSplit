@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Button} from 'react-native';
 import {observer} from 'mobx-react-lite';
 import expenseStore from '../../stores/expenseStore';
 import userStore from '../../stores/userStore';
@@ -11,50 +11,59 @@ interface IProps {
   navigation: ExpenseDetailsScreenNavigationProps['navigation'];
 }
 
-const ExpenseDetailsScreen: FC<IProps> = observer(({route}) => {
-  const {expenseId} = route.params;
-  const expense = expenseStore.expenses.get(expenseId);
+export const ExpenseDetailsScreen: FC<IProps> = observer(
+  ({navigation, route}) => {
+    const {expenseId} = route.params;
+    const expense = expenseStore.expenses.get(expenseId);
 
-  if (!expense) {
+    if (!expense) {
+      return (
+        <View style={styles.container}>
+          <Text>Расход не найден</Text>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
-        <Text>Расход не найден</Text>
+        <Text style={styles.title}>{expense.description}</Text>
+        <Text style={styles.label}>Сумма: {expense.amount} ₽</Text>
+        <Text style={styles.label}>Заплатили: </Text>
+        {expense.paidBy.map(
+          (
+            pay, //!!!!!!!!!!вынести
+          ) => (
+            <Text key={pay.id} style={styles.splitItem}>
+              • {userStore.users.get(pay.userId)?.name ?? ''}: {pay.amount} ₽
+            </Text>
+          ),
+        )}
+        <Text style={styles.label}>Группа: {expense.group?.name || '—'}</Text>
+        <Text style={styles.label}>
+          Дата: {dayjs(expense.createdAt).format('DD.MM.YYYY HH:mm')}
+        </Text>
+
+        <Text style={styles.sectionTitle}>Распределение:</Text>
+        {expense.splits.map(
+          (
+            split, //!!!!!!вынести
+          ) => (
+            <Text key={split.id} style={styles.splitItem}>
+              • {userStore.users.get(split.userId)?.name ?? ''}: {split.amount}{' '}
+              ₽
+            </Text>
+          ),
+        )}
+        <Button
+          title="Редактировать"
+          onPress={() =>
+            navigation.navigate('EditExpense', {expenseId: expense.id})
+          }
+        />
       </View>
     );
-  }
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{expense.description}</Text>
-      <Text style={styles.label}>Сумма: {expense.amount} ₽</Text>
-      <Text style={styles.label}>Заплатили: </Text>
-      {expense.paidBy.map(
-        (
-          pay, //!!!!!!!!!!вынести
-        ) => (
-          <Text key={pay.id} style={styles.splitItem}>
-            • {userStore.users.get(pay.userId)?.name ?? ''}: {pay.amount} ₽
-          </Text>
-        ),
-      )}
-      <Text style={styles.label}>Группа: {expense.group?.name || '—'}</Text>
-      <Text style={styles.label}>
-        Дата: {dayjs(expense.createdAt).format('DD.MM.YYYY HH:mm')}
-      </Text>
-
-      <Text style={styles.sectionTitle}>Распределение:</Text>
-      {expense.splits.map(
-        (
-          split, //!!!!!!вынести
-        ) => (
-          <Text key={split.id} style={styles.splitItem}>
-            • {userStore.users.get(split.userId)?.name ?? ''}: {split.amount} ₽
-          </Text>
-        ),
-      )}
-    </View>
-  );
-});
+  },
+);
 
 const styles = StyleSheet.create({
   container: {padding: 16},
@@ -63,5 +72,3 @@ const styles = StyleSheet.create({
   sectionTitle: {fontSize: 18, marginTop: 16, fontWeight: '600'},
   splitItem: {fontSize: 16, marginLeft: 8},
 });
-
-export default ExpenseDetailsScreen;

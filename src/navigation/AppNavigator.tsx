@@ -11,7 +11,8 @@ import {AddExpenseScreen} from '../screens/AddExpense/AddExpenseScreen';
 import {CreateGroupScreen} from '../screens/CreateGroup/CreateGroupScreen';
 import {GroupDetailsScreen} from '../screens/GroupDetails/GroupDetailsScreen';
 import {GroupListScreen} from '../screens/GroupList/GroupListScreen';
-import ExpenseDetailsScreen from '../screens/ExpenseDetails/ExpenseDetailsScreen';
+import {ExpenseDetailsScreen} from '../screens/ExpenseDetails/ExpenseDetailsScreen';
+import {EditExpenseScreen} from '../screens/EditExpense/EditExpenseScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -31,6 +32,7 @@ const AppNavigator = observer(() => {
             name="ExpenseDetails"
             component={ExpenseDetailsScreen}
           />
+          <Stack.Screen name="EditExpense" component={EditExpenseScreen} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>

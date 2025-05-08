@@ -30,6 +30,17 @@ export const createExpense = (data: {
   splits: {userId: number; amount: number}[];
 }) => api.post('/expenses', data);
 
+export const updateExpense = (
+  id: number,
+  data: {
+    description: string;
+    amount: number;
+    groupId: number | null;
+    splits: {userId: number; amount: number}[];
+    paidBy: {userId: number; amount: number}[];
+  },
+) => api.put(`/expenses/${id}`, data);
+
 export const getBalance = (groupId: number) =>
   api.get('/expenses/balance', {params: {groupId}});
 

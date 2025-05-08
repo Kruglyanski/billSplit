@@ -20,7 +20,7 @@ class ExpenseStore {
   }
 
   async fetchExpenses(groupId: number) {
-    //все сразу?
+    //TODO: все сразу?
     this.loading = true;
     const res = await apiService.getExpenses(groupId);
 
@@ -42,6 +42,23 @@ class ExpenseStore {
     const res = await apiService.createExpense(data);
     runInAction(() => {
       this.expenses.set(res.data.id, res.data);
+    });
+  }
+
+  async updateExpense(
+    id: number,
+    data: {
+      description: string;
+      amount: number;
+      groupId: number | null;
+      splits: {userId: number; amount: number}[];
+      paidBy: {userId: number; amount: number}[];
+    },
+  ) {
+    const {data: updatedExpense} = await apiService.updateExpense(id, data);
+
+    runInAction(() => {
+      this.expenses.set(updatedExpense.id, updatedExpense);
     });
   }
 }
