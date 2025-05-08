@@ -8,6 +8,7 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import {observer} from 'mobx-react-lite';
 import expenseStore from '../../stores/expenseStore';
@@ -52,6 +53,25 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       console.log('upd error', error);
     }
   };
+
+  const handleDelete = () => {
+    Alert.alert('Удалить расход', 'Вы уверены, что хотите удалить этот расход?', [
+      {text: 'Отмена', style: 'cancel'},
+      {
+        text: 'Удалить',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await expenseStore.deleteExpense(expenseId);
+            navigation.goBack();
+          } catch (error) {
+            console.log('delete error', error);
+          }
+        },
+      },
+    ]);
+  };
+  
 
   const renderGroupItem = ({item}: any) => (
     <TouchableOpacity
@@ -141,6 +161,7 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       })}
 
       <Button title="Сохранить изменения" onPress={handleSave} />
+      <Button title="Удалить расход" onPress={handleDelete} color="red" />
 
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modalContent}>

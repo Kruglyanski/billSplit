@@ -61,6 +61,14 @@ class ExpenseStore {
       this.expenses.set(updatedExpense.id, updatedExpense);
     });
   }
+
+  async deleteExpense(id: number) {
+    await apiService.deleteExpense(id);
+
+    runInAction(() => {
+      this.expenses.delete(id);
+    });
+  }
 }
 
 const expenseStore = new ExpenseStore();
