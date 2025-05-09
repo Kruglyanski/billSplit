@@ -23,11 +23,15 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
 
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [splits, setSplits] = useState<{userId: number; amount: number}[]>([]);
-  const [paidBy, setPaidBy] = useState<{userId: number; amount: number}[]>([]);
 
   const group = groupStore.groups.find(g => g.id === groupId);
   const participants = group?.members || [];
+  const [splits, setSplits] = useState<{userId: number; amount: number}[]>(() =>
+    participants.map(p => ({userId: p.id, amount: 0})),
+  );
+  const [paidBy, setPaidBy] = useState<{userId: number; amount: number}[]>(() =>
+    participants.map(p => ({userId: p.id, amount: 0})),
+  );
 
   const handleSplitChange = (userId: number, value: string) => {
     const numeric = parseFloat(value) || 0;

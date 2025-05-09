@@ -80,6 +80,12 @@ export const GroupDetailsScreen: FC<IProps> = observer(
           title="Добавить расход"
           onPress={() => navigation.navigate('AddExpense', {groupId: group.id})}
         />
+        <Button
+          title="Баланс"
+          onPress={() =>
+            navigation.navigate('GroupBalance', {groupId: group.id})
+          }
+        />
       </View>
     );
   },

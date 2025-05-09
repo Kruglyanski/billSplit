@@ -43,12 +43,9 @@ export const updateExpense = (
 
 export const deleteExpense = (id: number) => api.delete(`/expenses/${id}`);
 
-export const getBalance = (groupId: number) =>
-  api.get('/expenses/balance', {params: {groupId}});
-
-export const getSettlements = (groupId: number) =>
-  api.get('/expenses/settlements', {params: {groupId}});
-
 export const getAllUsers = () => api.get('/users');
 
 export const getExpenseHistory = () => api.get(`/expenses/history`);
+
+export const getBalance = (groupId: number) =>
+  api.get(`/groups/${groupId}/debts`);

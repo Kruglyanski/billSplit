@@ -2,15 +2,43 @@ import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
 import {IUser} from './userStore';
 
+interface ITransaction {
+  fromUserId: number;
+  fromUserName: string;
+  toUserId: number;
+  toUserName: string;
+  amount: number;
+}
+
+interface IBalance {
+  userId: number;
+  userName: string;
+  balance: number;
+}
+
+interface IMyPosition {
+  totalOwed: number;
+  totalToReceive: number;
+  netBalance: number;
+}
+
+interface IDebtResult {
+  transactions: ITransaction[];
+  balances: IBalance[];
+  myPosition: IMyPosition;
+}
+
 export interface IGroup {
   id: number;
   name: string;
   members: IUser[];
+  debtResult: IDebtResult;
 }
 
 class GroupStore {
   groups: IGroup[] = [];
   loading = false;
+  debtResult: IDebtResult | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -42,6 +70,17 @@ class GroupStore {
       });
     } catch (error) {
       console.error('Ошибка при создании группы', error);
+    }
+  }
+
+  async fetchBalance(groupId: number) {
+    try {
+      const res = await apiService.getBalance(groupId);
+      runInAction(() => {
+        this.debtResult = res.data;
+      });
+    } catch (error) {
+      console.error('Ошибка при запросе баланса', error);
     }
   }
 }
