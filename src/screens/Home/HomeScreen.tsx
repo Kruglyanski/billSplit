@@ -22,6 +22,11 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
     navigation.navigate('GroupList');
   }, [navigation]);
 
+  const logOut = useCallback(() => {
+    authStore.logout();
+    navigation.navigate('Auth');
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>
@@ -32,7 +37,7 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
         onPress={navigateToGroupCreate}
       />
       <Button title="Перейти к группам" onPress={navigateToGroupList} />
-      <Button title="Выйти" onPress={authStore.logout} />
+      <Button title="Выйти" onPress={logOut} />
     </View>
   );
 });

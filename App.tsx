@@ -1,20 +1,33 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import './i18n';
+
 import React from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import {PaperProvider} from 'react-native-paper';
+import {useColorScheme} from 'react-native';
+import {lightTheme, darkTheme} from './src/theme';
+import {EThemeType, appStore} from './src/stores/appStore';
+
+const themeMap = {
+  [EThemeType.LIGHT]: lightTheme,
+  [EThemeType.DARK]: darkTheme,
+};
 
 function App(): React.JSX.Element {
+  const colorScheme = useColorScheme();
+
+  let theme;
+
+  if (appStore.themeType !== null) {
+    theme = themeMap[appStore.themeType];
+  } else if (colorScheme) {
+    theme = themeMap[colorScheme as EThemeType];
+  } else theme = lightTheme;
+
   return (
-    <PaperProvider>
+    <PaperProvider {...{theme}}>
       <AppNavigator />
     </PaperProvider>
   );
 }
 
 export default App;
-

@@ -1,8 +1,7 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-  Register: undefined;
-  Login: undefined;
+  Auth: undefined;
   Home: undefined;
   CreateGroup: undefined;
   GroupList: undefined;
@@ -19,14 +18,9 @@ export type HomeScreenNavigationProps = NativeStackScreenProps<
   'Home'
 >;
 
-export type RegisterScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
-  'Register'
->;
-
 export type LoginScreenNavigationProps = NativeStackScreenProps<
   RootStackParamList,
-  'Login'
+  'Auth'
 >;
 
 export type AddExpenseScreenNavigationProps = NativeStackScreenProps<

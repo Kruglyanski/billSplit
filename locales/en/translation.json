@@ -1,0 +1,25 @@
+{
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "enter": "Enter",
+    "register": "Register",
+    "registration": "Registration",
+    "already_have_account": "Already have account",
+    "subheader": {
+      "enter": "Welcome",
+      "registration": "Create account"
+    },
+    "errors": {
+      "error": "Error",
+      "fill_email": "Enter email",
+      "invalid_email": "Wrong email format",
+      "fill_password": "Enter password",
+      "password_too_short": "Password must be {{min}} characters or greater",
+      "fill_name": "Enter name",
+      "something_went_wrong": "Something went wrong"
+    }
+  }
+}
+  

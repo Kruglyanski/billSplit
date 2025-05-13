@@ -1,0 +1,24 @@
+{
+  "auth": {
+    "email": "Email",
+    "password": "Пароль",
+    "name": "Имя",
+    "enter": "Войти",
+    "register": "Зарегистрироваться",
+    "registration": "Регистрация",
+    "already_have_account": "Уже есть аккаунт",
+    "subheader": {
+      "enter": "Добро пожаловать",
+      "registration": "Создать аккаунт"
+    },
+    "errors": {
+      "error": "Ошибка",
+      "fill_email": "Введите email",
+      "invalid_email": "Неверный формат email",
+      "fill_password": "Введите пароль",
+      "password_too_short": "Пароль должен быть не менее {{min}} символов",
+      "fill_name": "Введите имя",
+      "something_went_wrong": "Что-то пошло не так"
+    }
+  }
+}
