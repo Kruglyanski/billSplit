@@ -1,12 +1,13 @@
 import React, {FC, useCallback, useRef, useState} from 'react';
-import {View, Alert, Image} from 'react-native';
-import Animated, {SlideInRight} from 'react-native-reanimated';
+import {View, Image, Keyboard} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {LoginScreenNavigationProps} from '../../navigation/types';
 import authStore from '../../stores/authStore';
 import {getEmailError, getNameError, getPasswordError} from './auth-helper';
 import {AuthForm} from '../../components/auth-form/AuthForm';
 import {styles} from './styles';
+import {appStore} from '../../stores/appStore';
+import {useKeyboardOpen} from '../../hooks/use-keyboard-open';
 
 interface IProps {
   navigation: LoginScreenNavigationProps['navigation'];
@@ -29,6 +30,7 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
   const formIsTouched = useRef(false);
 
   const {t} = useTranslation();
+  const isKeyboardOpen = useKeyboardOpen();
 
   const changePassword = useCallback((value: string) => {
     setPassword(value);
@@ -59,9 +61,9 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
       await authStore.login(email, password);
       navigation.navigate('Home');
     } catch (e: any) {
-      Alert.alert(
-        t('auth.errors.error'),
-        e.response?.data?.message || t('auth.errors.something_went_wrong'),
+      appStore.showInfoModal(
+        `${(t('auth.errors.error'), e.response?.data?.message)}` ||
+          t('auth.errors.something_went_wrong'),
       );
     }
   }, [email, password, emailError, passwordError]);
@@ -80,9 +82,9 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
     try {
       await authStore.register(name, email, password);
     } catch (e: any) {
-      Alert.alert(
-        t('auth.errors.error'),
-        e.response?.data?.message || t('auth.errors.something_went_wrong'),
+      appStore.showInfoModal(
+        `${(t('auth.errors.error'), e.response?.data?.message)}` ||
+          t('auth.errors.something_went_wrong'),
       );
     }
   }, [name, email, password, nameError, passwordError, emailError]);
@@ -97,16 +99,30 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
     setPasswordError('');
   }, []);
 
+  const switchAuthMode = useCallback(
+    (mode: EAuthMode) => {
+      const switchMode = () => {
+        cleanFields();
+        setAuthMode(mode);
+      };
+
+      if (isKeyboardOpen) {
+        Keyboard.dismiss();
+        setTimeout(switchMode, 300);
+      } else {
+        switchMode();
+      }
+    },
+    [isKeyboardOpen, cleanFields],
+  );
+
   const showRegistration = useCallback(() => {
-    setAuthMode(EAuthMode.REGISTRATION);
-    cleanFields();
-  }, [cleanFields]);
+    switchAuthMode(EAuthMode.REGISTRATION);
+  }, [switchAuthMode]);
 
   const showLogin = useCallback(() => {
-    setAuthMode(EAuthMode.LOGIN);
-    cleanFields();
-  }, [cleanFields]);
-
+    switchAuthMode(EAuthMode.LOGIN);
+  }, [switchAuthMode]);
   return (
     <View style={styles.container}>
       <Image
@@ -114,47 +130,39 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
         style={styles.logo}
       />
       {authMode === EAuthMode.LOGIN ? (
-        <Animated.View
+        <AuthForm
           key={authMode}
-          entering={SlideInRight.duration(150)}
-          style={styles.animatedWrapper}>
-          <AuthForm
-            title={t('auth.subheader.enter')}
-            email={email}
-            password={password}
-            emailError={emailError}
-            passwordError={passwordError}
-            onChangeEmail={changeEmail}
-            onChangePassword={changePassword}
-            onSubmit={handleLogin}
-            onSwitchMode={showRegistration}
-            submitText={t('auth.enter')}
-            switchText={t('auth.registration')}
-          />
-        </Animated.View>
+          title={t('auth.subheader.enter')}
+          email={email}
+          password={password}
+          emailError={emailError}
+          passwordError={passwordError}
+          onChangeEmail={changeEmail}
+          onChangePassword={changePassword}
+          onSubmit={handleLogin}
+          onSwitchMode={showRegistration}
+          submitText={t('auth.enter')}
+          switchText={t('auth.registration')}
+        />
       ) : (
-        <Animated.View
+        <AuthForm
           key={authMode}
-          entering={SlideInRight.duration(150)}
-          style={styles.animatedWrapper}>
-          <AuthForm
-            title={t('auth.subheader.registration')}
-            name={name}
-            email={email}
-            password={password}
-            nameError={nameError}
-            emailError={emailError}
-            passwordError={passwordError}
-            showNameField
-            onChangeName={setName}
-            onChangeEmail={changeEmail}
-            onChangePassword={changePassword}
-            onSubmit={handleRegister}
-            onSwitchMode={showLogin}
-            submitText={t('auth.register')}
-            switchText={t('auth.already_have_account')}
-          />
-        </Animated.View>
+          title={t('auth.subheader.registration')}
+          name={name}
+          email={email}
+          password={password}
+          nameError={nameError}
+          emailError={emailError}
+          passwordError={passwordError}
+          showNameField
+          onChangeName={setName}
+          onChangeEmail={changeEmail}
+          onChangePassword={changePassword}
+          onSubmit={handleRegister}
+          onSwitchMode={showLogin}
+          submitText={t('auth.register')}
+          switchText={t('auth.already_have_account')}
+        />
       )}
     </View>
   );

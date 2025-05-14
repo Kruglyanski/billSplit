@@ -6,6 +6,7 @@ import {PaperProvider} from 'react-native-paper';
 import {useColorScheme} from 'react-native';
 import {lightTheme, darkTheme} from './src/theme';
 import {EThemeType, appStore} from './src/stores/appStore';
+import {InfoModal} from './src/components/info-modal/InfoModal';
 
 const themeMap = {
   [EThemeType.LIGHT]: lightTheme,
@@ -26,6 +27,7 @@ function App(): React.JSX.Element {
   return (
     <PaperProvider {...{theme}}>
       <AppNavigator />
+      <InfoModal />
     </PaperProvider>
   );
 }

@@ -7,10 +7,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  animatedWrapper: {
-    width: '80%',
-  },
-
   logo: {
     width: 100,
     height: 100,

@@ -20,6 +20,10 @@
       "fill_name": "Enter name",
       "something_went_wrong": "Something went wrong"
     }
+  },
+  "info_modal": {
+    "close": "Close",
+    "error": "Error"
   }
 }
   

@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import {action, makeAutoObservable} from 'mobx';
 
 export enum EThemeType {
   LIGHT = 'light',
@@ -7,6 +7,8 @@ export enum EThemeType {
 
 class AppStore {
   _themeType: EThemeType | null = null;
+  infoModalMessage = '';
+  infoModalTitle = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -14,6 +16,17 @@ class AppStore {
 
   setTheme(themeType: EThemeType) {
     this._themeType = themeType;
+  }
+
+  hideInfoModal = action(() => {
+    this.infoModalMessage = '';
+  });
+
+  showInfoModal(message: string, title?: string) {
+    this.infoModalMessage = message;
+    if (title) {
+      this.infoModalTitle = title;
+    }
   }
 
   get themeType() {

@@ -20,5 +20,9 @@
       "fill_name": "Введите имя",
       "something_went_wrong": "Что-то пошло не так"
     }
+  },
+  "info_modal": {
+    "close": "Закрыть",
+    "error": "Ошибка"
   }
 }
