@@ -7,6 +7,7 @@
     "register": "Register",
     "registration": "Registration",
     "already_have_account": "Already have account",
+    "back": "Back",
     "subheader": {
       "enter": "Welcome",
       "registration": "Create account"
@@ -23,7 +24,37 @@
   },
   "info_modal": {
     "close": "Close",
-    "error": "Error"
+    "error": "Error",
+    "confirm": "Confirm"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "user": "User",
+    "event": "Event",
+    "go_to_groups": "To events",
+    "logout": "Logout",
+    "create_expense": "Create expense",
+    "logout_message": "You are going to logout",
+    "attention": "Attention!",
+    "current_expenses": "Current expenses"
+  },
+  "add_expense": {
+    "create_expense": "Expense creation",
+    "edit_expense": "Expense editing",
+    "back": "Go back",
+    "add": "Add",
+    "error": "Error",
+    "expense_not_created": "Failed to create expense",
+    "fill_all_fields": "Fill in all fields",
+    "sum_must_be_positive": "The amount must be a positive number.",
+    "sums_must_be equal" : "The amount from payers ({{paidSum}}) must be equal to the total amount ({{numericAmount}})",
+    "description": "Description",
+    "sum": "Amount",
+    "select_group": "Select the group",
+    "group": "Group",
+    "paid": "Paid",
+    "must_pay": "Must pay",
+    "close": "Close"
   }
 }
   

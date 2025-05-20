@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useRef, useState} from 'react';
-import {View, Image, Keyboard} from 'react-native';
+import {Image, Keyboard} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {LoginScreenNavigationProps} from '../../navigation/types';
 import authStore from '../../stores/authStore';
@@ -8,6 +8,10 @@ import {AuthForm} from '../../components/auth-form/AuthForm';
 import {styles} from './styles';
 import {appStore} from '../../stores/appStore';
 import {useKeyboardOpen} from '../../hooks/use-keyboard-open';
+import {AuthWelcome} from '../../components/auth-welcome/AuthWelcome';
+import LinearGradient from 'react-native-linear-gradient';
+import {colors} from '../../theme/colors';
+import {SCREEN_GRADIENT_END, SCREEN_GRADIENT_START} from '../../constants';
 
 interface IProps {
   navigation: LoginScreenNavigationProps['navigation'];
@@ -16,13 +20,16 @@ interface IProps {
 enum EAuthMode {
   LOGIN = 'login',
   REGISTRATION = 'registration',
+  MAIN = 'main',
 }
+
+const GRADIENT_COLORS = [colors.orange, colors.white];
 
 export const AuthScreen: FC<IProps> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [authMode, setAuthMode] = useState(EAuthMode.LOGIN);
+  const [authMode, setAuthMode] = useState(EAuthMode.MAIN);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [nameError, setNameError] = useState('');
@@ -61,10 +68,11 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
       await authStore.login(email, password);
       navigation.navigate('Home');
     } catch (e: any) {
-      appStore.showInfoModal(
-        `${(t('auth.errors.error'), e.response?.data?.message)}` ||
+      appStore.showInfoModal({
+        message:
+          `${(t('auth.errors.error'), e.response?.data?.message)}` ||
           t('auth.errors.something_went_wrong'),
-      );
+      });
     }
   }, [email, password, emailError, passwordError]);
 
@@ -82,10 +90,11 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
     try {
       await authStore.register(name, email, password);
     } catch (e: any) {
-      appStore.showInfoModal(
-        `${(t('auth.errors.error'), e.response?.data?.message)}` ||
+      appStore.showInfoModal({
+        message:
+          `${(t('auth.errors.error'), e.response?.data?.message)}` ||
           t('auth.errors.something_went_wrong'),
-      );
+      });
     }
   }, [name, email, password, nameError, passwordError, emailError]);
 
@@ -123,13 +132,25 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
   const showLogin = useCallback(() => {
     switchAuthMode(EAuthMode.LOGIN);
   }, [switchAuthMode]);
+
+  const showMain = useCallback(() => {
+    switchAuthMode(EAuthMode.MAIN);
+  }, [switchAuthMode]);
+
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={GRADIENT_COLORS}
+      start={SCREEN_GRADIENT_START}
+      end={SCREEN_GRADIENT_END}
+      style={styles.container}>
       <Image
         source={require('../../../assets/images/lanes-main-logo.png')}
         style={styles.logo}
       />
-      {authMode === EAuthMode.LOGIN ? (
+      {authMode === EAuthMode.MAIN && (
+        <AuthWelcome {...{showLogin, showRegistration}} />
+      )}
+      {authMode === EAuthMode.LOGIN && (
         <AuthForm
           key={authMode}
           title={t('auth.subheader.enter')}
@@ -140,11 +161,12 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
           onChangeEmail={changeEmail}
           onChangePassword={changePassword}
           onSubmit={handleLogin}
-          onSwitchMode={showRegistration}
+          onBackPress={showMain}
           submitText={t('auth.enter')}
-          switchText={t('auth.registration')}
+          backText={t('auth.back')}
         />
-      ) : (
+      )}
+      {authMode === EAuthMode.REGISTRATION && (
         <AuthForm
           key={authMode}
           title={t('auth.subheader.registration')}
@@ -159,11 +181,11 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
           onChangeEmail={changeEmail}
           onChangePassword={changePassword}
           onSubmit={handleRegister}
-          onSwitchMode={showLogin}
+          onBackPress={showMain}
           submitText={t('auth.register')}
-          switchText={t('auth.already_have_account')}
+          backText={t('auth.already_have_account')}
         />
       )}
-    </View>
+    </LinearGradient>
   );
 };

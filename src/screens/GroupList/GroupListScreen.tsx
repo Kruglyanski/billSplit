@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import {observer} from 'mobx-react-lite';
 import groupStore from '../../stores/groupStore';
@@ -9,10 +9,6 @@ interface IProps {
 }
 
 export const GroupListScreen: FC<IProps> = observer(({navigation}) => {
-  useEffect(() => {
-    groupStore.fetchUserGroups();
-  }, []);
-
   const renderItem = (
     {item}: any, //TODO: вынести
   ) => (

@@ -19,8 +19,10 @@ export const getGroup = (groupId: number) => api.get(`/groups/${groupId}`);
 export const addUserToGroup = (groupId: number, userId: number) =>
   api.post(`/groups/${groupId}/add-user`, {userId});
 
-export const getExpenses = (groupId: number) =>
+export const getExpensesByGroup = (groupId: number) =>
   api.get(`/expenses`, {params: {groupId}});
+
+export const getExpensesByUser = () => api.get(`/expenses/user`);
 
 export const createExpense = (data: {
   description: string;

@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {colors} from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   animatedWrapper: {
@@ -11,23 +12,20 @@ export const styles = StyleSheet.create({
   },
 
   input: {
-    width: '60%',
+    width: 300,
     marginBottom: 8,
+    borderRadius: 36,
+    color: colors.white,
   },
 
   button: {
-    width: '40%',
+    width: 200,
     marginTop: 8,
-  },
-
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 100,
   },
 
   subheader: {
     marginBottom: 40,
+    color: colors.white,
   },
 
   errorText: {

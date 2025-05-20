@@ -1,11 +1,16 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+export enum EExpenseActionType {
+  EDIT = 'edit',
+  CREATE = 'create',
+}
+
 export type RootStackParamList = {
   Auth: undefined;
   Home: undefined;
   CreateGroup: undefined;
   GroupList: undefined;
-  AddExpense: {groupId: number};
+  AddExpense: {groupId?: number; actionType: EExpenseActionType};
   GroupDetails: {groupId: number};
   GroupBalance: {groupId: number};
   ExpenseDetails: {expenseId: number};

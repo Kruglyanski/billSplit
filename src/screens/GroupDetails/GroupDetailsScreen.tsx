@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {
   View,
   Text,
@@ -21,12 +21,6 @@ export const GroupDetailsScreen: FC<IProps> = observer(
   ({route, navigation}) => {
     const {groupId} = route.params;
     const group = groupStore.groups.find(g => g.id === groupId);
-
-    useEffect(() => {
-      if (group) {
-        expenseStore.fetchExpenses(group.id);
-      }
-    }, [group]);
 
     if (!group) {
       return (

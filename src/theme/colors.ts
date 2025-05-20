@@ -20,3 +20,19 @@ export const DarkColors = {
   onSurface: '#ffffff',
   outline: '#777777',
 };
+
+export const colors = {
+  violet: '#665cfa',
+  yellow: '#FFCA40',
+  lightRed: '#FF6B6B',
+  red: '#e80909',
+  blue: '#3D9BF0',
+  green: '#50D990',
+  orange: '#FF7E30',
+  orangeLight: '#ff9326',
+  gray: '#F5F6FA',
+  darkGray: '#2B2B2B',
+  lightGray: '#777',
+  white: '#FFFFFF',
+  black: '#000000',
+};

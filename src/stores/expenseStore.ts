@@ -1,7 +1,7 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
 
-interface IExpense {
+export interface IExpense {
   id: number;
   description: string;
   amount: number;
@@ -19,10 +19,9 @@ class ExpenseStore {
     makeAutoObservable(this);
   }
 
-  async fetchExpenses(groupId: number) {
-    //TODO: все сразу?
+  async fetchExpensesByUser() {
     this.loading = true;
-    const res = await apiService.getExpenses(groupId);
+    const res = await apiService.getExpensesByUser();
 
     runInAction(() => {
       res.data.forEach((expense: IExpense) =>
@@ -41,7 +40,12 @@ class ExpenseStore {
   }) {
     const res = await apiService.createExpense(data);
     runInAction(() => {
-      this.expenses.set(res.data.id, res.data);
+      const newMap = new Map<number, IExpense>();
+      newMap.set(res.data.id, res.data);
+      for (const [key, value] of this.expenses) {
+        newMap.set(key, value);
+      }
+      this.expenses = newMap;
     });
   }
 

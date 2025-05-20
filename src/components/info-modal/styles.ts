@@ -6,16 +6,28 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'center',
     justifyContent: 'space-between',
-    width: '60%',
+    width: '90%',
     minHeight: '20%',
     maxHeight: '60%',
   },
+
   text: {
     marginTop: 12,
   },
 
+  buttons: {
+    flexDirection: 'row',
+    gap: 24,
+    justifyContent: 'flex-end',
+  },
+
   closeButton: {
-    width: '40%',
+    width: 120,
+    alignSelf: 'flex-end',
+  },
+
+  confirmButton: {
+    width: 120,
     alignSelf: 'flex-end',
   },
 });

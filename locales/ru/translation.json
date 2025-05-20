@@ -7,6 +7,7 @@
     "register": "Зарегистрироваться",
     "registration": "Регистрация",
     "already_have_account": "Уже есть аккаунт",
+    "back": "Назад",
     "subheader": {
       "enter": "Добро пожаловать",
       "registration": "Создать аккаунт"
@@ -23,6 +24,36 @@
   },
   "info_modal": {
     "close": "Закрыть",
-    "error": "Ошибка"
+    "error": "Ошибка",
+    "confirm": "Согласен"
+  },
+  "home": {
+    "welcome": "Добро пожаловать",
+    "user": "Пользователь",
+    "event": "Событие",
+    "go_to_groups": "К событиям",
+    "logout": "Выйти",
+    "create_expense": "Создать расход",
+    "logout_message": "Вы собираетесь выйти из аккаунта",
+    "attention": "Внимание!",
+    "current_expenses": "Текущие расходы"
+  },
+  "add_expense": {
+    "create_expense": "Создание расхода",
+    "edit_expense": "Редактирование расхода",
+    "back": "Назад",
+    "add": "Добавить",
+    "error": "Ошибка",
+    "expense_not_created": "Не удалось создать расход",
+    "fill_all_fields": "Заполните все поля",
+    "sum_must_be_positive": "Сумма должна быть положительным числом",
+    "sums_must_be equal" : "Сумма от плательщиков ({{paidSum}}) должна равняться общей сумме ({{numericAmount}})",
+    "description": "Описание",
+    "sum": "Сумма",
+    "select_group": "Выберите группу",
+    "group": "Группа",
+    "paid": "Заплатил",
+    "must_pay": "Должен",
+    "close": "Закрыть"
   }
 }
