@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = observer(() => {
   if (authStore.loading) return null; //TODO: сделать сплеш
-  console.log('authStore.user', authStore.user);
+
   return (
     <NavigationContainer>
       <Stack.Navigator

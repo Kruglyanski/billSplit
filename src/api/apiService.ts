@@ -9,6 +9,8 @@ export const register = (data: {
 export const login = (data: {email: string; password: string}) =>
   api.post('/auth/login', data);
 
+export const getMe = () => api.get('/users/me');
+
 export const getUserGroups = () => api.get('/groups');
 
 export const createGroup = (name: string, userIds: any) =>

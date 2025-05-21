@@ -1,12 +1,16 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import {makeAutoObservable, runInAction} from 'mobx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as apiService from '../api/apiService';
-import { setAuthToken, clearAuthToken } from '../api/api';
+import {setAuthToken, clearAuthToken} from '../api/api';
 
-type User = { id: number; name: string; email: string };
+interface IUser {
+  id: number;
+  name: string;
+  email: string;
+}
 
 class AuthStore {
-  user: User | null = null;
+  user: IUser | null = null;
   loading = true;
 
   constructor() {
@@ -16,12 +20,16 @@ class AuthStore {
 
   async bootstrap() {
     const token = await AsyncStorage.getItem('token');
-    const userData = await AsyncStorage.getItem('user');
-    if (token && userData) {
+    if (token) {
       setAuthToken(token);
-      runInAction(() => {
-        this.user = JSON.parse(userData);
-      });
+      try {
+        const res = await apiService.getMe();
+        runInAction(() => {
+          this.user = res.data;
+        });
+      } catch {
+        await this.logout();
+      }
     }
     runInAction(() => {
       this.loading = false;
@@ -29,10 +37,10 @@ class AuthStore {
   }
 
   async login(email: string, password: string) {
-    const res = await apiService.login({ email, password });
-    const { token, user } = res.data;
+    const res = await apiService.login({email, password});
+    const {token, user} = res.data;
     await AsyncStorage.setItem('token', token);
-    await AsyncStorage.setItem('user', JSON.stringify(user));
+
     setAuthToken(token);
     runInAction(() => {
       this.user = user;
@@ -40,10 +48,10 @@ class AuthStore {
   }
 
   async register(name: string, email: string, password: string) {
-    const res = await apiService.register({ name, email, password });
-    const { token, user } = res.data;
+    const res = await apiService.register({name, email, password});
+    const {token, user} = res.data;
     await AsyncStorage.setItem('token', token);
-    await AsyncStorage.setItem('user', JSON.stringify(user));
+
     setAuthToken(token);
     runInAction(() => {
       this.user = user;

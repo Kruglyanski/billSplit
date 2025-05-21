@@ -20,9 +20,7 @@ class UserStore {
     try {
       const res = await getAllUsers();
       runInAction(() => {
-        console.log('asd res.data', res.data);
         res.data.forEach((user: IUser) => this.users.set(user.id, user));
-        console.log('asd this.users', this.users);
       });
     } catch (error) {
       console.error('Ошибка при загрузке пользователей', error);
