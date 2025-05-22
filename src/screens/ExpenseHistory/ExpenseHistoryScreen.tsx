@@ -6,11 +6,9 @@ import {observer} from 'mobx-react-lite';
 
 interface IProps {
   navigation: ExpenseHistoryScreenNavigationProps['navigation'];
-  route: ExpenseHistoryScreenNavigationProps['route'];
 }
 
-export const ExpenseHistoryScreen: FC<IProps> = observer(({route}) => {
-  //   const {expenseId} = route.params;
+export const ExpenseHistoryScreen: FC<IProps> = observer(({navigation}) => {
   const history = historyStore.expensesHistory;
 
   useEffect(() => {

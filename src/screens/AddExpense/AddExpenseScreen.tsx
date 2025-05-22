@@ -1,6 +1,8 @@
 import React, {FC, useCallback, useState} from 'react';
-import {View, StyleSheet, ScrollView, Pressable} from 'react-native';
+import {View, ScrollView, Pressable} from 'react-native';
 import {observer} from 'mobx-react-lite';
+import {Text, TextInput} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 import expenseStore from '../../stores/expenseStore';
 import groupStore, {IGroup} from '../../stores/groupStore';
 import {
@@ -9,15 +11,15 @@ import {
 } from '../../navigation/types';
 import {GroupSelectModal} from '../../components/group-select-modal/GroupSelectModal';
 import {ScreenWrapper} from '../../components/screen-wrapper/ScreenWrapper';
-import {useTranslation} from 'react-i18next';
 import {colors} from '../../theme/colors';
 import {appStore} from '../../stores/appStore';
-import {Text, TextInput} from 'react-native-paper';
+import {styles} from './styles';
 
 interface IProps {
-  route: AddExpenseScreenNavigationProps['route'];
   navigation: AddExpenseScreenNavigationProps['navigation'];
+  route: AddExpenseScreenNavigationProps['route'];
 }
+
 const GRADIENT_COLORS = [colors.green, colors.white];
 
 export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
@@ -200,47 +202,4 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       </ScrollView>
     </ScreenWrapper>
   );
-});
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  scrollview: {
-    marginTop: 12,
-  },
-  input: {
-    marginBottom: 12,
-  },
-  label: {
-    color: colors.violet,
-    marginBottom: 8,
-    marginTop: 16,
-  },
-  splitRow: {
-    marginBottom: 12,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderColor: colors.violet,
-  },
-  userName: {
-    marginBottom: 4,
-    color: colors.darkGray,
-  },
-  inputsContainer: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  inputWrapper: {
-    flex: 1,
-  },
-  inputLabel: {
-    color: colors.violet,
-    marginBottom: 4,
-  },
-  groupSelector: {
-    padding: 12,
-    marginVertical: 10,
-    borderRadius: 6,
-  },
 });

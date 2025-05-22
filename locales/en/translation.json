@@ -1,4 +1,10 @@
 {
+  "tab": {
+    "home": "Home",
+    "history": "History",
+    "events": "Events",
+    "settings": "Settings"
+  },
   "auth": {
     "email": "Email",
     "password": "Password",

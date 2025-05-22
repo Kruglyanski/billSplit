@@ -1,4 +1,10 @@
 {
+  "tab": {
+    "home": "Главная",
+    "history": "История",
+    "events": "События",
+    "settings": "Настройки"
+  },
   "auth": {
     "email": "Email",
     "password": "Пароль",

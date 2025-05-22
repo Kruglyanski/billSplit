@@ -5,6 +5,7 @@ import groupStore from '../../stores/groupStore';
 import {observer} from 'mobx-react-lite';
 
 interface IProps {
+  navigation: GroupBalanceScreenNavigationProps['navigation'];
   route: GroupBalanceScreenNavigationProps['route'];
 }
 

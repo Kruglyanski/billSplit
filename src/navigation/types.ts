@@ -1,4 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {NavigatorScreenParams} from '@react-navigation/native';
 
 export enum EExpenseActionType {
   EDIT = 'edit',
@@ -7,62 +9,91 @@ export enum EExpenseActionType {
 
 export type RootStackParamList = {
   Auth: undefined;
-  Home: undefined;
-  CreateGroup: undefined;
-  GroupList: undefined;
-  AddExpense: {groupId?: number; actionType: EExpenseActionType};
-  GroupDetails: {groupId: number};
-  GroupBalance: {groupId: number};
-  ExpenseDetails: {expenseId: number};
-  EditExpense: {expenseId: number};
-  ExpenseHistory: {expenseId: number};
+  Tabs: NavigatorScreenParams<TabsParamList>;
 };
 
-export type HomeScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
-  'Home'
->;
+export type TabsParamList = {
+  HomeTab: NavigatorScreenParams<HomeStackParamList>;
+  GroupListTab: NavigatorScreenParams<GroupStackParamList>;
+  ExpenseHistoryTab: undefined;
+};
+
+export type HomeStackParamList = {
+  Home: undefined;
+  AddExpense: {
+    groupId?: number;
+    expenseId?: number;
+    actionType: EExpenseActionType;
+  };
+  ExpenseDetails: {expenseId: number};
+  CreateGroup: undefined;
+};
+
+export type GroupStackParamList = {
+  GroupList: undefined;
+  GroupBalance: {groupId: number};
+  CreateGroup: undefined;
+  AddExpense: {
+    groupId?: number;
+    expenseId?: number;
+    actionType: EExpenseActionType;
+  };
+  GroupDetails: {groupId: number};
+  ExpenseDetails: {expenseId: number};
+  EditExpense: {expenseId: number};
+};
 
 export type LoginScreenNavigationProps = NativeStackScreenProps<
   RootStackParamList,
   'Auth'
 >;
 
-export type AddExpenseScreenNavigationProps = NativeStackScreenProps<
+export type TabsScreenNavigationProps = NativeStackScreenProps<
   RootStackParamList,
-  'AddExpense'
+  'Tabs'
 >;
 
-export type GroupDetailScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
-  'GroupDetails'
+export type GroupListScreenNavigationProps = BottomTabScreenProps<
+  TabsParamList,
+  'GroupListTab'
+>;
+
+export type ExpenseHistoryScreenNavigationProps = BottomTabScreenProps<
+  TabsParamList,
+  'ExpenseHistoryTab'
+>;
+
+export type GroupBalanceScreenNavigationProps = NativeStackScreenProps<
+  GroupStackParamList,
+  'GroupBalance'
 >;
 
 export type CreateGroupScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
+  GroupStackParamList,
   'CreateGroup'
 >;
 
-export type GroupListScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
-  'GroupList'
+export type AddExpenseScreenNavigationProps = NativeStackScreenProps<
+  GroupStackParamList,
+  'AddExpense'
+>;
+
+export type GroupDetailsScreenNavigationProps = NativeStackScreenProps<
+  GroupStackParamList,
+  'GroupDetails'
 >;
 
 export type ExpenseDetailsScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
+  GroupStackParamList,
   'ExpenseDetails'
 >;
 
 export type EditExpenseScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
+  GroupStackParamList,
   'EditExpense'
 >;
-export type ExpenseHistoryScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
-  'ExpenseHistory'
->;
 
-export type GroupBalanceScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
-  'GroupBalance'
+export type HomeScreenNavigationProps = BottomTabScreenProps<
+  TabsParamList,
+  'HomeTab'
 >;

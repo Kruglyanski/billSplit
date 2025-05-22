@@ -1,41 +1,123 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {observer} from 'mobx-react-lite';
 import {AuthScreen} from '../screens/Auth/AuthScreen';
 import {HomeScreen} from '../screens/Home/HomeScreen';
+import {GroupListScreen} from '../screens/GroupList/GroupListScreen';
+import {GroupBalanceScreen} from '../screens/GroupBalance/GroupBalanceScreen';
 import authStore from '../stores/authStore';
-import {RootStackParamList} from './types';
+import {
+  GroupStackParamList,
+  HomeStackParamList,
+  RootStackParamList,
+} from './types';
 import {AddExpenseScreen} from '../screens/AddExpense/AddExpenseScreen';
 import {CreateGroupScreen} from '../screens/CreateGroup/CreateGroupScreen';
 import {GroupDetailsScreen} from '../screens/GroupDetails/GroupDetailsScreen';
-import {GroupListScreen} from '../screens/GroupList/GroupListScreen';
 import {ExpenseDetailsScreen} from '../screens/ExpenseDetails/ExpenseDetailsScreen';
-import {EditExpenseScreen} from '../screens/EditExpense/EditExpenseScreen';
 import {ExpenseHistoryScreen} from '../screens/ExpenseHistory/ExpenseHistoryScreen';
-import {GroupBalanceScreen} from '../screens/GroupBalance/GroupBalanceScreen';
+import {Icon} from 'react-native-paper';
+import {colors} from '../theme/colors';
+import {customTypeScale} from '../theme/typography';
+import {useTranslation} from 'react-i18next';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const GroupStack = createNativeStackNavigator<GroupStackParamList>();
+
+const GroupListStackNavigator = () => {
+  return (
+    <GroupStack.Navigator screenOptions={{headerShown: false}}>
+      <GroupStack.Screen name="GroupList" component={GroupListScreen} />
+      <GroupStack.Screen name="AddExpense" component={AddExpenseScreen} />
+      <GroupStack.Screen name="CreateGroup" component={CreateGroupScreen} />
+      <GroupStack.Screen name="GroupDetails" component={GroupDetailsScreen} />
+      <GroupStack.Screen
+        name="ExpenseDetails"
+        component={ExpenseDetailsScreen}
+      />
+      <GroupStack.Screen name="GroupBalance" component={GroupBalanceScreen} />
+    </GroupStack.Navigator>
+  );
+};
+
+const HomeStackNavigator = () => {
+  return (
+    <HomeStack.Navigator screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="AddExpense" component={AddExpenseScreen} />
+      <HomeStack.Screen name="CreateGroup" component={CreateGroupScreen} />
+      <HomeStack.Screen
+        name="ExpenseDetails"
+        component={ExpenseDetailsScreen}
+      />
+    </HomeStack.Navigator>
+  );
+};
+
+const Tabs = () => {
+  const {t} = useTranslation();
+  return (
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        headerShown: false,
+        tabBarIcon: ({color, size}) => {
+          let iconName: string = 'home';
+
+          if (route.name === 'Home') iconName = 'home';
+          if (route.name === 'GroupList') iconName = 'account-group';
+          if (route.name === 'ExpenseHistory') iconName = 'history';
+
+          return <Icon source={iconName} size={size} color={color} />;
+        },
+        tabBarStyle: {
+          backgroundColor: colors.violet,
+          borderTopWidth: 1,
+          borderTopColor: colors.darkGray,
+          height: 60,
+        },
+        tabBarActiveTintColor: colors.yellow,
+        tabBarInactiveTintColor: colors.green,
+        tabBarLabelStyle: {
+          ...customTypeScale.bodyMedium,
+        },
+        tabBarItemStyle: {
+          padding: 4,
+        },
+      })}>
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeStackNavigator}
+        options={{title: t('tab.home')}}
+      />
+      <Tab.Screen
+        name="GroupListTab"
+        component={GroupListStackNavigator}
+        options={{title: t('tab.events')}}
+      />
+      <Tab.Screen
+        name="ExpenseHistoryTab"
+        component={ExpenseHistoryScreen}
+        options={{title: t('tab.history')}}
+      />
+    </Tab.Navigator>
+  );
+};
 
 const AppNavigator = observer(() => {
-  if (authStore.loading) return null; //TODO: сделать сплеш
+  if (authStore.loading) return null; // TODO: сделать сплеш экран
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      <RootStack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={authStore.user ? 'Home' : 'Auth'}>
-        <Stack.Screen name="Auth" component={AuthScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
-        <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
-        <Stack.Screen name="GroupDetails" component={GroupDetailsScreen} />
-        <Stack.Screen name="GroupList" component={GroupListScreen} />
-        <Stack.Screen name="GroupBalance" component={GroupBalanceScreen} />
-        <Stack.Screen name="ExpenseDetails" component={ExpenseDetailsScreen} />
-        <Stack.Screen name="EditExpense" component={EditExpenseScreen} />
-        <Stack.Screen name="ExpenseHistory" component={ExpenseHistoryScreen} />
-      </Stack.Navigator>
+        initialRouteName={authStore.user ? 'Tabs' : 'Auth'}>
+        <RootStack.Screen name="Auth" component={AuthScreen} />
+        <RootStack.Screen name="Tabs" component={Tabs} />
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 });

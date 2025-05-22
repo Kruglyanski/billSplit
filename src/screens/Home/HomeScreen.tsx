@@ -43,15 +43,18 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
   }, []);
 
   const navigateToGroupCreate = useCallback(() => {
-    navigation.navigate('CreateGroup');
+    navigation.navigate('HomeTab', {screen: 'CreateGroup'});
   }, [navigation]);
 
   const navigateToGroupList = useCallback(() => {
-    navigation.navigate('GroupList');
+    navigation.navigate('GroupListTab', {screen: 'GroupList'});
   }, [navigation]);
 
   const navigateToAddExpense = useCallback(() => {
-    navigation.navigate('AddExpense', {actionType: EExpenseActionType.CREATE});
+    navigation.navigate('HomeTab', {
+      screen: 'AddExpense',
+      params: {actionType: EExpenseActionType.CREATE},
+    });
   }, [navigation]);
 
   // const logOut = useCallback(() => {
@@ -86,8 +89,8 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
     <ScreenWrapper
       title={`${t('home.welcome')}, ${authStore.user?.name || t('home.user')}!`}
       gradientColors={GRADIENT_COLORS}
-      onRightButtonPress={navigateToGroupCreate}
-      onLeftButtonPress={navigateToGroupList}
+      onRightButtonPress={navigateToGroupList}
+      onLeftButtonPress={navigateToGroupCreate}
       leftButtonText={t('home.event')}
       leftButtonIcon={'plus'}
       rightButtonText={t('home.go_to_groups')}>
