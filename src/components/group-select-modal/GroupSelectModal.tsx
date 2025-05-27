@@ -7,7 +7,7 @@ import {styles} from './styles';
 
 interface IProps {
   visible: boolean;
-  onSelect: (group: IGroup) => void;
+  onSelect: (groupId: IGroup['id']) => void;
   onDismiss: () => void;
   groups: IGroup[];
 }
@@ -50,13 +50,13 @@ export const GroupSelectModal: React.FC<IProps> = memo(
 
 interface IGroupCardProps {
   item: IGroup;
-  onSelect: (item: IGroup) => void;
+  onSelect: (groupId: IGroup['id']) => void;
   onDismiss: () => void;
 }
 
 const GroupCard: FC<IGroupCardProps> = memo(({onSelect, onDismiss, item}) => {
   const onPress = useCallback(() => {
-    onSelect(item);
+    onSelect(item.id);
     onDismiss();
   }, [onSelect, onDismiss, item]);
   return (

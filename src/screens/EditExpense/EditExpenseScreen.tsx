@@ -1,212 +1,150 @@
-import React, {FC, useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from 'react-native';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import expenseStore from '../../stores/expenseStore';
+import {useTranslation} from 'react-i18next';
+import expenseStore, {TSplitPaidBy} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
 import {EditExpenseScreenNavigationProps} from '../../navigation/types';
-import userStore from '../../stores/userStore';
+import {ScreenWrapper} from '../../components/screen-wrapper/ScreenWrapper';
+import {appStore} from '../../stores/appStore';
+import {colors} from '../../theme/colors';
+import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
+import {Button} from 'react-native-paper';
 
-interface IProps {
-  navigation: EditExpenseScreenNavigationProps['navigation'];
-  route: EditExpenseScreenNavigationProps['route'];
-}
+const GRADIENT_COLORS = [colors.green, colors.white];
+
+interface IProps extends EditExpenseScreenNavigationProps {}
 
 export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const {expenseId} = route.params;
+  const {t} = useTranslation();
+
   const expense = expenseStore.expenses.get(expenseId);
 
-  const [description, setDescription] = useState(expense?.description ?? '');
-  const [amount, setAmount] = useState(String(expense?.amount ?? ''));
-  const [groupId, setGroupId] = useState(expense?.group?.id ?? null);
-  const [splits, setSplits] = useState(
-    expense?.splits?.map(s => ({userId: s.userId, amount: s.amount})) ?? [],
-  );
-  const [paidBy, setPaidBy] = useState(
-    expense?.paidBy?.map(p => ({userId: p.userId, amount: p.amount})) ?? [],
-  );
-  const [modalVisible, setModalVisible] = useState(false);
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState('');
+  const [groupId, setGroupId] = useState<number | null>(null);
+  const [splits, setSplits] = useState<TSplitPaidBy[]>([]);
+  const [paidBy, setPaidBy] = useState<TSplitPaidBy[]>([]);
 
-  const currentGroup = groupStore.groups.find(g => g.id === groupId);
+  useEffect(() => {
+    if (expense) {
+      setDescription(expense.description);
+      setAmount(expense.amount?.toString());
+      setGroupId(expense.group?.id);
+      setSplits(expense.splits);
+      setPaidBy(expense.paidBy);
+    }
+  }, [expense]);
 
-  const handleSave = async () => {
-    if (!expense) return;
+  const handleAmountChange = useCallback(
+    (userId: number, value: string, type: 'paid' | 'split') => {
+      const amountValue = +value;
+      const setters = {
+        paid: setPaidBy,
+        split: setSplits,
+      };
+      setters[type](prev =>
+        prev.map(s => (s.userId === userId ? {...s, amount: amountValue} : s)),
+      );
+    },
+    [],
+  );
+
+  const handleSubmit = useCallback(async () => {
+    if (!description || !amount || !groupId) {
+      appStore.showInfoModal({
+        message: t('add_expense.fill_all_fields'),
+      });
+      return;
+    }
+
+    const numAmount = +amount;
+    if (isNaN(numAmount) || numAmount <= 0) {
+      appStore.showInfoModal({
+        message: t('add_expense.sum_must_be_positive'),
+      });
+      return;
+    }
+
+    const paidSum = paidBy.reduce((sum, p) => sum + p.amount, 0);
+    if (paidSum !== numAmount) {
+      appStore.showInfoModal({
+        message: t('add_expense.sums_must_be_equal', {
+          paidSum,
+          amount,
+        }),
+      });
+      return;
+    }
+
     try {
-      await expenseStore.updateExpense(expense.id, {
+      await expenseStore.updateExpense(expenseId, {
         description,
-        amount: parseFloat(amount),
+        amount: numAmount,
         groupId,
         splits,
         paidBy,
       });
       navigation.goBack();
-    } catch (error) {
-      console.log('upd error', error);
+    } catch (e: any) {
+      appStore.showInfoModal({
+        message:
+          e.response?.data?.message || t('add_expense.expense_not_created'),
+      });
     }
-  };
+  }, [description, amount, groupId, splits, paidBy, expenseId, navigation, t]);
 
-  const handleDelete = () => {
-    Alert.alert('Удалить расход', 'Вы уверены, что хотите удалить этот расход?', [
-      {text: 'Отмена', style: 'cancel'},
-      {
-        text: 'Удалить',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await expenseStore.deleteExpense(expenseId);
-            navigation.goBack();
-          } catch (error) {
-            console.log('delete error', error);
-          }
-        },
+  const deleteExpense = useCallback(async () => {
+    try {
+      await expenseStore.deleteExpense(expenseId);
+      navigation.goBack();
+    } catch {
+      appStore.showInfoModal({
+        message: t('add_expense.delete_expense_error'),
+      });
+    }
+  }, [expenseId, navigation, t]);
+
+  const handleDelete = useCallback(() => {
+    appStore.showInfoModal({
+      title: t('add_expense.delete_expense'),
+      message: t('add_expense.delete_expense_description'),
+      action: () => {
+        deleteExpense();
+        appStore.hideInfoModal();
       },
-    ]);
-  };
-  
+    });
+  }, [deleteExpense, t]);
 
-  const renderGroupItem = ({item}: any) => (
-    <TouchableOpacity
-      style={styles.groupItem}
-      onPress={() => {
-        setGroupId(item.id);
-        setModalVisible(false);
-      }}>
-      <Text style={{fontSize: 16}}>{item.name}</Text>
-    </TouchableOpacity>
-  );
+  if (!expense || groupId === null) {
+    return <></>;
+  }
 
-  const updateSplitAmount = (userId: number, value: string) => {
-    setSplits(prev =>
-      prev.map(split =>
-        split.userId === userId
-          ? {...split, amount: parseFloat(value) || 0}
-          : split,
-      ),
-    );
-  };
-
-  const updatePaidAmount = (userId: number, value: string) => {
-    setPaidBy(prev =>
-      prev.map(payer =>
-        payer.userId === userId
-          ? {...payer, amount: parseFloat(value) || 0}
-          : payer,
-      ),
-    );
-  };
+  const group = groupStore.groups.find(g => g.id === groupId);
+  const participants = group?.members || [];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Описание</Text>
-      <TextInput
-        value={description}
-        onChangeText={setDescription}
-        style={styles.input}
+    <ScreenWrapper
+      title={t('add_expense.edit_expense')}
+      gradientColors={GRADIENT_COLORS}
+      onRightButtonPress={handleSubmit}
+      onLeftButtonPress={navigation.goBack}
+      leftButtonText={t('add_expense.back')}
+      leftButtonIcon="arrow-left"
+      rightButtonText={t('add_expense.save')}>
+      <EditExpenseForm
+        groupName={group?.name || ''}
+        users={participants}
+        amount={amount}
+        handleAmountChange={handleAmountChange}
+        setGroupId={setGroupId}
+        setAmount={setAmount}
+        setDescription={setDescription}
+        splits={splits}
+        paidBy={paidBy}
+        description={description}
       />
-
-      <Text style={styles.label}>Сумма</Text>
-      <TextInput
-        value={amount}
-        onChangeText={setAmount}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-
-      <Text style={styles.label}>Группа</Text>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Text style={styles.groupSelector}>
-          {currentGroup?.name || 'Выберите группу'}
-        </Text>
-      </TouchableOpacity>
-
-      <Text style={styles.label}>Доли участников</Text>
-      {splits.map(split => {
-        const member = userStore.users.get(split.userId);
-        return (
-          <View key={split.userId} style={styles.splitItem}>
-            <Text style={{flex: 1}}>{member?.name || '—'}</Text>
-            <TextInput
-              style={[styles.input, {flex: 1}]}
-              value={split.amount.toString()}
-              onChangeText={v => updateSplitAmount(split.userId, v)}
-              keyboardType="numeric"
-            />
-          </View>
-        );
-      })}
-
-      <Text style={styles.label}>Заплачено участниками</Text>
-      {paidBy.map(payer => {
-        const member = userStore.users.get(payer.userId);
-        return (
-          <View key={payer.userId} style={styles.splitItem}>
-            <Text style={{flex: 1}}>{member?.name || '—'}</Text>
-            <TextInput
-              style={[styles.input, {flex: 1}]}
-              value={payer.amount.toString()}
-              onChangeText={v => updatePaidAmount(payer.userId, v)}
-              keyboardType="numeric"
-            />
-          </View>
-        );
-      })}
-
-      <Button title="Сохранить изменения" onPress={handleSave} />
-      <Button title="Удалить расход" onPress={handleDelete} color="red" />
-
-      <Modal visible={modalVisible} animationType="slide">
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Выберите группу</Text>
-          <FlatList
-            data={groupStore.groups}
-            keyExtractor={item => item.id.toString()}
-            renderItem={renderGroupItem}
-          />
-          <Button title="Закрыть" onPress={() => setModalVisible(false)} />
-        </View>
-      </Modal>
-    </View>
+      <Button onPress={handleDelete}>{t('add_expense.delete')}</Button>
+    </ScreenWrapper>
   );
-});
-
-const styles = StyleSheet.create({
-  container: {flex: 1, padding: 16},
-  label: {fontSize: 16, marginTop: 12},
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-    padding: 10,
-    marginTop: 4,
-    fontSize: 16,
-  },
-  groupSelector: {
-    fontSize: 16,
-    padding: 12,
-    backgroundColor: '#eee',
-    marginVertical: 10,
-    borderRadius: 6,
-  },
-  modalContent: {flex: 1, padding: 16},
-  modalTitle: {fontSize: 20, fontWeight: 'bold', marginBottom: 16},
-  groupItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  splitItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-    gap: 8,
-  },
 });

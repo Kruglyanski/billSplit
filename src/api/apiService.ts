@@ -1,3 +1,4 @@
+import {TSplitPaidBy} from '../stores/expenseStore';
 import api from './api';
 
 export const register = (data: {
@@ -30,8 +31,8 @@ export const createExpense = (data: {
   description: string;
   amount: number;
   groupId: number;
-  paidByUsers: {userId: number; amount: number}[];
-  splits: {userId: number; amount: number}[];
+  paidByUsers: TSplitPaidBy[];
+  splits: TSplitPaidBy[];
 }) => api.post('/expenses', data);
 
 export const updateExpense = (
@@ -40,8 +41,8 @@ export const updateExpense = (
     description: string;
     amount: number;
     groupId: number | null;
-    splits: {userId: number; amount: number}[];
-    paidBy: {userId: number; amount: number}[];
+    splits: TSplitPaidBy[];
+    paidBy: TSplitPaidBy[];
   },
 ) => api.put(`/expenses/${id}`, data);
 

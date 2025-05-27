@@ -49,6 +49,7 @@
     "edit_expense": "Expense editing",
     "back": "Go back",
     "add": "Add",
+    "save": "Save",
     "error": "Error",
     "expense_not_created": "Failed to create expense",
     "fill_all_fields": "Fill in all fields",
@@ -60,7 +61,12 @@
     "group": "Group",
     "paid": "Paid",
     "must_pay": "Must pay",
-    "close": "Close"
+    "close": "Close",
+    "expense_not_found": "Expense not found",
+    "delete": "Delete",
+    "delete_expense": "Delete expense?",
+    "delete_expense_description": "Expense will be deleted irrevocably!",
+    "delete_expense_error": "An error occurred while deleting!"
   }
 }
   

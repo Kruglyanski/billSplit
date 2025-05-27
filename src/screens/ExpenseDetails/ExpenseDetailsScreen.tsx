@@ -3,19 +3,13 @@ import {View, Text, StyleSheet, Button} from 'react-native';
 import {observer} from 'mobx-react-lite';
 import expenseStore from '../../stores/expenseStore';
 import userStore from '../../stores/userStore';
-import {
-  EExpenseActionType,
-  ExpenseDetailsScreenNavigationProps,
-} from '../../navigation/types';
+import {ExpenseDetailsScreenNavigationProps} from '../../navigation/types';
 import dayjs from 'dayjs';
 
-interface IProps {
-  route: ExpenseDetailsScreenNavigationProps['route'];
-  navigation: ExpenseDetailsScreenNavigationProps['navigation'];
-}
+type TProps = ExpenseDetailsScreenNavigationProps & {};
 
-export const ExpenseDetailsScreen: FC<IProps> = observer(
-  ({navigation, route}) => {
+export const ExpenseDetailsScreen: FC<TProps> = observer(
+  ({route, navigation}) => {
     const {expenseId} = route.params;
     const expense = expenseStore.expenses.get(expenseId);
 
@@ -59,12 +53,7 @@ export const ExpenseDetailsScreen: FC<IProps> = observer(
         )}
         <Button
           title="Редактировать"
-          onPress={() =>
-            navigation.navigate('AddExpense', {
-              expenseId: expense.id,
-              actionType: EExpenseActionType.EDIT,
-            })
-          }
+          onPress={() => navigation.navigate('EditExpense', {expenseId})}
         />
       </View>
     );

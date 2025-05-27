@@ -1,13 +1,19 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
 
+export type TSplitPaidBy = {
+  id?: number;
+  userId: number;
+  amount: number;
+};
+
 export interface IExpense {
   id: number;
   description: string;
   amount: number;
-  group: {id: number; name: string};
-  paidBy: {id: number; userId: number; amount: number}[]; //TODO: вынести
-  splits: {id: number; userId: number; amount: number}[];
+  group: {id: number; name: string}; //
+  paidBy: TSplitPaidBy[];
+  splits: TSplitPaidBy[];
   createdAt: string;
 }
 
@@ -35,8 +41,8 @@ class ExpenseStore {
     description: string;
     amount: number;
     groupId: number;
-    paidByUsers: {userId: number; amount: number}[];
-    splits: {userId: number; amount: number}[];
+    paidByUsers: TSplitPaidBy[];
+    splits: TSplitPaidBy[];
   }) {
     const res = await apiService.createExpense(data);
     runInAction(() => {
@@ -55,8 +61,8 @@ class ExpenseStore {
       description: string;
       amount: number;
       groupId: number | null;
-      splits: {userId: number; amount: number}[];
-      paidBy: {userId: number; amount: number}[];
+      splits: TSplitPaidBy[];
+      paidBy: TSplitPaidBy[];
     },
   ) {
     const {data: updatedExpense} = await apiService.updateExpense(id, data);

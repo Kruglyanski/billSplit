@@ -16,7 +16,10 @@ interface IProps {
 export const ExpenseCard: FC<IProps> = memo(
   ({title, createdAt, color, id, navigation}) => {
     const onPress = useCallback(() => {
-      navigation.navigate('ExpenseDetails', {expenseId: id});
+      navigation.navigate('HomeTab', {
+        screen: 'ExpenseDetails',
+        params: {expenseId: id},
+      });
     }, [navigation, id]);
 
     const date = dayjs(createdAt).format('DD.MM.YYYY HH:mm');

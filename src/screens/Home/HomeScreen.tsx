@@ -2,10 +2,7 @@ import React, {FC, useCallback, useEffect} from 'react';
 import {FlatList} from 'react-native';
 import {observer} from 'mobx-react-lite';
 import authStore from '../../stores/authStore';
-import {
-  EExpenseActionType,
-  HomeScreenNavigationProps,
-} from '../../navigation/types';
+import {HomeScreenNavigationProps} from '../../navigation/types';
 import userStore from '../../stores/userStore';
 import {useTranslation} from 'react-i18next';
 import {FAB, Text} from 'react-native-paper';
@@ -51,10 +48,7 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
   }, [navigation]);
 
   const navigateToAddExpense = useCallback(() => {
-    navigation.navigate('HomeTab', {
-      screen: 'AddExpense',
-      params: {actionType: EExpenseActionType.CREATE},
-    });
+    navigation.navigate('HomeTab', {screen: 'AddExpense', params: {}});
   }, [navigation]);
 
   // const logOut = useCallback(() => {

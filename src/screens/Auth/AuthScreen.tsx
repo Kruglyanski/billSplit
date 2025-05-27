@@ -1,7 +1,10 @@
 import React, {FC, useCallback, useRef, useState} from 'react';
 import {Image, Keyboard} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {LoginScreenNavigationProps} from '../../navigation/types';
+import {
+  AuthScreenNavigationProps,
+  RootStackParamList,
+} from '../../navigation/types';
 import authStore from '../../stores/authStore';
 import {getEmailError, getNameError, getPasswordError} from './auth-helper';
 import {AuthForm} from '../../components/auth-form/AuthForm';
@@ -14,7 +17,7 @@ import {colors} from '../../theme/colors';
 import {SCREEN_GRADIENT_END, SCREEN_GRADIENT_START} from '../../constants';
 
 interface IProps {
-  navigation: LoginScreenNavigationProps['navigation'];
+  navigation: AuthScreenNavigationProps['navigation'];
 }
 
 enum EAuthMode {
@@ -66,7 +69,7 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
 
     try {
       await authStore.login(email, password);
-      navigation.navigate('Home');
+      navigation.navigate('Tabs');
     } catch (e: any) {
       appStore.showInfoModal({
         message:

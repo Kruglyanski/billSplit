@@ -22,6 +22,7 @@ import {Icon} from 'react-native-paper';
 import {colors} from '../theme/colors';
 import {customTypeScale} from '../theme/typography';
 import {useTranslation} from 'react-i18next';
+import {EditExpenseScreen} from '../screens/EditExpense/EditExpenseScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -49,6 +50,7 @@ const HomeStackNavigator = () => {
     <HomeStack.Navigator screenOptions={{headerShown: false}}>
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="AddExpense" component={AddExpenseScreen} />
+      <HomeStack.Screen name="EditExpense" component={EditExpenseScreen} />
       <HomeStack.Screen name="CreateGroup" component={CreateGroupScreen} />
       <HomeStack.Screen
         name="ExpenseDetails"
@@ -67,9 +69,9 @@ const Tabs = () => {
         tabBarIcon: ({color, size}) => {
           let iconName: string = 'home';
 
-          if (route.name === 'Home') iconName = 'home';
-          if (route.name === 'GroupList') iconName = 'account-group';
-          if (route.name === 'ExpenseHistory') iconName = 'history';
+          if (route.name === 'HomeTab') iconName = 'home';
+          if (route.name === 'GroupListTab') iconName = 'account-group';
+          if (route.name === 'ExpenseHistoryTab') iconName = 'history';
 
           return <Icon source={iconName} size={size} color={color} />;
         },
