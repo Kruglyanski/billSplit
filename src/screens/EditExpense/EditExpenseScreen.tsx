@@ -9,6 +9,7 @@ import {appStore} from '../../stores/appStore';
 import {colors} from '../../theme/colors';
 import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
 import {Button} from 'react-native-paper';
+import { styles } from './styles';
 
 const GRADIENT_COLORS = [colors.green, colors.white];
 
@@ -144,7 +145,12 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
         paidBy={paidBy}
         description={description}
       />
-      <Button onPress={handleDelete}>{t('add_expense.delete')}</Button>
+      <Button
+        mode="contained"
+        onPress={handleDelete}
+        style={styles.deleteButton}>
+        {t('add_expense.delete')}
+      </Button>
     </ScreenWrapper>
   );
 });
