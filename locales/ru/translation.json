@@ -67,5 +67,21 @@
     "delete_expense": "Удалить расход?",
     "delete_expense_description": "Расход будет безвозвратно удален!",
     "delete_expense_error": "При ударении расхода произошла ошибка!"
+  },
+  "details" : {
+    "details_header": "Детали расхода",
+    "edit": "Редактировать",
+    "back": "Назад",
+    "expense_not_found": "Расход не найден",
+    "amount": "Сумма",
+    "date": "Дата",
+    "split": "Распределение",
+    "paid_by": "Заплатили",
+    "event": "Событие"
+  },
+  "event_list": {
+    "title": "Мои события",
+    "back": "Назад",
+    "add": "Добавить"
   }
 }

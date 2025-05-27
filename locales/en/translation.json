@@ -67,6 +67,22 @@
     "delete_expense": "Delete expense?",
     "delete_expense_description": "Expense will be deleted irrevocably!",
     "delete_expense_error": "An error occurred while deleting!"
+  },
+  "details" : {
+    "details_header": "Expense details",
+    "edit": "Edit",
+    "back": "Go Back",
+    "expense_not_found": "Expense not found",
+    "amount": "Amount",
+    "date": "Date",
+    "split": "Split",
+    "paid_by": "Paid",
+    "event": "Event"
+  },
+  "event_list": {
+    "title": "My Events",
+    "back": "Go Back",
+    "add": "Add"
   }
 }
   

@@ -31,6 +31,7 @@ interface IDebtResult {
 export interface IGroup {
   id: number;
   name: string;
+  createdAt: string;
   members: IUser[];
   debtResult: IDebtResult;
 }

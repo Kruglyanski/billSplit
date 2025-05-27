@@ -1,15 +1,18 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import expenseStore, {TSplitPaidBy} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
 import {EditExpenseScreenNavigationProps} from '../../navigation/types';
-import {ScreenWrapper} from '../../components/screen-wrapper/ScreenWrapper';
+import {
+  IButtonSettings,
+  ScreenWrapper,
+} from '../../components/screen-wrapper/ScreenWrapper';
 import {appStore} from '../../stores/appStore';
 import {colors} from '../../theme/colors';
 import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
 import {Button} from 'react-native-paper';
-import { styles } from './styles';
+import {styles} from './styles';
 
 const GRADIENT_COLORS = [colors.green, colors.white];
 
@@ -124,15 +127,22 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const group = groupStore.groups.find(g => g.id === groupId);
   const participants = group?.members || [];
 
+  const headerButtons: IButtonSettings[] = useMemo(() => {
+    return [
+      {
+        icon: 'arrow-left',
+        title: t('add_expense.back'),
+        onPress: navigation.goBack,
+      },
+      {title: t('add_expense.save'), onPress: handleSubmit},
+    ];
+  }, [navigation, handleSubmit, t]);
+
   return (
     <ScreenWrapper
       title={t('add_expense.edit_expense')}
       gradientColors={GRADIENT_COLORS}
-      onRightButtonPress={handleSubmit}
-      onLeftButtonPress={navigation.goBack}
-      leftButtonText={t('add_expense.back')}
-      leftButtonIcon="arrow-left"
-      rightButtonText={t('add_expense.save')}>
+      buttons={headerButtons}>
       <EditExpenseForm
         groupName={group?.name || ''}
         users={participants}

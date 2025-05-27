@@ -24,14 +24,18 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  buttonContainer: {
+  buttons: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 24,
   },
 
-  button: {
+  buttonWrapper: {
     marginBottom: 12,
+    width: 160,
+  },
+
+  button: {
     width: 160,
     borderWidth: 1,
     borderColor: colors.white,

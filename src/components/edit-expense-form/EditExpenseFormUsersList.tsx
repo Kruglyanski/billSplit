@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {TSplitPaidBy} from '../../stores/expenseStore';
 import {styles} from './styles';
 import {IUser} from '../../stores/userStore';
-import {getUserAmount} from './helper';
+import {getUserAmount} from '../../utils/helpers/get-user-amount-helper';
 
 interface IProps {
   handleAmountChange: (

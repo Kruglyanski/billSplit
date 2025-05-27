@@ -1,29 +1,18 @@
-import {FC, memo, useCallback} from 'react';
+import {FC, memo} from 'react';
 import {View} from 'react-native';
 import {Card, Text} from 'react-native-paper';
 import dayjs from 'dayjs';
-import {HomeScreenNavigationProps} from '../../navigation/types';
 import {styles} from './styles';
 
 interface IProps {
   title: string;
   createdAt: string;
   color: string;
-  id: number;
-  navigation: HomeScreenNavigationProps['navigation'];
+  onPress: () => void;
 }
 
-export const ExpenseCard: FC<IProps> = memo(
-  ({title, createdAt, color, id, navigation}) => {
-    const onPress = useCallback(() => {
-      navigation.navigate('HomeTab', {
-        screen: 'ExpenseDetails',
-        params: {expenseId: id},
-      });
-    }, [navigation, id]);
-
-    const date = dayjs(createdAt).format('DD.MM.YYYY HH:mm');
-
+export const ItemCard: FC<IProps> = memo(
+  ({title, createdAt, color, onPress}) => {
     return (
       <Card style={[styles.card, {backgroundColor: color}]} {...{onPress}}>
         <Card.Content>
@@ -35,7 +24,7 @@ export const ExpenseCard: FC<IProps> = memo(
               {title}
             </Text>
             <Text style={styles.cardDate} variant="labelMedium">
-              {date}
+              {dayjs(createdAt).format('DD.MM.YYYY HH:mm')}
             </Text>
           </View>
         </Card.Content>

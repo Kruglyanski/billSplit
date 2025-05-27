@@ -1,16 +1,19 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect, useMemo} from 'react';
 import {FlatList} from 'react-native';
 import {observer} from 'mobx-react-lite';
+import {FAB, Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 import authStore from '../../stores/authStore';
 import {HomeScreenNavigationProps} from '../../navigation/types';
 import userStore from '../../stores/userStore';
-import {useTranslation} from 'react-i18next';
-import {FAB, Text} from 'react-native-paper';
 import {colors} from '../../theme/colors';
 import expenseStore, {IExpense} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
-import {ExpenseCard} from '../../components/expense-card/ExpenseCard';
-import {ScreenWrapper} from '../../components/screen-wrapper/ScreenWrapper';
+import {ItemCard} from '../../components/item-card/ItemCard';
+import {
+  IButtonSettings,
+  ScreenWrapper,
+} from '../../components/screen-wrapper/ScreenWrapper';
 import {styles} from './styles';
 
 interface IProps {
@@ -67,27 +70,36 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
   const renderItem = useCallback(
     ({item, index}: {item: IExpense; index: number}) => {
       const color = COLOR_PALLETE[index % COLOR_PALLETE.length];
+
+      const onPress = () =>
+        navigation.navigate('HomeTab', {
+          screen: 'ExpenseDetails',
+          params: {expenseId: item.id},
+        });
+
       return (
-        <ExpenseCard
-          id={item.id}
+        <ItemCard
           title={item.description}
           createdAt={item.createdAt}
-          {...{navigation, color}}
+          {...{onPress, color}}
         />
       );
     },
     [],
   );
 
+  const headerButtons: IButtonSettings[] = useMemo(() => {
+    return [
+      {icon: 'plus', title: t('home.event'), onPress: navigateToGroupCreate},
+      {title: t('home.go_to_groups'), onPress: navigateToGroupList},
+    ];
+  }, [navigateToGroupCreate, navigateToGroupCreate, t]);
+
   return (
     <ScreenWrapper
       title={`${t('home.welcome')}, ${authStore.user?.name || t('home.user')}!`}
       gradientColors={GRADIENT_COLORS}
-      onRightButtonPress={navigateToGroupList}
-      onLeftButtonPress={navigateToGroupCreate}
-      leftButtonText={t('home.event')}
-      leftButtonIcon={'plus'}
-      rightButtonText={t('home.go_to_groups')}>
+      buttons={headerButtons}>
       <Text variant="headlineSmall" style={styles.listHeader}>
         {t('home.current_expenses')}:
       </Text>

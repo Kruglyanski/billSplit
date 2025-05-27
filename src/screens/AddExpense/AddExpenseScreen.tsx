@@ -1,10 +1,13 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useCallback, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import expenseStore, {TSplitPaidBy} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
 import {AddExpenseScreenNavigationProps} from '../../navigation/types';
-import {ScreenWrapper} from '../../components/screen-wrapper/ScreenWrapper';
+import {
+  IButtonSettings,
+  ScreenWrapper,
+} from '../../components/screen-wrapper/ScreenWrapper';
 import {colors} from '../../theme/colors';
 import {appStore} from '../../stores/appStore';
 import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
@@ -102,15 +105,22 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
     }
   }, [navigation, description, amount, groupId, splits, paidBy]);
 
+  const headerButtons: IButtonSettings[] = useMemo(() => {
+    return [
+      {
+        icon: 'arrow-left',
+        title: t('add_expense.back'),
+        onPress: navigation.goBack,
+      },
+      {title: t('add_expense.add'), onPress: handleSubmit},
+    ];
+  }, [navigation, handleSubmit, t]);
+
   return (
     <ScreenWrapper
       title={t('add_expense.create_expense')}
       gradientColors={GRADIENT_COLORS}
-      onRightButtonPress={handleSubmit}
-      onLeftButtonPress={navigation.goBack}
-      leftButtonText={t('add_expense.back')}
-      leftButtonIcon={'arrow-left'}
-      rightButtonText={t('add_expense.add')}>
+      buttons={headerButtons}>
       <EditExpenseForm
         groupName={group?.name || ''}
         users={participants}
