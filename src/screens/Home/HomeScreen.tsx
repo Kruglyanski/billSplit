@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useMemo} from 'react';
 import {FlatList} from 'react-native';
 import {observer} from 'mobx-react-lite';
-import {FAB, Text} from 'react-native-paper';
+import {Button, FAB, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import authStore from '../../stores/authStore';
 import {HomeScreenNavigationProps} from '../../navigation/types';
@@ -15,6 +15,7 @@ import {
   ScreenWrapper,
 } from '../../components/screen-wrapper/ScreenWrapper';
 import {styles} from './styles';
+import {appStore} from '../../stores/appStore';
 
 interface IProps {
   navigation: HomeScreenNavigationProps['navigation'];
@@ -54,18 +55,18 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
     navigation.navigate('HomeTab', {screen: 'AddExpense', params: {}});
   }, [navigation]);
 
-  // const logOut = useCallback(() => {
-  //   authStore.logout();
-  //   navigation.navigate('Auth');
-  // }, [navigation]);
+  const logOut = useCallback(() => {
+    authStore.logout();
+    navigation.navigate('Auth');
+  }, [navigation]);
 
-  // const showLogoutModal = useCallback(() => {
-  //   appStore.showInfoModal({
-  //     message: t('home.logout_message'),
-  //     title: t('home.attention'),
-  //     action: logOut,
-  //   });
-  // }, [logOut]);
+  const showLogoutModal = useCallback(() => {
+    appStore.showInfoModal({
+      message: t('home.logout_message'),
+      title: t('home.attention'),
+      action: logOut,
+    });
+  }, [logOut]);
 
   const renderItem = useCallback(
     ({item, index}: {item: IExpense; index: number}) => {
@@ -103,6 +104,13 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
       <Text variant="headlineSmall" style={styles.listHeader}>
         {t('home.current_expenses')}:
       </Text>
+      <Button
+        mode="text"
+        onPress={showLogoutModal}
+        icon="logout"
+        textColor={colors.darkGray}>
+        {t('home.logout')}
+      </Button>
       <FlatList
         style={styles.list}
         contentContainerStyle={styles.listContainer}
@@ -121,14 +129,3 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
     </ScreenWrapper>
   );
 });
-
-{
-  /* <Button
-style={styles.logout}
-mode="text"
-onPress={showLogoutModal}
-icon="logout"
-textColor={colors.darkGray}>
-{t('home.logout')}
-</Button> */
-}

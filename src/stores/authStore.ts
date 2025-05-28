@@ -58,6 +58,16 @@ class AuthStore {
     });
   }
 
+  async loginWithGoogle(idToken: string) {
+    const res = await apiService.loginWithGoogle({idToken});
+    const {token, user} = res.data;
+    await AsyncStorage.setItem('token', token);
+    setAuthToken(token);
+    runInAction(() => {
+      this.user = user;
+    });
+  }
+
   async logout() {
     await AsyncStorage.clear();
     clearAuthToken();

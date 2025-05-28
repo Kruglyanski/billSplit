@@ -1,6 +1,11 @@
 import axios from 'axios';
+import {Platform} from 'react-native';
 
-const API_BASE_URL = 'http://10.0.2.2:3000'; 
+const API_BASE_URL = Platform.select({
+  android: 'http://10.0.2.2:3000', // для Android эмулятора
+  ios: 'http://localhost:3000', // для iOS симулятора
+  default: 'http://localhost:3000', // для других случаев
+});
 
 const api = axios.create({
   baseURL: API_BASE_URL,
