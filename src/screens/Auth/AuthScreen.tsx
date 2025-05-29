@@ -1,11 +1,8 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {Image, Keyboard, Platform} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import {
-  AuthScreenNavigationProps,
-  RootStackParamList,
-} from '../../navigation/types';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {AuthScreenNavigationProps} from '../../navigation/types';
 import authStore from '../../stores/authStore';
 import {getEmailError, getNameError, getPasswordError} from './auth-helper';
 import {AuthForm} from '../../components/auth-form/AuthForm';
@@ -16,7 +13,7 @@ import {AuthWelcome} from '../../components/auth-welcome/AuthWelcome';
 import LinearGradient from 'react-native-linear-gradient';
 import {colors} from '../../theme/colors';
 import {SCREEN_GRADIENT_END, SCREEN_GRADIENT_START} from '../../constants';
-import { Button } from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 interface IProps {
   navigation: AuthScreenNavigationProps['navigation'];
@@ -50,25 +47,30 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
       const userInfo = await GoogleSignin.signIn();
       const idToken = userInfo?.data?.idToken;
 
-      if(idToken){
+      if (idToken) {
         await authStore.loginWithGoogle(idToken);
         navigation.navigate('Tabs');
       }
     } catch (error) {
       console.error('Google login error', error);
     }
-  },[])
+  }, []);
 
   useEffect(() => {
-    console.log('platform', Platform.OS )
-    GoogleSignin.configure(Platform.OS === 'ios' ? {
-      iosClientId: '681483286285-67vl244e1ngentnnt911l5iu43ba407t.apps.googleusercontent.com',
-    } : {
-      webClientId: '681483286285-nm370tnopi3blde1vkgnro835c6vnjbq.apps.googleusercontent.com',
-      offlineAccess: true,
-    });
-  
+    GoogleSignin.configure(
+      Platform.OS === 'ios'
+        ? {
+            iosClientId:
+              '681483286285-67vl244e1ngentnnt911l5iu43ba407t.apps.googleusercontent.com',
+          }
+        : {
+            webClientId:
+              '681483286285-nm370tnopi3blde1vkgnro835c6vnjbq.apps.googleusercontent.com',
+            offlineAccess: true,
+          },
+    );
   }, []);
+
   const changePassword = useCallback((value: string) => {
     setPassword(value);
     if (formIsTouched.current) {

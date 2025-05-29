@@ -23,7 +23,7 @@ export type HomeStackParamList = {
   AddExpense: TAddExpense;
   EditExpense: TEditExpense;
   ExpenseDetails: TExpenseDetails;
-  CreateGroup: TCreateGroup;
+  // CreateGroup: TCreateGroup;
 };
 
 type TAddExpense = {
@@ -41,13 +41,13 @@ type TEditExpense = {
 type TCreateGroup = undefined;
 
 export type GroupStackParamList = {
-  GroupList: undefined;
-  GroupBalance: {groupId: number};
-  CreateGroup: TCreateGroup;
   AddExpense: TAddExpense;
-  GroupDetails: {groupId: number};
   ExpenseDetails: TExpenseDetails;
   EditExpense: {expenseId: number};
+  GroupList: undefined;
+  GroupDetails: {groupId: number};
+  GroupBalance: {groupId: number};
+  CreateGroup: TCreateGroup;
 };
 
 export type AuthScreenNavigationProps = NativeStackScreenProps<

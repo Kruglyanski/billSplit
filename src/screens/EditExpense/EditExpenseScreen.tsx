@@ -120,13 +120,6 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
     });
   }, [deleteExpense, t]);
 
-  if (!expense || groupId === null) {
-    return <></>;
-  }
-
-  const group = groupStore.groups.find(g => g.id === groupId);
-  const participants = group?.members || [];
-
   const headerButtons: IButtonSettings[] = useMemo(() => {
     return [
       {
@@ -137,6 +130,13 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       {title: t('add_expense.save'), onPress: handleSubmit},
     ];
   }, [navigation, handleSubmit, t]);
+
+  if (!expense || groupId === null) {
+    return <></>;
+  }
+
+  const group = groupStore.groups.find(g => g.id === groupId);
+  const participants = group?.members || [];
 
   return (
     <ScreenWrapper

@@ -38,14 +38,14 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    userStore.fetchUsers();
+    userStore.fetchRelatedUsers();
     expenseStore.fetchExpensesByUser();
     groupStore.fetchUserGroups();
   }, []);
 
-  const navigateToGroupCreate = useCallback(() => {
-    navigation.navigate('HomeTab', {screen: 'CreateGroup'});
-  }, [navigation]);
+  // const navigateToGroupCreate = useCallback(() => {
+  //   navigation.navigate('HomeTab', {screen: 'CreateGroup'});
+  // }, [navigation]);
 
   const navigateToGroupList = useCallback(() => {
     navigation.navigate('GroupListTab', {screen: 'GroupList'});
@@ -91,10 +91,10 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
 
   const headerButtons: IButtonSettings[] = useMemo(() => {
     return [
-      {icon: 'plus', title: t('home.event'), onPress: navigateToGroupCreate},
+      // {icon: 'plus', title: t('home.event'), onPress: navigateToGroupCreate},
       {title: t('home.go_to_groups'), onPress: navigateToGroupList},
     ];
-  }, [navigateToGroupCreate, navigateToGroupCreate, t]);
+  }, [navigateToGroupList, t]);
 
   return (
     <ScreenWrapper

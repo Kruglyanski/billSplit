@@ -1,11 +1,14 @@
 import {makeAutoObservable, runInAction} from 'mobx';
-import {getAllUsers} from '../api/apiService';
+import {getAllUsers, getRelatedUsers, getUserByEmail} from '../api/apiService';
 
 export interface IUser {
   id: number;
   name: string;
   email: string;
+  registered: boolean;
 }
+
+export type TExtraUser = Omit<IUser, 'id'>;
 
 class UserStore {
   users: Map<number, IUser> = new Map();
@@ -20,10 +23,42 @@ class UserStore {
     try {
       const res = await getAllUsers();
       runInAction(() => {
+        this.users.clear();
         res.data.forEach((user: IUser) => this.users.set(user.id, user));
       });
     } catch (error) {
       console.error('Ошибка при загрузке пользователей', error);
+    }
+  }
+
+  async fetchRelatedUsers() {
+    try {
+      const res = await getRelatedUsers();
+      runInAction(() => {
+        this.users.clear();
+        res.data.forEach((user: IUser) => {
+          this.users.set(user.id, user);
+        });
+      });
+    } catch (error) {
+      console.error('Ошибка при загрузке связанных пользователей', error);
+    }
+  }
+
+  async fetchUserByEmail(email: string) {
+    try {
+      const res = await getUserByEmail(email);
+      runInAction(() => {
+        const newMap = new Map<number, IUser>();
+        newMap.set(res.data.id, res.data);
+        for (const [key, value] of this.users) {
+          newMap.set(key, value);
+        }
+        this.users = newMap;
+      });
+      return res.data;
+    } catch (error) {
+      console.error('Ошибка при загрузке пользователz по Email', error);
     }
   }
 

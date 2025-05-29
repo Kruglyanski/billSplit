@@ -51,11 +51,13 @@ const HomeStackNavigator = () => {
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="AddExpense" component={AddExpenseScreen} />
       <HomeStack.Screen name="EditExpense" component={EditExpenseScreen} />
-      <HomeStack.Screen name="CreateGroup" component={CreateGroupScreen} />
       <HomeStack.Screen
         name="ExpenseDetails"
         component={ExpenseDetailsScreen}
       />
+      {/* <HomeStack.Screen name="CreateGroup" component={CreateGroupScreen} />
+      <HomeStack.Screen name="GroupDetails" component={GroupDetailsScreen} />
+      <HomeStack.Screen name="GroupBalance" component={GroupBalanceScreen} /> */}
     </HomeStack.Navigator>
   );
 };

@@ -1,4 +1,6 @@
 import {TSplitPaidBy} from '../stores/expenseStore';
+import {IGroup} from '../stores/groupStore';
+import {IUser, TExtraUser} from '../stores/userStore';
 import api from './api';
 
 export const register = (data: {
@@ -17,8 +19,11 @@ export const getMe = () => api.get('/users/me');
 
 export const getUserGroups = () => api.get('/groups');
 
-export const createGroup = (name: string, userIds: any) =>
-  api.post('/groups', {name, userIds}); //TODO: types
+export const createGroup = (
+  name: string,
+  userIds: number[],
+  extraUsers: TExtraUser[],
+) => api.post<IGroup>('/groups', {name, userIds, extraUsers});
 
 export const getGroup = (groupId: number) => api.get(`/groups/${groupId}`);
 
@@ -52,6 +57,11 @@ export const updateExpense = (
 export const deleteExpense = (id: number) => api.delete(`/expenses/${id}`);
 
 export const getAllUsers = () => api.get('/users');
+
+export const getRelatedUsers = () => api.get('/users/related');
+
+export const getUserByEmail = (email: string) =>
+  api.get<IUser>(`/users/by-email?email=${email}`);
 
 export const getExpenseHistory = () => api.get(`/expenses/history`);
 

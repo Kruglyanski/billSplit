@@ -1,6 +1,6 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
-import {IUser} from './userStore';
+import {IUser, TExtraUser} from './userStore';
 
 interface ITransaction {
   fromUserId: number;
@@ -63,12 +63,14 @@ class GroupStore {
     });
   }
 
-  async createGroup(name: string, userIds: string[]) {
+  async createGroup(name: string, userIds: number[], extraUsers: TExtraUser[]) {
     try {
-      const res = await apiService.createGroup(name, userIds);
+      // Вызов API с тремя параметрами
+      const res = await apiService.createGroup(name, userIds, extraUsers);
       runInAction(() => {
         this.groups.push(res.data);
       });
+      return res.data.id;
     } catch (error) {
       console.error('Ошибка при создании группы', error);
     }
