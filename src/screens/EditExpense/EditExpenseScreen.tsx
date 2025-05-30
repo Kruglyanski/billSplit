@@ -11,8 +11,6 @@ import {
 import {appStore} from '../../stores/appStore';
 import {colors} from '../../theme/colors';
 import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
-import {Button} from 'react-native-paper';
-import {styles} from './styles';
 
 const GRADIENT_COLORS = [colors.green, colors.white];
 
@@ -127,7 +125,7 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
         title: t('add_expense.back'),
         onPress: navigation.goBack,
       },
-      {title: t('add_expense.save'), onPress: handleSubmit},
+      {title: t('add_expense.delete'), onPress: handleDelete},
     ];
   }, [navigation, handleSubmit, t]);
 
@@ -146,21 +144,18 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       <EditExpenseForm
         groupName={group?.name || ''}
         users={participants}
-        amount={amount}
-        handleAmountChange={handleAmountChange}
-        setGroupId={setGroupId}
-        setAmount={setAmount}
-        setDescription={setDescription}
-        splits={splits}
-        paidBy={paidBy}
-        description={description}
+        {...{
+          amount,
+          splits,
+          paidBy,
+          description,
+          setDescription,
+          setAmount,
+          setGroupId,
+          handleAmountChange,
+          handleSubmit,
+        }}
       />
-      <Button
-        mode="contained"
-        onPress={handleDelete}
-        style={styles.deleteButton}>
-        {t('add_expense.delete')}
-      </Button>
     </ScreenWrapper>
   );
 });

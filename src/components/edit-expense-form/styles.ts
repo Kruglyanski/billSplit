@@ -51,4 +51,10 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 6,
   },
+
+  saveButton: {
+    marginBottom: 16,
+    width: 200,
+    alignSelf: 'center',
+  },
 });

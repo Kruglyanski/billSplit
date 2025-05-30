@@ -1,6 +1,6 @@
 import React, {FC, memo, useCallback, useState} from 'react';
 import {ScrollView, Pressable} from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {Button, TextInput} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {TSplitPaidBy} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
@@ -15,6 +15,7 @@ interface IProps {
     value: string,
     type: 'paid' | 'split',
   ) => void;
+  handleSubmit: () => void;
   setGroupId: (groupId: number) => void;
   setAmount: (amount: string) => void;
   setDescription: (description: string) => void;
@@ -29,6 +30,7 @@ interface IProps {
 export const EditExpenseForm: FC<IProps> = memo(
   ({
     handleAmountChange,
+    handleSubmit,
     setGroupId,
     setAmount,
     setDescription,
@@ -81,6 +83,12 @@ export const EditExpenseForm: FC<IProps> = memo(
         <EditExpenseFormUsersList
           {...{handleAmountChange, paidBy, splits, users}}
         />
+        <Button
+          mode="contained"
+          onPress={handleSubmit}
+          style={styles.saveButton}>
+          {t('add_expense.save')}
+        </Button>
         <GroupSelectModal
           visible={modalVisible}
           onDismiss={closeGroupsList}
