@@ -65,7 +65,6 @@ class GroupStore {
 
   async createGroup(name: string, userIds: number[], extraUsers: TExtraUser[]) {
     try {
-      // Вызов API с тремя параметрами
       const res = await apiService.createGroup(name, userIds, extraUsers);
       runInAction(() => {
         this.groups.push(res.data);
@@ -73,6 +72,24 @@ class GroupStore {
       return res.data.id;
     } catch (error) {
       console.error('Ошибка при создании группы', error);
+    }
+  }
+
+  async updateGroup(
+    id: number,
+    name: string,
+    userIds: number[],
+    extraUsers: TExtraUser[],
+  ) {
+    try {
+      const res = await apiService.updateGroup(id, name, userIds, extraUsers);
+      runInAction(() => {
+        this.groups = this.groups.map(g => (g.id === id ? res.data : g));
+      });
+      return res.data;
+    } catch (error) {
+      console.error('Ошибка обновления группы', error);
+      throw error;
     }
   }
 

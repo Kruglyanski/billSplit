@@ -1,6 +1,6 @@
 import {makeAutoObservable, runInAction} from 'mobx';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as apiService from '../api/apiService';
+import * as authService from '../utils/services/authService';
 import {setAuthToken, clearAuthToken} from '../api/api';
 
 interface IUser {
@@ -11,7 +11,7 @@ interface IUser {
 
 class AuthStore {
   user: IUser | null = null;
-  loading = true;
+  isLoading = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -19,7 +19,7 @@ class AuthStore {
   }
 
   async bootstrap() {
-    const token = await AsyncStorage.getItem('token');
+    const token = await authService.getAccessToken();
     if (token) {
       setAuthToken(token);
       try {
@@ -31,17 +31,18 @@ class AuthStore {
         await this.logout();
       }
     }
+
     runInAction(() => {
-      this.loading = false;
+      this.isLoading = false;
     });
   }
 
   async login(email: string, password: string) {
     const res = await apiService.login({email, password});
-    const {token, user} = res.data;
-    await AsyncStorage.setItem('token', token);
+    const {tokens, user} = res.data;
+    authService.saveTokens(tokens.accessToken, tokens.refreshToken);
+    setAuthToken(tokens.accessToken);
 
-    setAuthToken(token);
     runInAction(() => {
       this.user = user;
     });
@@ -53,12 +54,9 @@ class AuthStore {
 
   async confirmEmail(token: string) {
     const res = await apiService.confirmEmail(token);
-    const {token: newToken, user} = res.data;
-
-    if (newToken) {
-      await AsyncStorage.setItem('token', newToken);
-      setAuthToken(newToken);
-    }
+    const {tokens, user} = res.data;
+    authService.saveTokens(tokens.accessToken, tokens.refreshToken);
+    setAuthToken(tokens.accessToken);
 
     runInAction(() => {
       this.user = user;
@@ -67,16 +65,18 @@ class AuthStore {
 
   async loginWithGoogle(idToken: string) {
     const res = await apiService.loginWithGoogle({idToken});
-    const {token, user} = res.data;
-    await AsyncStorage.setItem('token', token);
-    setAuthToken(token);
+    const {tokens, user} = res.data;
+    authService.saveTokens(tokens.accessToken, tokens.refreshToken);
+    setAuthToken(tokens.accessToken);
+
     runInAction(() => {
       this.user = user;
     });
   }
 
   async logout() {
-    await AsyncStorage.clear();
+    apiService.logout();
+    authService.resetTokens();
     clearAuthToken();
     runInAction(() => {
       this.user = null;

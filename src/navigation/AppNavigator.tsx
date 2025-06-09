@@ -24,7 +24,7 @@ import {customTypeScale} from '../theme/typography';
 import {useTranslation} from 'react-i18next';
 import {EditExpenseScreen} from '../screens/EditExpense/EditExpenseScreen';
 import {ConfirmEmailScreen} from '../screens/ConfirmEmail/ConfirmEmailScreen';
-import {setNavigator} from '../utils/services/deeplink_service';
+import {setNavigator} from '../utils/services/deeplinkService';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -111,7 +111,7 @@ const Tabs = () => {
 };
 
 const AppNavigator = observer(() => {
-  if (authStore.loading) return null; // TODO: сделать сплеш экран
+  if (authStore.isLoading) return null;
 
   return (
     <NavigationContainer ref={setNavigator}>

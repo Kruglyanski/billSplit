@@ -1,20 +1,22 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   Button,
+  TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {observer} from 'mobx-react-lite';
 import groupStore from '../../stores/groupStore';
-import expenseStore from '../../stores/expenseStore';
-import {GroupDetailScreenNavigationProps} from '../../navigation/types';
+import {GroupDetailsScreenNavigationProps} from '../../navigation/types';
+import {TExtraUser} from '../../stores/userStore';
 
 interface IProps {
-  navigation: GroupDetailScreenNavigationProps['navigation'];
-  route: GroupDetailScreenNavigationProps['route'];
+  navigation: GroupDetailsScreenNavigationProps['navigation'];
+  route: GroupDetailsScreenNavigationProps['route'];
 }
 
 export const GroupDetailsScreen: FC<IProps> = observer(
@@ -30,56 +32,130 @@ export const GroupDetailsScreen: FC<IProps> = observer(
       );
     }
 
-    const renderExpense = ({item}: any) => (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('ExpenseDetails', {expenseId: item.id})
-        }>
-        <View style={styles.expenseItem}>
-          <View>
-            <Text style={styles.expenseDesc}>{item.description}</Text>
-            <Text style={styles.paidBy}>
-              Заплатил: {item.paidBy?.name || '—'}
-            </Text>
-          </View>
-          <Text style={styles.expenseAmount}>{item.amount} ₽</Text>
-        </View>
-      </TouchableOpacity>
+    const [name, setName] = useState(group.name);
+    const [selectedUserIds, setSelectedUserIds] = useState(
+      group.members.map(m => m.id),
     );
+    const [extraUsers, setExtraUsers] = useState<TExtraUser[]>([]);
 
-    const renderMember = (member: any) => (
-      <Text key={member.id} style={styles.member}>
-        • {member.name}
-      </Text>
-    );
+    const [extraUserEmail, setExtraUserEmail] = useState('');
+    const [extraUserName, setExtraUserName] = useState('');
+
+    const allUsers = group.members || [];
+
+    const toggleUser = (id: number) => {
+      setSelectedUserIds(prev => {
+        if (prev.includes(id)) {
+          return prev.filter(uid => uid !== id);
+        } else {
+          return [...prev, id];
+        }
+      });
+    };
+
+    // Добавить extraUser
+    const addExtraUser = () => {
+      if (!extraUserEmail || !extraUserName) {
+        Alert.alert(
+          'Ошибка',
+          'Введите имя и email для дополнительного участника',
+        );
+        return;
+      }
+      setExtraUsers(prev => [
+        ...prev,
+        {email: extraUserEmail, name: extraUserName, registered: false},
+      ]);
+      setExtraUserEmail('');
+      setExtraUserName('');
+    };
+
+    // Удалить extraUser по индексу
+    const removeExtraUser = (index: number) => {
+      setExtraUsers(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Сохранить изменения — вызвать updateGroup из groupStore
+    const onSave = async () => {
+      try {
+        await groupStore.updateGroup(
+          group.id,
+          name,
+          selectedUserIds,
+          extraUsers,
+        );
+        Alert.alert('Успех', 'Группа обновлена');
+        navigation.goBack();
+      } catch (e) {
+        Alert.alert('Ошибка', 'Не удалось обновить группу');
+      }
+    };
 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{group.name}</Text>
+        <Text style={styles.label}>Название группы:</Text>
+        <TextInput
+          value={name}
+          onChangeText={setName}
+          style={styles.input}
+          placeholder="Название группы"
+        />
 
-        <Text style={styles.sectionTitle}>Участники:</Text>
-        {group.members.map(renderMember)}
-
-        <Text style={styles.sectionTitle}>Расходы:</Text>
+        <Text style={styles.label}>Участники:</Text>
         <FlatList
-          data={[...expenseStore.expenses.values()].filter(
-            e => e.group.id === group.id,
-          )}
+          data={allUsers}
           keyExtractor={item => item.id.toString()}
-          renderItem={renderExpense}
-          ListEmptyComponent={<Text>Нет расходов</Text>}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.memberItem}
+              onPress={() => toggleUser(item.id)}>
+              <Text
+                style={{
+                  ...styles.memberName,
+                  fontWeight: selectedUserIds.includes(item.id)
+                    ? 'bold'
+                    : 'normal',
+                }}>
+                {item.name}
+              </Text>
+              <Text style={styles.checkbox}>
+                {selectedUserIds.includes(item.id) ? '☑' : '☐'}
+              </Text>
+            </TouchableOpacity>
+          )}
+          ListEmptyComponent={<Text>Нет пользователей для выбора</Text>}
         />
 
-        <Button
-          title="Добавить расход"
-          onPress={() => navigation.navigate('AddExpense', {groupId: group.id})}
-        />
-        <Button
-          title="Баланс"
-          onPress={() =>
-            navigation.navigate('GroupBalance', {groupId: group.id})
-          }
-        />
+        <Text style={styles.label}>Дополнительные участники (email):</Text>
+        {extraUsers.map((eu, i) => (
+          <View key={i} style={styles.extraUserRow}>
+            <Text style={styles.extraUserText}>
+              {eu.name} ({eu.email})
+            </Text>
+            <Button title="Удалить" onPress={() => removeExtraUser(i)} />
+          </View>
+        ))}
+        <View style={styles.extraUserInputRow}>
+          <TextInput
+            placeholder="Email"
+            value={extraUserEmail}
+            onChangeText={setExtraUserEmail}
+            style={[styles.input, {flex: 1, marginRight: 8}]}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <TextInput
+            placeholder="Имя"
+            value={extraUserName}
+            onChangeText={setExtraUserName}
+            style={[styles.input, {flex: 1}]}
+          />
+        </View>
+        <Button title="Добавить участника" onPress={addExtraUser} />
+
+        <View style={{marginVertical: 16}}>
+          <Button title="Сохранить" onPress={onSave} />
+        </View>
       </View>
     );
   },
@@ -87,21 +163,33 @@ export const GroupDetailsScreen: FC<IProps> = observer(
 
 const styles = StyleSheet.create({
   container: {flex: 1, padding: 16},
-  title: {fontSize: 24, fontWeight: 'bold', marginBottom: 16},
-  sectionTitle: {fontSize: 18, marginTop: 16, fontWeight: '600'},
-  member: {fontSize: 16},
-  expenseItem: {
+  label: {fontSize: 16, marginBottom: 8, fontWeight: '600'},
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 16,
+  },
+  memberItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 8,
+    borderBottomColor: '#eee',
     borderBottomWidth: 1,
-    borderColor: '#ccc',
   },
-  expenseDesc: {fontSize: 16},
-  expenseAmount: {fontSize: 16, fontWeight: 'bold'},
-  paidBy: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 2,
+  memberName: {fontSize: 16},
+  checkbox: {fontSize: 18},
+  extraUserRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  extraUserText: {fontSize: 14},
+  extraUserInputRow: {
+    flexDirection: 'row',
+    marginBottom: 16,
   },
 });

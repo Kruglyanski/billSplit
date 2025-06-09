@@ -18,6 +18,13 @@ export const login = (data: {email: string; password: string}) =>
 export const loginWithGoogle = (data: {idToken: string}) =>
   api.post('/auth/google', data);
 
+export const logout = () => api.get('/auth/logout');
+
+export const refreshToken = (refreshToken: string) =>
+  api.post('/auth/refresh', null, {
+    headers: {Authorization: `Bearer ${refreshToken}`},
+  });
+
 export const getMe = () => api.get('/users/me');
 
 export const getUserGroups = () => api.get('/groups');
@@ -27,6 +34,13 @@ export const createGroup = (
   userIds: number[],
   extraUsers: TExtraUser[],
 ) => api.post<IGroup>('/groups', {name, userIds, extraUsers});
+
+export const updateGroup = (
+  id: number,
+  name: string,
+  userIds: number[],
+  extraUsers: TExtraUser[],
+) => api.put<IGroup>(`/groups/${id}`, {name, userIds, extraUsers});
 
 export const getGroup = (groupId: number) => api.get(`/groups/${groupId}`);
 

@@ -1,6 +1,9 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {NavigatorScreenParams} from '@react-navigation/native';
+import {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 
 export type RootStackParamList = {
   Auth: undefined;
@@ -61,9 +64,9 @@ export type TabsScreenNavigationProps = NativeStackScreenProps<
   'Tabs'
 >;
 
-export type HomeScreenNavigationProps = BottomTabScreenProps<
-  TabsParamList,
-  'HomeTab'
+export type HomeScreenNavigationProps = CompositeScreenProps<
+  BottomTabScreenProps<TabsParamList, 'HomeTab'>,
+  NativeStackScreenProps<RootStackParamList>
 >;
 
 export type GroupListScreenNavigationProps = BottomTabScreenProps<
