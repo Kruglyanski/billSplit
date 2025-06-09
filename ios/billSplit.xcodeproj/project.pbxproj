@@ -23,6 +23,7 @@
 		3B4392A12AC88292D35C810B /* Pods-billSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-billSplit.debug.xcconfig"; path = "Target Support Files/Pods-billSplit/Pods-billSplit.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-billSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-billSplit.release.xcconfig"; path = "Target Support Files/Pods-billSplit/Pods-billSplit.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-billSplit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-billSplit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E3005E82DF2F15C004C4E0E /* billSplit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = billSplit.entitlements; path = billSplit/billSplit.entitlements; sourceTree = "<group>"; };
 		5EE830732DE71CFE00C7CBE6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = billSplit/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = billSplit/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -44,6 +45,7 @@
 		13B07FAE1A68108700A75B9A /* billSplit */ = {
 			isa = PBXGroup;
 			children = (
+				5E3005E82DF2F15C004C4E0E /* billSplit.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -263,6 +265,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = billSplit/billSplit.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = billSplit/Info.plist;
@@ -291,6 +294,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = billSplit/billSplit.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = billSplit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;

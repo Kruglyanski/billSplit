@@ -121,6 +121,9 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
 
     try {
       await authStore.register(name, email, password);
+      appStore.showInfoModal({
+        message: t('auth.registered', {email}),
+      });
     } catch (e: any) {
       appStore.showInfoModal({
         message:

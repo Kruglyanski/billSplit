@@ -14,6 +14,7 @@
     "registration": "Регистрация",
     "already_have_account": "Уже есть аккаунт",
     "back": "Назад",
+    "registered":"На почту {{email}} отправлено подтверждение регистрации",
     "subheader": {
       "enter": "Добро пожаловать",
       "registration": "Создать аккаунт"

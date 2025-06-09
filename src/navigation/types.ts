@@ -4,6 +4,7 @@ import {NavigatorScreenParams} from '@react-navigation/native';
 
 export type RootStackParamList = {
   Auth: undefined;
+  ConfirmEmail: {token: string};
   Tabs:
     | {
         screen?: keyof TabsParamList;

@@ -11,7 +11,7 @@ export const LightColors = {
 };
 
 export const DarkColors = {
-  primary: '##86adfc',
+  primary: '#86adfc',
   onPrimary: '#000000',
   background: '#121212',
   surface: '#121212',

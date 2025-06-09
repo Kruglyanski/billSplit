@@ -14,6 +14,7 @@
     "registration": "Registration",
     "already_have_account": "Already have account",
     "back": "Back",
+    "registered":"Confirmation of registration has been sent to {{email}}",
     "subheader": {
       "enter": "Welcome",
       "registration": "Create account"

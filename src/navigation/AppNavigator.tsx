@@ -23,6 +23,8 @@ import {colors} from '../theme/colors';
 import {customTypeScale} from '../theme/typography';
 import {useTranslation} from 'react-i18next';
 import {EditExpenseScreen} from '../screens/EditExpense/EditExpenseScreen';
+import {ConfirmEmailScreen} from '../screens/ConfirmEmail/ConfirmEmailScreen';
+import {setNavigator} from '../utils/services/deeplink_service';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -55,9 +57,6 @@ const HomeStackNavigator = () => {
         name="ExpenseDetails"
         component={ExpenseDetailsScreen}
       />
-      {/* <HomeStack.Screen name="CreateGroup" component={CreateGroupScreen} />
-      <HomeStack.Screen name="GroupDetails" component={GroupDetailsScreen} />
-      <HomeStack.Screen name="GroupBalance" component={GroupBalanceScreen} /> */}
     </HomeStack.Navigator>
   );
 };
@@ -115,11 +114,12 @@ const AppNavigator = observer(() => {
   if (authStore.loading) return null; // TODO: сделать сплеш экран
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={setNavigator}>
       <RootStack.Navigator
         screenOptions={{headerShown: false}}
         initialRouteName={authStore.user ? 'Tabs' : 'Auth'}>
         <RootStack.Screen name="Auth" component={AuthScreen} />
+        <RootStack.Screen name="ConfirmEmail" component={ConfirmEmailScreen} />
         <RootStack.Screen name="Tabs" component={Tabs} />
       </RootStack.Navigator>
     </NavigationContainer>

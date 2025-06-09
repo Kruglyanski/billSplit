@@ -27,6 +27,8 @@ class AppStore {
 
   hideInfoModal = action(() => {
     this.infoModalMessage = '';
+    this.infoModalTitle = '';
+    this.infoModalAction = null;
   });
 
   showInfoModal({message, title, action}: TInfoModalSettings) {

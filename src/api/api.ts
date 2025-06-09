@@ -7,6 +7,8 @@ const API_BASE_URL = Platform.select({
   default: 'http://localhost:3000', // для других случаев
 });
 
+// const API_BASE_URL = 'https://bill-split-backend.onrender.com';
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,

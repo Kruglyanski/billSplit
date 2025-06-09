@@ -1,12 +1,16 @@
 import './i18n';
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import {PaperProvider} from 'react-native-paper';
 import {useColorScheme} from 'react-native';
 import {lightTheme, darkTheme} from './src/theme';
 import {EThemeType, appStore} from './src/stores/appStore';
 import {InfoModal} from './src/components/info-modal/InfoModal';
+import {
+  handleInitialDeeplink,
+  subscribeToDeeplinks,
+} from './src/utils/services/deeplink_service';
 
 const themeMap = {
   [EThemeType.LIGHT]: lightTheme,
@@ -16,13 +20,19 @@ const themeMap = {
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
 
-  let theme;
+  useEffect(() => {
+    handleInitialDeeplink();
+    const unsubscribe = subscribeToDeeplinks();
+    return () => unsubscribe();
+  }, []);
 
-  if (appStore.themeType !== null) {
-    theme = themeMap[appStore.themeType];
-  } else if (colorScheme) {
-    theme = themeMap[colorScheme as EThemeType];
-  } else theme = lightTheme;
+  let theme = lightTheme;
+
+  // if (appStore.themeType !== null) {
+  //   theme = themeMap[appStore.themeType];
+  // } else if (colorScheme) {
+  //   theme = themeMap[colorScheme as EThemeType];
+  // } else theme = lightTheme;
 
   return (
     <PaperProvider {...{theme}}>

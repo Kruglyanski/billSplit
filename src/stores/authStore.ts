@@ -49,10 +49,17 @@ class AuthStore {
 
   async register(name: string, email: string, password: string) {
     const res = await apiService.register({name, email, password});
-    const {token, user} = res.data;
-    await AsyncStorage.setItem('token', token);
+  }
 
-    setAuthToken(token);
+  async confirmEmail(token: string) {
+    const res = await apiService.confirmEmail(token);
+    const {token: newToken, user} = res.data;
+
+    if (newToken) {
+      await AsyncStorage.setItem('token', newToken);
+      setAuthToken(newToken);
+    }
+
     runInAction(() => {
       this.user = user;
     });

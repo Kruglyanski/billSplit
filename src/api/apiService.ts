@@ -9,6 +9,9 @@ export const register = (data: {
   password: string;
 }) => api.post('/auth/register', data);
 
+export const confirmEmail = (token: string) =>
+  api.get('/auth/confirm', {params: {token}});
+
 export const login = (data: {email: string; password: string}) =>
   api.post('/auth/login', data);
 

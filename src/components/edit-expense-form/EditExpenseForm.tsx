@@ -15,7 +15,6 @@ interface IProps {
     value: string,
     type: 'paid' | 'split',
   ) => void;
-  handleSubmit: () => void;
   setGroupId: (groupId: number) => void;
   setAmount: (amount: string) => void;
   setDescription: (description: string) => void;
@@ -30,7 +29,6 @@ interface IProps {
 export const EditExpenseForm: FC<IProps> = memo(
   ({
     handleAmountChange,
-    handleSubmit,
     setGroupId,
     setAmount,
     setDescription,
@@ -68,7 +66,6 @@ export const EditExpenseForm: FC<IProps> = memo(
         </Pressable>
         <TextInput
           label={t('add_expense.description')}
-          keyboardType="numeric"
           value={description}
           onChangeText={setDescription}
           style={styles.input}
@@ -83,12 +80,6 @@ export const EditExpenseForm: FC<IProps> = memo(
         <EditExpenseFormUsersList
           {...{handleAmountChange, paidBy, splits, users}}
         />
-        <Button
-          mode="contained"
-          onPress={handleSubmit}
-          style={styles.saveButton}>
-          {t('add_expense.save')}
-        </Button>
         <GroupSelectModal
           visible={modalVisible}
           onDismiss={closeGroupsList}
