@@ -10,9 +10,10 @@
 		0C80B921A6F3F58F76C31292 /* libPods-billSplit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-billSplit.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		28F9EDBEF45FB4346DED717C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		5E53CCE72DF69FFA00DD08C4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		5E53CCE92DF6A27A00DD08C4 /* my_assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E53CCE82DF6A27A00DD08C4 /* my_assets.xcassets */; };
 		5EE830752DE71DD100C7CBE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EE830732DE71CFE00C7CBE6 /* GoogleService-Info.plist */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		5709B34CF0A7D63546082F79 /* Pods-billSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-billSplit.release.xcconfig"; path = "Target Support Files/Pods-billSplit/Pods-billSplit.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-billSplit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-billSplit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E3005E82DF2F15C004C4E0E /* billSplit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = billSplit.entitlements; path = billSplit/billSplit.entitlements; sourceTree = "<group>"; };
+		5E53CCE82DF6A27A00DD08C4 /* my_assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = my_assets.xcassets; sourceTree = "<group>"; };
 		5EE830732DE71CFE00C7CBE6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = billSplit/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = billSplit/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +49,7 @@
 			children = (
 				5E3005E82DF2F15C004C4E0E /* billSplit.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				5E53CCE82DF6A27A00DD08C4 /* my_assets.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -163,10 +166,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				5EE830752DE71DD100C7CBE6 /* GoogleService-Info.plist in Resources */,
+				5E53CCE72DF69FFA00DD08C4 /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				28F9EDBEF45FB4346DED717C /* PrivacyInfo.xcprivacy in Resources */,
+				5E53CCE92DF6A27A00DD08C4 /* my_assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,7 +388,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -453,7 +460,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

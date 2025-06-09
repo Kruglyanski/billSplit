@@ -6,6 +6,7 @@ import {PaperProvider} from 'react-native-paper';
 import {useColorScheme} from 'react-native';
 import {lightTheme, darkTheme} from './src/theme';
 import {EThemeType, appStore} from './src/stores/appStore';
+import SplashScreen from 'react-native-splash-screen';
 import {InfoModal} from './src/components/info-modal/InfoModal';
 import {
   handleInitialDeeplink,
@@ -23,6 +24,9 @@ function App(): React.JSX.Element {
   useEffect(() => {
     handleInitialDeeplink();
     const unsubscribe = subscribeToDeeplinks();
+
+    SplashScreen.hide();
+
     return () => unsubscribe();
   }, []);
 
