@@ -23,7 +23,7 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const [amount, setAmount] = useState('');
   const [groupId, setGroupId] = useState(paramGroupId || null);
 
-  const group = groupStore.groups.find(g => g.id === groupId);
+  const group =  groupStore.groups.get(groupId || -1);
 
   const {t} = useTranslation();
 

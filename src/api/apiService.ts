@@ -27,7 +27,7 @@ export const refreshToken = (refreshToken: string) =>
 
 export const getMe = () => api.get('/users/me');
 
-export const getUserGroups = () => api.get('/groups');
+export const getUserGroups = () => api.get<IGroup[]>('/groups');
 
 export const createGroup = (
   name: string,

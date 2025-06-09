@@ -79,7 +79,7 @@ export const GroupListScreen: FC<IProps> = observer(({navigation}) => {
       buttons={headerButtons}>
       <FlatList
         style={styles.list}
-        data={groupStore.groups}
+        data={[...groupStore.groups.values()]}
         showsVerticalScrollIndicator={false}
         {...{keyExtractor, renderItem}}
         ListEmptyComponent={

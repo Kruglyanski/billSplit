@@ -83,7 +83,7 @@ export const EditExpenseForm: FC<IProps> = memo(
         <GroupSelectModal
           visible={modalVisible}
           onDismiss={closeGroupsList}
-          groups={groupStore.groups}
+          groups={[...groupStore.groups.values()]}
           onSelect={setGroupId}
         />
       </ScrollView>

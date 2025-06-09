@@ -22,26 +22,18 @@ interface IProps {
 export const GroupDetailsScreen: FC<IProps> = observer(
   ({route, navigation}) => {
     const {groupId} = route.params;
-    const group = groupStore.groups.find(g => g.id === groupId);
+    const group = groupStore?.groups?.get(groupId);
 
-    if (!group) {
-      return (
-        <View style={styles.container}>
-          <Text>Группа не найдена</Text>
-        </View>
-      );
-    }
-
-    const [name, setName] = useState(group.name);
+    const [name, setName] = useState(group?.name || '');
     const [selectedUserIds, setSelectedUserIds] = useState(
-      group.members.map(m => m.id),
+      group?.members.map(m => m.id) || [],
     );
     const [extraUsers, setExtraUsers] = useState<TExtraUser[]>([]);
 
     const [extraUserEmail, setExtraUserEmail] = useState('');
     const [extraUserName, setExtraUserName] = useState('');
 
-    const allUsers = group.members || [];
+    const allUsers = group?.members || [];
 
     const toggleUser = (id: number) => {
       setSelectedUserIds(prev => {
@@ -53,7 +45,6 @@ export const GroupDetailsScreen: FC<IProps> = observer(
       });
     };
 
-    // Добавить extraUser
     const addExtraUser = () => {
       if (!extraUserEmail || !extraUserName) {
         Alert.alert(
@@ -70,27 +61,33 @@ export const GroupDetailsScreen: FC<IProps> = observer(
       setExtraUserName('');
     };
 
-    // Удалить extraUser по индексу
     const removeExtraUser = (index: number) => {
       setExtraUsers(prev => prev.filter((_, i) => i !== index));
     };
 
-    // Сохранить изменения — вызвать updateGroup из groupStore
     const onSave = async () => {
-      try {
-        await groupStore.updateGroup(
-          group.id,
-          name,
-          selectedUserIds,
-          extraUsers,
-        );
-        Alert.alert('Успех', 'Группа обновлена');
-        navigation.goBack();
-      } catch (e) {
-        Alert.alert('Ошибка', 'Не удалось обновить группу');
+      if (group) {
+        try {
+          await groupStore.updateGroup(
+            group.id,
+            name,
+            selectedUserIds,
+            extraUsers,
+          );
+          Alert.alert('Успех', 'Группа обновлена');
+        } catch (e) {
+          Alert.alert('Ошибка', 'Не удалось обновить группу');
+        }
       }
     };
 
+    if (!group) {
+      return (
+        <View style={styles.container}>
+          <Text>Группа не найдена</Text>
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.label}>Название группы:</Text>

@@ -37,7 +37,7 @@ export interface IGroup {
 }
 
 class GroupStore {
-  groups: IGroup[] = [];
+  groups: Map<number, IGroup> = new Map();
   loading = false;
   debtResult: IDebtResult | null = null;
 
@@ -58,7 +58,7 @@ class GroupStore {
     this.loading = true;
     const res = await apiService.getUserGroups();
     runInAction(() => {
-      this.groups = res.data;
+      res.data.forEach(group => this.groups.set(group.id, group));
       this.loading = false;
     });
   }
@@ -67,7 +67,7 @@ class GroupStore {
     try {
       const res = await apiService.createGroup(name, userIds, extraUsers);
       runInAction(() => {
-        this.groups.push(res.data);
+        this.groups.set(res.data.id, res.data);
       });
       return res.data.id;
     } catch (error) {
@@ -84,7 +84,7 @@ class GroupStore {
     try {
       const res = await apiService.updateGroup(id, name, userIds, extraUsers);
       runInAction(() => {
-        this.groups = this.groups.map(g => (g.id === id ? res.data : g));
+        this.groups = this.groups.set(res.data.id, res.data);
       });
       return res.data;
     } catch (error) {
