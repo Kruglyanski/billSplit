@@ -11,6 +11,7 @@ import {
   handleInitialDeeplink,
   subscribeToDeeplinks,
 } from './src/utils/services/deeplinkService';
+import SplashScreen from 'react-native-splash-screen';
 
 const themeMap = {
   [EThemeType.LIGHT]: lightTheme,
@@ -23,6 +24,7 @@ function App(): React.JSX.Element {
   useEffect(() => {
     handleInitialDeeplink();
     const unsubscribe = subscribeToDeeplinks();
+    SplashScreen.hide();
 
     return () => unsubscribe();
   }, []);

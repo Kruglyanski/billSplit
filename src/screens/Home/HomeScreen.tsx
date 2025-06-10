@@ -16,7 +16,6 @@ import {
 } from '../../components/screen-wrapper/ScreenWrapper';
 import {styles} from './styles';
 import {appStore} from '../../stores/appStore';
-import SplashScreen from 'react-native-splash-screen';
 
 interface IProps {
   navigation: HomeScreenNavigationProps['navigation'];
@@ -40,8 +39,8 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      //show skeleton
       await expenseStore.fetchExpensesByUser();
-      SplashScreen.hide();
       userStore.fetchRelatedUsers();
       groupStore.fetchUserGroups();
     };
