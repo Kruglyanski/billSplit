@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
-import {Image, Keyboard, Platform} from 'react-native';
+import {Image, Keyboard, Platform, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {AuthScreenNavigationProps} from '../../navigation/types';
@@ -10,10 +10,8 @@ import {styles} from './styles';
 import {appStore} from '../../stores/appStore';
 import {useKeyboardOpen} from '../../hooks/use-keyboard-open';
 import {AuthWelcome} from '../../components/auth-welcome/AuthWelcome';
-import LinearGradient from 'react-native-linear-gradient';
-import {colors} from '../../theme/colors';
-import {SCREEN_GRADIENT_END, SCREEN_GRADIENT_START} from '../../constants';
-import {Button} from 'react-native-paper';
+import {CustomButton} from '../../components/custom-button/CustomButton';
+import {Text} from 'react-native-paper';
 
 interface IProps {
   navigation: AuthScreenNavigationProps['navigation'];
@@ -24,8 +22,6 @@ enum EAuthMode {
   REGISTRATION = 'registration',
   MAIN = 'main',
 }
-
-const GRADIENT_COLORS = [colors.orange, colors.white];
 
 export const AuthScreen: FC<IProps> = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -57,6 +53,7 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
   }, []);
 
   useEffect(() => {
+    //TODO: в конфиг
     GoogleSignin.configure(
       Platform.OS === 'ios'
         ? {
@@ -173,22 +170,21 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
   }, [switchAuthMode]);
 
   return (
-    <LinearGradient
-      colors={GRADIENT_COLORS}
-      start={SCREEN_GRADIENT_START}
-      end={SCREEN_GRADIENT_END}
-      style={styles.container}>
+    <View style={styles.container}>
       <Image
-        source={require('../../../assets/images/lanes-main-logo.png')}
+        source={require('../../../assets/images/billSplit-welcome-logo.png')}
         style={styles.logo}
       />
+      {/* <Text variant="headlineLarge" style={styles.title}>
+        {t('auth.subheader.enter')}
+      </Text> */}
       {authMode === EAuthMode.MAIN && (
-        <AuthWelcome {...{showLogin, showRegistration}} />
+        <AuthWelcome {...{showLogin, showRegistration, googleLogin}} />
       )}
       {authMode === EAuthMode.LOGIN && (
         <AuthForm
           key={authMode}
-          title={t('auth.subheader.enter')}
+          title={t('auth.subheader.login')}
           email={email}
           password={password}
           emailError={emailError}
@@ -211,7 +207,6 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
           nameError={nameError}
           emailError={emailError}
           passwordError={passwordError}
-          showNameField
           onChangeName={setName}
           onChangeEmail={changeEmail}
           onChangePassword={changePassword}
@@ -221,7 +216,6 @@ export const AuthScreen: FC<IProps> = ({navigation}) => {
           backText={t('auth.already_have_account')}
         />
       )}
-      <Button onPress={googleLogin}>GOOGLE</Button>
-    </LinearGradient>
+    </View>
   );
 };

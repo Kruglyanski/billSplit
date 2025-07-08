@@ -12,12 +12,14 @@
     "enter": "Enter",
     "register": "Register",
     "registration": "Registration",
+    "with_google": "Enter with google",
     "already_have_account": "Already have account",
     "back": "Back",
     "registered":"Confirmation of registration has been sent to {{email}}",
     "subheader": {
-      "enter": "Welcome",
-      "registration": "Create account"
+      "enter": "Split the bill with friends!",
+      "registration": "Create account",
+      "login": "Login"
     },
     "errors": {
       "error": "Error",

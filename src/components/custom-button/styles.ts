@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {colors} from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   contentStyle: {
@@ -13,20 +14,20 @@ export const styles = StyleSheet.create({
   },
 
   primary: {
-    backgroundColor: '#1991d1',
+    backgroundColor: colors.lightMain,
   },
 
   secondary: {
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.darkWhite,
   },
 
   primaryLabel: {
-    color: '#ffffff',
+    color: colors.darkWhite,
     fontSize: 16,
   },
 
   secondaryLabel: {
-    color: '#000000',
+    color: colors.black,
     fontSize: 16,
   },
 

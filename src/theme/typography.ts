@@ -12,6 +12,14 @@ const extraLightFont: Omit<MD3Type, 'fontSize' | 'lineHeight'> = {
   letterSpacing: 0,
 };
 
+export const extraTypography = {
+  extraLightLarge: {
+    ...extraLightFont,
+    fontSize: 16,
+    lineHeight: 20,
+  },
+};
+
 export const customTypeScale: MD3Typescale = {
   default: defaultFont,
   displayLarge: {

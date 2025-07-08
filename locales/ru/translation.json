@@ -12,12 +12,14 @@
     "enter": "Войти",
     "register": "Зарегистрироваться",
     "registration": "Регистрация",
+    "with_google": "Войти с google",
     "already_have_account": "Уже есть аккаунт",
     "back": "Назад",
     "registered":"На почту {{email}} отправлено подтверждение регистрации",
     "subheader": {
-      "enter": "Добро пожаловать",
-      "registration": "Создать аккаунт"
+      "enter": "Делите счет с друзьями!",
+      "registration": "Создать аккаунт",
+      "login": "Войти"
     },
     "errors": {
       "error": "Ошибка",

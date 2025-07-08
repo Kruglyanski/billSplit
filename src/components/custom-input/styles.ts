@@ -1,24 +1,28 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
+import {colors} from '../../theme/colors';
+import {extraTypography} from '../../theme/typography';
 
 export const styles = StyleSheet.create({
   inputBase: {
-    fontSize: 16,
+    ...extraTypography.extraLightLarge,
     paddingHorizontal: 12,
     borderRadius: 8,
     borderWidth: 1,
+    paddingVertical: 0,
+    textAlignVertical: 'center',
   },
 
   filled: {
-    backgroundColor: '#ffffff',
-    borderColor: 'transparent',
+    backgroundColor: colors.darkWhite,
+    borderColor: colors.transparent,
   },
 
   outlined: {
-    backgroundColor: 'transparent',
-    borderColor: '#ffffff',
+    backgroundColor: colors.transparent,
+    borderColor: colors.darkWhite,
   },
 
   errorBorder: {
-    borderColor: 'red',
+    borderColor: colors.red,
   },
 });

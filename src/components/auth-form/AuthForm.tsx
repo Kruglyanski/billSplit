@@ -1,9 +1,11 @@
 import React, {memo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View} from 'react-native';
-import {TextInput, Text, Button} from 'react-native-paper';
+import {TextInput, Text} from 'react-native-paper';
 import {styles} from './styles';
 import Animated, {SlideInRight} from 'react-native-reanimated';
+import {CustomButton} from '../custom-button/CustomButton';
+import {CustomInput} from '../custom-input/CustomInput';
 
 interface AuthFormProps {
   title: string;
@@ -13,7 +15,6 @@ interface AuthFormProps {
   nameError?: string;
   emailError?: string;
   passwordError?: string;
-  showNameField?: boolean;
   onChangeName?: (value: string) => void;
   onChangeEmail: (value: string) => void;
   onChangePassword: (value: string) => void;
@@ -32,7 +33,6 @@ export const AuthForm: React.FC<AuthFormProps> = memo(
     nameError,
     emailError,
     passwordError,
-    showNameField,
     onChangeName,
     onChangeEmail,
     onChangePassword,
@@ -47,64 +47,72 @@ export const AuthForm: React.FC<AuthFormProps> = memo(
         entering={SlideInRight.duration(150)}
         style={styles.animatedWrapper}>
         <View style={styles.formWrapper}>
-          <Text variant="headlineLarge" style={styles.subheader}>
+          <Text variant="headlineSmall" style={styles.subheader}>
             {title}
           </Text>
-          {showNameField && (
+          {!!onChangeName && name !== undefined && (
             <>
-              <TextInput
-                label={t('auth.name')}
+              <CustomInput
                 value={name}
-                onChangeText={onChangeName}
-                mode="outlined"
+                label={t('auth.name')}
                 error={!!nameError}
-                style={styles.input}
-                theme={{
-                  roundness: 8,
-                }}
+                type="outlined"
+                onChangeText={onChangeName}
+                width={300}
               />
-              {nameError && <Text style={styles.errorText}>{nameError}</Text>}
+              <View style={styles.errorWrapper}>
+                {nameError && (
+                  <Text variant="labelSmall" style={styles.errorText}>
+                    {nameError}
+                  </Text>
+                )}
+              </View>
             </>
           )}
-          <TextInput
-            label={t('auth.email')}
+          <CustomInput
             value={email}
-            onChangeText={onChangeEmail}
-            mode="outlined"
+            label={t('auth.email')}
             error={!!emailError}
-            style={styles.input}
-            theme={{
-              roundness: 8,
-            }}
+            type="outlined"
+            onChangeText={onChangeEmail}
+            width={300}
           />
-          {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-          <TextInput
-            label={t('auth.password')}
+          <View style={styles.errorWrapper}>
+            {emailError && (
+              <Text variant="labelSmall" style={styles.errorText}>
+                {emailError}
+              </Text>
+            )}
+          </View>
+          <CustomInput
             value={password}
-            onChangeText={onChangePassword}
-            secureTextEntry
-            mode="outlined"
+            label={t('auth.password')}
             error={!!passwordError}
-            style={styles.input}
-            theme={{
-              roundness: 8,
-              // colors: {
-              //   primary: colors.white,
-              //       onSurfaceVariant: colors.white,
-              //       onSurface: colors.white,
-              //       outline: colors.violet
-              // },
-            }}
+            type="outlined"
+            onChangeText={onChangePassword}
+            width={300}
           />
-          {passwordError && (
-            <Text style={styles.errorText}>{passwordError}</Text>
-          )}
-          <Button mode="contained" onPress={onSubmit} style={styles.button}>
-            {submitText}
-          </Button>
-          <Button mode="outlined" onPress={onBackPress} style={styles.button}>
-            {backText}
-          </Button>
+          <View style={styles.errorWrapper}>
+            {passwordError && (
+              <Text variant="labelSmall" style={styles.errorText}>
+                {passwordError}
+              </Text>
+            )}
+          </View>
+          <View style={styles.buttons}>
+            <CustomButton
+              type="secondary"
+              onPress={onSubmit}
+              title={submitText}
+              width={200}
+            />
+            <CustomButton
+              type="primary"
+              onPress={onBackPress}
+              title={backText}
+              width={200}
+            />
+          </View>
         </View>
       </Animated.View>
     );

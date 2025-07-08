@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { colors } from '../../theme/colors';
+import {colors} from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   animated: {
@@ -8,17 +8,12 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    color: colors.white,
-  },
-
-  name: {
-    color: colors.white,
-    marginBottom: 36,
+    color: colors.lightMain,
   },
 
   buttons: {
-    flexDirection: 'row',
-    gap: 10,
+    marginTop: 60,
+    gap: 16,
   },
 
   button: {

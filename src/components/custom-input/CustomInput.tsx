@@ -27,11 +27,10 @@ export const CustomInput: FC<IProps> = memo(
 
     return (
       <TextInput
-        value={value}
-        onChangeText={onChangeText}
         placeholder={label}
         placeholderTextColor={error ? colors.red : colors.gray}
         style={inputStyle}
+        {...{value, onChangeText}}
       />
     );
   },

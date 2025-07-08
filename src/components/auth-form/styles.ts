@@ -3,19 +3,12 @@ import {colors} from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   animatedWrapper: {
-    width: '80%',
+    width: '100%',
   },
 
   formWrapper: {
     alignItems: 'center',
     height: 400,
-  },
-
-  input: {
-    width: 300,
-    marginBottom: 8,
-    borderRadius: 36,
-    color: colors.white,
   },
 
   button: {
@@ -24,14 +17,23 @@ export const styles = StyleSheet.create({
   },
 
   subheader: {
-    marginBottom: 40,
-    color: colors.white,
+    marginBottom: 60,
+    color: colors.lightMain,
+  },
+
+  errorWrapper: {
+    width: 300,
+    height: 18,
   },
 
   errorText: {
-    color: 'red',
-    fontSize: 12,
+    color: colors.red,
     marginBottom: 4,
-    width: '60%',
+    marginLeft: 8,
+  },
+
+  buttons: {
+    gap: 15,
+    marginTop: 24,
   },
 });
