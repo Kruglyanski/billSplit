@@ -1,7 +1,13 @@
 import {MD3Typescale, MD3Type} from 'react-native-paper/lib/typescript/types';
 
 const defaultFont: Omit<MD3Type, 'fontSize' | 'lineHeight'> = {
-  fontFamily: 'System',
+  fontFamily: 'SourceSans3-Regular',
+  fontWeight: '400',
+  letterSpacing: 0,
+};
+
+const extraLightFont: Omit<MD3Type, 'fontSize' | 'lineHeight'> = {
+  fontFamily: 'SourceSans3-ExtraLight',
   fontWeight: '400',
   letterSpacing: 0,
 };
