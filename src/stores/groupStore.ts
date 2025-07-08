@@ -66,6 +66,7 @@ class GroupStore {
   async createGroup(name: string, userIds: number[], extraUsers: TExtraUser[]) {
     try {
       const res = await apiService.createGroup(name, userIds, extraUsers);
+      console.log('createGroup', res);
       runInAction(() => {
         this.groups.set(res.data.id, res.data);
       });

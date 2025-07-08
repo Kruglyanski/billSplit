@@ -12,6 +12,9 @@ import {
   subscribeToDeeplinks,
 } from './src/utils/services/deeplinkService';
 import SplashScreen from 'react-native-splash-screen';
+import authStore from './src/stores/authStore';
+import { disconnectSocket, initSocket } from './src/utils/services/websocket-service/websocketService';
+import { observer } from 'mobx-react-lite';
 
 const themeMap = {
   [EThemeType.LIGHT]: lightTheme,
@@ -28,6 +31,21 @@ function App(): React.JSX.Element {
 
     return () => unsubscribe();
   }, []);
+  
+  useEffect(() => {
+    if (authStore.jwt) {
+      console.log('APP SOCKET INIT')
+      initSocket();
+    } else {
+      console.log('APP SOCKET DISCONNECT 1')
+      disconnectSocket();
+    }
+  
+    return () => {
+      console.log('APP SOCKET DISCONNECT 2')
+      disconnectSocket();
+    };
+  }, [authStore.jwt]);
 
   let theme = lightTheme;
 
@@ -45,4 +63,4 @@ function App(): React.JSX.Element {
   );
 }
 
-export default App;
+export default observer(App);

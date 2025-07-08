@@ -37,11 +37,15 @@ export const GroupDetailsScreen: FC<IProps> = observer(
 
     const toggleUser = (id: number) => {
       setSelectedUserIds(prev => {
+        console.log('prev', prev);
+        let res;
         if (prev.includes(id)) {
-          return prev.filter(uid => uid !== id);
+          res = prev.filter(uid => uid !== id);
         } else {
-          return [...prev, id];
+          res = [...prev, id];
         }
+        console.log('user res', res);
+        return res;
       });
     };
 

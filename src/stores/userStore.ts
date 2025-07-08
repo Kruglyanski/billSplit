@@ -19,21 +19,23 @@ class UserStore {
     makeAutoObservable(this);
   }
 
-  async fetchUsers() {
-    try {
-      const res = await getAllUsers();
-      runInAction(() => {
-        this.users.clear();
-        res.data.forEach((user: IUser) => this.users.set(user.id, user));
-      });
-    } catch (error) {
-      console.error('Ошибка при загрузке пользователей', error);
-    }
-  }
+  // async fetchUsers() {
+  //   try {
+  //     const res = await getAllUsers();
+
+  //     runInAction(() => {
+  //       this.users.clear();
+  //       res.data.forEach((user: IUser) => this.users.set(user.id, user));
+  //     });
+  //   } catch (error) {
+  //     console.error('Ошибка при загрузке пользователей', error);
+  //   }
+  // }
 
   async fetchRelatedUsers() {
     try {
       const res = await getRelatedUsers();
+      console.log('asd fetchUsers res', res);
       runInAction(() => {
         this.users.clear();
         res.data.forEach((user: IUser) => {

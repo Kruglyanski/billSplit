@@ -1,4 +1,4 @@
-import {Linking} from 'react-native';
+import {EmitterSubscription, Linking} from 'react-native';
 import {NavigationContainerRef} from '@react-navigation/native';
 import {getQueryFromUrl} from '../helpers/get-query-from-url';
 
@@ -28,9 +28,14 @@ export const handleUrl = (url: string) => {
 };
 
 export const subscribeToDeeplinks = () => {
-  const sub = Linking.addEventListener('url', event => {
-    handleUrl(event.url);
-  });
+  let sub: EmitterSubscription;
+  try {
+    sub = Linking.addEventListener('url', event => {
+      handleUrl(event.url);
+    });
+  } catch (error) {
+    console.log('subscribeToDeeplinks error', error);
+  }
 
   return () => sub.remove();
 };

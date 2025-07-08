@@ -12,6 +12,7 @@ interface IUser {
 class AuthStore {
   user: IUser | null = null;
   isLoading = true;
+  jwt: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -20,11 +21,14 @@ class AuthStore {
 
   async bootstrap() {
     const token = await authService.getAccessToken();
+
     if (token) {
       setAuthToken(token);
+
       try {
         const res = await apiService.getMe();
         runInAction(() => {
+          this.jwt = token;
           this.user = res.data;
         });
       } catch {
@@ -44,6 +48,7 @@ class AuthStore {
     setAuthToken(tokens.accessToken);
 
     runInAction(() => {
+      this.jwt = tokens.accessToken;
       this.user = user;
     });
   }
@@ -59,6 +64,7 @@ class AuthStore {
     setAuthToken(tokens.accessToken);
 
     runInAction(() => {
+      this.jwt = tokens.accessToken;
       this.user = user;
     });
   }
@@ -70,8 +76,23 @@ class AuthStore {
     setAuthToken(tokens.accessToken);
 
     runInAction(() => {
+      this.jwt = tokens.accessToken;
       this.user = user;
     });
+  }
+
+  async refreshToken() {
+    const rt = (await authService.getRefreshToken()) || '';
+    const res = await apiService.refreshToken(rt);
+    const {tokens} = res.data;
+    authService.saveTokens(tokens.accessToken, tokens.refreshToken);
+    setAuthToken(tokens.accessToken);
+
+    runInAction(() => {
+      this.jwt = tokens.accessToken;
+    });
+
+    return tokens.accessToken;
   }
 
   async logout() {
@@ -79,6 +100,7 @@ class AuthStore {
     authService.resetTokens();
     clearAuthToken();
     runInAction(() => {
+      this.jwt = null;
       this.user = null;
     });
   }

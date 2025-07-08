@@ -135,7 +135,7 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
       }
     }
 
-    const userIds = selectedInvitees.filter(u => u.registered).map(u => u.id!);
+    const userIds = selectedInvitees.filter(u => u.selected).map(u => u.id!);
 
     const extraUsers = selectedInvitees.filter(u => !u.existed);
 
@@ -149,10 +149,10 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
       setGroupName('');
       setInvitees(new Map());
 
-      if (groupId) {
-        // navigation.navigate('HomeTab', {screen: 'CreateGroup'});
-        navigation.navigate('GroupDetails', {groupId});
-      }
+      // if (groupId) {
+      //   // navigation.navigate('HomeTab', {screen: 'CreateGroup'});
+      //   navigation.navigate('GroupDetails', {groupId});
+      // }
     } catch (error: any) {
       Alert.alert(error.message);
     }
@@ -184,7 +184,8 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
   );
 
   const inviteesArray = useMemo(() => [...invitees.values()], [invitees]);
-
+  console.log('invitees', invitees);
+  console.log('inviteesArray', inviteesArray);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Создать группу</Text>
