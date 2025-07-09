@@ -3,12 +3,13 @@ import {Image, StyleProp, ViewStyle, ImageStyle} from 'react-native';
 import {Button} from 'react-native-paper';
 import {styles} from './styles';
 import {getSizeStyle} from '../../utils/helpers/get-size-style';
+import {IconSource} from 'react-native-paper/lib/typescript/components/Icon';
 
 interface IProps {
   onPress: () => void;
   type: 'primary' | 'secondary';
   title?: string;
-  icon?: string;
+  icon?: IconSource;
   image?: string;
   width?: number | `${number}%`;
   height?: number;

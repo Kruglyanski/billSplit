@@ -5,39 +5,31 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
-    justifyContent: 'space-between',
   },
 
   header: {
-    backgroundColor: colors.violet,
-    borderBottomEndRadius: 36,
-    borderBottomStartRadius: 36,
-    height: 140,
-    paddingTop: 16,
+    flexDirection: 'row',
+    backgroundColor: colors.darkMain,
+    height: 80,
     marginHorizontal: -16,
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
-  welcome: {
-    marginBottom: 20,
-    color: colors.white,
+  title: {
+    color: colors.darkWhite,
     textAlign: 'center',
-  },
-
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 24,
+    textTransform: 'uppercase',
   },
 
   buttonWrapper: {
-    marginBottom: 12,
-    width: 160,
+    width: 60,
+    alignItems: 'center',
   },
 
   button: {
-    width: 160,
+    width: 34,
     borderWidth: 1,
-    borderColor: colors.white,
+    borderColor: colors.darkWhite,
   },
 });

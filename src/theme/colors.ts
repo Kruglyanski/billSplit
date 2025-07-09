@@ -23,9 +23,9 @@ export const DarkColors = {
 };
 
 export const colors = {
-  main: '#2d4d6a', //
+  main: '#233950', //
   darkMain: '#1c3d54', //
-  lightMain: '#3e6a87', //
+  lightMain: '#3e6c8a', //
   violet: '#665cfa',
   yellow: '#FFCA40',
   lightRed: '#FF6B6B',
