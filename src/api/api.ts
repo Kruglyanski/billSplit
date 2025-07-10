@@ -1,6 +1,10 @@
-import axios from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import {Platform} from 'react-native';
 import authStore from '../stores/authStore';
+
+export interface AxiosRequestConfigWithMeta extends AxiosRequestConfig {
+  skipAuthRefresh?: boolean;
+}
 
 export const API_BASE_URL = Platform.select({
   //TODO: вынести!!!!!!!
@@ -19,6 +23,10 @@ const api = axios.create({
 api.interceptors.response.use(
   response => response,
   async error => {
+    if (error.config?.skipAuthRefresh) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401) {
       try {
         const newToken = await authStore.refreshToken();

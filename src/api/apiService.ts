@@ -1,7 +1,7 @@
 import {TSplitPaidBy} from '../stores/expenseStore';
 import {IGroup} from '../stores/groupStore';
 import {IUser, TExtraUser} from '../stores/userStore';
-import api from './api';
+import api, {AxiosRequestConfigWithMeta} from './api';
 
 export const register = (data: {
   name: string;
@@ -23,7 +23,8 @@ export const logout = () => api.get('/auth/logout');
 export const refreshToken = (refreshToken: string) =>
   api.post('/auth/refresh', null, {
     headers: {Authorization: `Bearer ${refreshToken}`},
-  });
+    skipAuthRefresh: true,
+  } as AxiosRequestConfigWithMeta);
 
 export const getMe = () => api.get('/users/me');
 

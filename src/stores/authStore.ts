@@ -84,15 +84,18 @@ class AuthStore {
   async refreshToken() {
     const rt = (await authService.getRefreshToken()) || '';
     const res = await apiService.refreshToken(rt);
-    const {tokens} = res.data;
-    authService.saveTokens(tokens.accessToken, tokens.refreshToken);
-    setAuthToken(tokens.accessToken);
+
+    const {accessToken, refreshToken} = res.data;
+
+    await authService.saveTokens(accessToken, refreshToken);
+
+    setAuthToken(accessToken);
 
     runInAction(() => {
-      this.jwt = tokens.accessToken;
+      this.jwt = accessToken;
     });
 
-    return tokens.accessToken;
+    return accessToken;
   }
 
   async logout() {
