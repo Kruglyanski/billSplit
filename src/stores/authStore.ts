@@ -2,6 +2,7 @@ import {makeAutoObservable, runInAction} from 'mobx';
 import * as apiService from '../api/apiService';
 import * as authService from '../utils/services/authService';
 import {setAuthToken, clearAuthToken} from '../api/api';
+import i18n from '../../i18n';
 
 interface IUser {
   id: number;
@@ -27,10 +28,16 @@ class AuthStore {
 
       try {
         const res = await apiService.getMe();
+        const user = res.data;
+        console.log('asd user', user);
         runInAction(() => {
           this.jwt = token;
-          this.user = res.data;
+          this.user = user;
         });
+
+        if (user.settings?.language) {
+          i18n.changeLanguage(user.settings.language);
+        }
       } catch {
         await this.logout();
       }
@@ -44,6 +51,7 @@ class AuthStore {
   async login(email: string, password: string) {
     const res = await apiService.login({email, password});
     const {tokens, user} = res.data;
+    console.log('asd user ', user);
     authService.saveTokens(tokens.accessToken, tokens.refreshToken);
     setAuthToken(tokens.accessToken);
 
@@ -51,6 +59,10 @@ class AuthStore {
       this.jwt = tokens.accessToken;
       this.user = user;
     });
+
+    if (user.settings?.language) {
+      i18n.changeLanguage(user.settings.language);
+    }
   }
 
   async register(name: string, email: string, password: string) {
@@ -67,6 +79,10 @@ class AuthStore {
       this.jwt = tokens.accessToken;
       this.user = user;
     });
+
+    if (user.settings?.language) {
+      i18n.changeLanguage(user.settings.language);
+    }
   }
 
   async loginWithGoogle(idToken: string) {
@@ -79,6 +95,10 @@ class AuthStore {
       this.jwt = tokens.accessToken;
       this.user = user;
     });
+
+    if (user.settings?.language) {
+      i18n.changeLanguage(user.settings.language);
+    }
   }
 
   async refreshToken() {

@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useMemo} from 'react';
 import {FlatList} from 'react-native';
 import {observer} from 'mobx-react-lite';
-import {Button, FAB, Text} from 'react-native-paper';
+import {FAB, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import authStore from '../../stores/authStore';
 import {HomeScreenNavigationProps} from '../../navigation/types';
@@ -110,13 +110,6 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
       <Text variant="headlineSmall" style={styles.listHeader}>
         {t('home.current_expenses')}:
       </Text>
-      <Button
-        mode="text"
-        onPress={showLogoutModal}
-        icon="logout"
-        textColor={colors.darkGray}>
-        {t('home.logout')}
-      </Button>
       <FlatList
         style={styles.list}
         contentContainerStyle={styles.listContainer}

@@ -25,6 +25,7 @@ import {useTranslation} from 'react-i18next';
 import {EditExpenseScreen} from '../screens/EditExpense/EditExpenseScreen';
 import {ConfirmEmailScreen} from '../screens/ConfirmEmail/ConfirmEmailScreen';
 import {setNavigator} from '../utils/services/deeplinkService';
+import {ProfileScreen} from '../screens/Profile/ProfileScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -73,6 +74,7 @@ const Tabs = () => {
           if (route.name === 'HomeTab') iconName = 'home';
           if (route.name === 'GroupListTab') iconName = 'account-group';
           if (route.name === 'ExpenseHistoryTab') iconName = 'history';
+          if (route.name === 'ProfileTab') iconName = 'face-man';
 
           return <Icon source={iconName} size={size} color={color} />;
         },
@@ -105,6 +107,11 @@ const Tabs = () => {
         name="ExpenseHistoryTab"
         component={ExpenseHistoryScreen}
         options={{title: t('tab.history')}}
+      />
+      <Tab.Screen
+        name="ProfileTab"
+        component={ProfileScreen}
+        options={{title: t('tab.profile')}}
       />
     </Tab.Navigator>
   );

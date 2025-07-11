@@ -20,6 +20,7 @@ export type TabsParamList = {
   HomeTab: NavigatorScreenParams<HomeStackParamList>;
   GroupListTab: NavigatorScreenParams<GroupStackParamList>;
   ExpenseHistoryTab: undefined;
+  ProfileTab: undefined;
 };
 
 export type HomeStackParamList = {
@@ -66,6 +67,11 @@ export type TabsScreenNavigationProps = NativeStackScreenProps<
 
 export type HomeScreenNavigationProps = CompositeScreenProps<
   BottomTabScreenProps<TabsParamList, 'HomeTab'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
+export type ProfileScreenNavigationProps = CompositeScreenProps<
+  BottomTabScreenProps<TabsParamList, 'ProfileTab'>,
   NativeStackScreenProps<RootStackParamList>
 >;
 

@@ -76,14 +76,9 @@ class GroupStore {
     }
   }
 
-  async updateGroup(
-    id: number,
-    name: string,
-    userIds: number[],
-    extraUsers: TExtraUser[],
-  ) {
+  async updateGroup(id: number, name: string, userIds: number[]) {
     try {
-      const res = await apiService.updateGroup(id, name, userIds, extraUsers);
+      const res = await apiService.updateGroup(id, name, userIds);
       runInAction(() => {
         this.groups = this.groups.set(res.data.id, res.data);
       });

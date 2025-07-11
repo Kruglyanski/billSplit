@@ -3,7 +3,8 @@
     "home": "Главная",
     "history": "История",
     "events": "События",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "profile": "Профиль"
   },
   "auth": {
     "email": "Email",
@@ -110,5 +111,9 @@
   "select_modal":{
     "confirm": "Согласен",
     "cancel": "Отмена"
+  },
+  "profile":{
+    "title": "Профиль",
+    "chose_lang": "Выбрать язык:"
   }
 }

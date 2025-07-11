@@ -33,9 +33,11 @@ class AppStore {
 
   showInfoModal({message, title, action}: TInfoModalSettings) {
     this.infoModalMessage = message;
+
     if (title) {
       this.infoModalTitle = title;
     }
+
     if (action) {
       this.infoModalAction = action;
     }

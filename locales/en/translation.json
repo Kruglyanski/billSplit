@@ -3,7 +3,8 @@
     "home": "Home",
     "history": "History",
     "events": "Events",
-    "settings": "Settings"
+    "settings": "Settings",
+    "profile": "Profile"
   },
   "auth": {
     "email": "Email",
@@ -110,6 +111,10 @@
   "select_modal":{
     "confirm": "Confirm",
     "cancel": "Cancel"
+  },
+  "profile":{
+    "title": "Profile",
+    "chose_lang": "Choose the language:"
   }
 }
   

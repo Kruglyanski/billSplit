@@ -1,13 +1,18 @@
+import i18n from '../../i18n';
 import {TSplitPaidBy} from '../stores/expenseStore';
 import {IGroup} from '../stores/groupStore';
-import {IUser, TExtraUser} from '../stores/userStore';
+import {IUser} from '../stores/userStore';
 import api, {AxiosRequestConfigWithMeta} from './api';
 
 export const register = (data: {
   name: string;
   email: string;
   password: string;
-}) => api.post('/auth/register', data);
+}) =>
+  api.post('/auth/register', {
+    ...data,
+    settings: {language: i18n.language || 'en'},
+  });
 
 export const confirmEmail = (token: string) =>
   api.get('/auth/confirm', {params: {token}});

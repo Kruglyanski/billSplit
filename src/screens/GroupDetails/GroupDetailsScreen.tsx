@@ -72,12 +72,7 @@ export const GroupDetailsScreen: FC<IProps> = observer(
     const onSave = async () => {
       if (group) {
         try {
-          await groupStore.updateGroup(
-            group.id,
-            name,
-            selectedUserIds,
-            extraUsers,
-          );
+          await groupStore.updateGroup(group.id, name, selectedUserIds);
           Alert.alert('Успех', 'Группа обновлена');
         } catch (e) {
           Alert.alert('Ошибка', 'Не удалось обновить группу');
