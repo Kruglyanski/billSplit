@@ -86,6 +86,30 @@
     "title": "My Events",
     "back": "Go Back",
     "add": "Add"
+  },
+  "create_group":{
+    "title": "Create event",
+    "event_title": "Event title",
+    "add_from_list": "Add from friends list",
+    "invitee_email": "Existing user email",
+    "invitee_name": "Add a new member by name",
+    "add_participant": "Add participant",
+    "participants_title": "Participants:",
+    "list_placeholder": "No participants",
+    "create": "Create",
+    "errors": {
+      "user_not_created": "Failed to create user",
+      "enter_email": "Enter email",
+      "incorrect_email": "Incorrect email",
+      "user_already_added": "A user with this email has already been added.",
+      "user_add_error": "Error adding user by email",
+      "enter_group_title": "Enter the event name",
+      "no_participants": "Select event participants"
+    }
+  },
+  "select_modal":{
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   }
 }
   

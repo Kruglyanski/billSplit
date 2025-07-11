@@ -25,7 +25,7 @@ export const DarkColors = {
 export const colors = {
   main: '#233950', //
   darkMain: '#1c3d54', //
-  lightMain: '#3e6c8a', //
+  lightMain: '#467b9e', //
   violet: '#665cfa',
   yellow: '#FFCA40',
   lightRed: '#FF6B6B',
@@ -36,7 +36,7 @@ export const colors = {
   orangeLight: '#ff9326',
   gray: '#b4b4b4', //
   darkGray: '#2B2B2B',
-  lightGray: '#777',
+  lightGray: '#e1e5e8',
   white: '#FFFFFF',
   darkWhite: '#f0f0f0', //
   black: '#000000',

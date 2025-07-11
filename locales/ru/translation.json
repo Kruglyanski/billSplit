@@ -86,5 +86,29 @@
     "title": "Мои события",
     "back": "Назад",
     "add": "Добавить"
+  },
+  "create_group":{
+    "title": "Создать событие",
+    "event_title": "Название события",
+    "add_from_list": "Добавить из списка друзей",
+    "invitee_email": "E-mail существующего пользователя",
+    "invitee_name": "Добавить нового участника по имени",
+    "add_participant": "Добавить участника",
+    "participants_title": "Участники события:",
+    "list_placeholder": "Нет участников",
+    "create": "Создать",
+    "errors": {
+      "user_not_created": "Не удалось создать пользователя",
+      "enter_email": "Введите email",
+      "incorrect_email": "Некорректный email",
+      "user_already_added": "Пользователь с таким email уже добавлен",
+      "user_add_error": "Ошибка при добавлении пользователя по e-mail",
+      "enter_group_title": "Введите название события",
+      "no_participants": "Выберите участников события"
+    }
+  },
+  "select_modal":{
+    "confirm": "Согласен",
+    "cancel": "Отмена"
   }
 }

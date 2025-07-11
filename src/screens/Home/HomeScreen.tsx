@@ -96,8 +96,9 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
 
   const headerButtons: IButtonSettings[] = useMemo(() => {
     return [
+      {icon: 'plus', title: t('home.event'), onPress: () => null},
       // {icon: 'plus', title: t('home.event'), onPress: navigateToGroupCreate},
-      {title: t('home.go_to_groups'), onPress: navigateToGroupList},
+      // {title: t('home.go_to_groups'), onPress: navigateToGroupList},
     ];
   }, [navigateToGroupList, t]);
 

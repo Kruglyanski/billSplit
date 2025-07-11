@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {Modal, View, FlatList, StyleSheet} from 'react-native';
+import {Modal, View, FlatList} from 'react-native';
 import {CustomButton} from '../custom-button/CustomButton';
 import {SelectItemCard} from './SelectItemCard';
 import {useTranslation} from 'react-i18next';

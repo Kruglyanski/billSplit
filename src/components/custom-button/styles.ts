@@ -22,12 +22,12 @@ export const styles = StyleSheet.create({
   },
 
   primaryLabel: {
-    color: colors.darkWhite,
+    color: colors.white,
     fontSize: 16,
   },
 
   secondaryLabel: {
-    color: colors.black,
+    color: colors.darkGray,
     fontSize: 16,
   },
 

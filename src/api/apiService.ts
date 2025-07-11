@@ -30,20 +30,16 @@ export const getMe = () => api.get('/users/me');
 
 export const getUserGroups = () => api.get<IGroup[]>('/groups');
 
-export const createGroup = (
-  name: string,
-  userIds: number[],
-  extraUsers: TExtraUser[],
-) => api.post<IGroup>('/groups', {name, userIds, extraUsers});
+export const createGroup = (name: string, userIds: number[]) =>
+  api.post<IGroup>('/groups', {name, userIds});
 
-export const updateGroup = (
-  id: number,
-  name: string,
-  userIds: number[],
-  extraUsers: TExtraUser[],
-) => api.put<IGroup>(`/groups/${id}`, {name, userIds, extraUsers});
+export const updateGroup = (id: number, name: string, userIds: number[]) =>
+  api.put<IGroup>(`/groups/${id}`, {name, userIds});
 
 export const getGroup = (groupId: number) => api.get(`/groups/${groupId}`);
+
+export const createFakeUser = (name: string) =>
+  api.post<IUser>('/users/fake', {name});
 
 export const addUserToGroup = (groupId: number, userId: number) =>
   api.post(`/groups/${groupId}/add-user`, {userId});

@@ -15,19 +15,13 @@ export const styles = StyleSheet.create({
     marginTop: 12,
   },
 
-  buttons: {
+  buttonsContainer: {
     flexDirection: 'row',
-    gap: 24,
     justifyContent: 'flex-end',
+    gap: 10,
   },
 
-  closeButton: {
-    width: 120,
-    alignSelf: 'flex-end',
-  },
-
-  confirmButton: {
-    width: 120,
-    alignSelf: 'flex-end',
+  button: {
+    minWidth: 80,
   },
 });

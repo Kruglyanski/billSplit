@@ -3,9 +3,7 @@ import './i18n';
 import React, {useEffect} from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import {PaperProvider} from 'react-native-paper';
-import {useColorScheme} from 'react-native';
-import {lightTheme, darkTheme} from './src/theme';
-import {EThemeType, appStore} from './src/stores/appStore';
+import {lightTheme} from './src/theme';
 import {InfoModal} from './src/components/info-modal/InfoModal';
 import {
   handleInitialDeeplink,
@@ -19,14 +17,7 @@ import {
 } from './src/utils/services/websocket-service/websocketService';
 import {observer} from 'mobx-react-lite';
 
-const themeMap = {
-  [EThemeType.LIGHT]: lightTheme,
-  [EThemeType.DARK]: darkTheme,
-};
-
 function App(): React.JSX.Element {
-  const colorScheme = useColorScheme();
-
   useEffect(() => {
     handleInitialDeeplink();
     const unsubscribe = subscribeToDeeplinks();
@@ -51,12 +42,6 @@ function App(): React.JSX.Element {
   }, [authStore.jwt]);
 
   let theme = lightTheme;
-
-  // if (appStore.themeType !== null) {
-  //   theme = themeMap[appStore.themeType];
-  // } else if (colorScheme) {
-  //   theme = themeMap[colorScheme as EThemeType];
-  // } else theme = lightTheme;
 
   return (
     <PaperProvider {...{theme}}>

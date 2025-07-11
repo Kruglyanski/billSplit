@@ -1,5 +1,9 @@
 import {makeAutoObservable, runInAction} from 'mobx';
-import {getAllUsers, getRelatedUsers, getUserByEmail} from '../api/apiService';
+import {
+  createFakeUser,
+  getRelatedUsers,
+  getUserByEmail,
+} from '../api/apiService';
 
 export interface IUser {
   id: number;
@@ -50,6 +54,7 @@ class UserStore {
   async fetchUserByEmail(email: string) {
     try {
       const res = await getUserByEmail(email);
+
       runInAction(() => {
         const newMap = new Map<number, IUser>();
         newMap.set(res.data.id, res.data);
@@ -59,8 +64,24 @@ class UserStore {
         this.users = newMap;
       });
       return res.data;
+    } catch (error: any) {
+      console.error('Ошибка при загрузке пользователя по Email', error);
+      throw error;
+    }
+  }
+
+  async createUserWithFakeEmail(name: string): Promise<IUser> {
+    try {
+      const res = await createFakeUser(name);
+
+      runInAction(() => {
+        this.users.set(res.data.id, res.data);
+      });
+
+      return res.data;
     } catch (error) {
-      console.error('Ошибка при загрузке пользователz по Email', error);
+      console.error('Ошибка при создании фейкового пользователя', error);
+      throw error;
     }
   }
 

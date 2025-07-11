@@ -1,16 +1,18 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
-import {Button, Modal, Portal, Text} from 'react-native-paper';
+import {Modal, Portal, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {observer} from 'mobx-react-lite';
 import {appStore} from '../../stores/appStore';
 import {styles} from './styles';
 import {colors} from '../../theme/colors';
+import {CustomButton} from '../custom-button/CustomButton';
 
 export const InfoModal: FC = observer(() => {
   const {infoModalMessage, infoModalTitle, hideInfoModal, infoModalAction} =
     appStore;
   const {t} = useTranslation();
+
   return (
     <Portal>
       <Modal
@@ -25,21 +27,23 @@ export const InfoModal: FC = observer(() => {
             {infoModalMessage}
           </Text>
         </View>
-        <View style={styles.buttons}>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.button}>
+            <CustomButton
+              title={t('info_modal.close')}
+              onPress={hideInfoModal}
+              type={'secondary'}
+            />
+          </View>
           {infoModalAction && (
-            <Button
-              mode="outlined"
-              onPress={infoModalAction}
-              style={styles.confirmButton}>
-              {t('info_modal.confirm')}
-            </Button>
+            <View style={styles.button}>
+              <CustomButton
+                title={t('info_modal.confirm')}
+                onPress={infoModalAction}
+                type={'primary'}
+              />
+            </View>
           )}
-          <Button
-            mode="contained"
-            onPress={hideInfoModal}
-            style={styles.closeButton}>
-            {t('info_modal.close')}
-          </Button>
         </View>
       </Modal>
     </Portal>

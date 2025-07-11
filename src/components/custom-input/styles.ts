@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   inputBase: {
     ...extraTypography.extraLightLarge,
     paddingHorizontal: 12,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     paddingVertical: 0,
     textAlignVertical: 'center',

@@ -4,14 +4,12 @@ import {colors} from '../../theme/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
   },
 
   header: {
     flexDirection: 'row',
     backgroundColor: colors.darkMain,
     height: 80,
-    marginHorizontal: -16,
     justifyContent: 'space-between',
     alignItems: 'center',
   },

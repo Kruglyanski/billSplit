@@ -50,7 +50,7 @@ export const ScreenWrapper: FC<IProps> = memo(
             )}
           </View>
         </View>
-        {children}
+        <View style={styles.container}>{children}</View>
       </LinearGradient>
     );
   },
