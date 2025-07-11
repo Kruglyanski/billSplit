@@ -1,5 +1,11 @@
 import React, {FC, memo, useMemo} from 'react';
-import {TextInput, StyleProp, TextStyle, ViewStyle} from 'react-native';
+import {
+  TextInput,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+  KeyboardTypeOptions,
+} from 'react-native';
 import {styles} from './styles';
 import {colors} from '../../theme/colors';
 
@@ -13,6 +19,7 @@ interface IProps {
   width?: number | `${number}%`;
   height?: number;
   editable?: boolean;
+  keyboardType?: KeyboardTypeOptions;
 }
 
 export const CustomInput: FC<IProps> = memo(
@@ -26,6 +33,7 @@ export const CustomInput: FC<IProps> = memo(
     width = '100%',
     height = 42,
     editable = true,
+    keyboardType,
   }) => {
     const isOutlined = type === 'outlined';
 
@@ -45,7 +53,7 @@ export const CustomInput: FC<IProps> = memo(
         placeholder={label}
         placeholderTextColor={error ? colors.red : colors.gray}
         style={inputStyle}
-        {...{value, onChangeText, editable, onSubmitEditing}}
+        {...{value, onChangeText, editable, onSubmitEditing, keyboardType}}
       />
     );
   },
