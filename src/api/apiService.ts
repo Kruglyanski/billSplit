@@ -86,3 +86,8 @@ export const getExpenseHistory = () => api.get(`/expenses/history`);
 
 export const getBalance = (groupId: number) =>
   api.get(`/groups/${groupId}/debts`);
+
+export const changeLanguage = (lang: string) =>
+  api.patch('/users/settings', {
+    settings: {language: lang},
+  });

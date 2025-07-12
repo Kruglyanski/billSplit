@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {RadioButton, Text} from 'react-native-paper';
+import React, {memo, useState} from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
 import i18n from '../../../i18n';
-import api from '../../api/api';
 import {useTranslation} from 'react-i18next';
 import {colors} from '../../theme/colors';
-import {styles} from './styles';
+import { styles } from './styles';
+import { changeLanguage } from '../../api/apiService';
 
-export const LanguageSwitcher = () => {
+const LANGUAGES = [
+  {label: 'RU', value: 'ru'},
+  {label: 'EN', value: 'en'},
+];
+
+export const LanguageSwitcher = memo(() => {
   const [value, setValue] = useState<string>(i18n.language || 'en');
   const {t} = useTranslation();
 
@@ -16,31 +20,36 @@ export const LanguageSwitcher = () => {
     i18n.changeLanguage(lang);
 
     try {
-      await api.patch('/users/settings', {
-        settings: {language: lang},
-      });
+      await changeLanguage(lang);
     } catch (e) {
-      console.warn('Failed to update language setting', e);
+      console.warn('Ошибка при записи настроек языка', e);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text variant="bodyLarge" style={styles.label}>
-        {t('profile.chose_lang')}
-      </Text>
-      <RadioButton.Group onValueChange={handleLanguageChange} value={value}>
-        <View style={styles.row}>
-          <View style={styles.option}>
-            <RadioButton value="ru" color={colors.lightMain} />
-            <Text style={styles.lang}>RU</Text>
-          </View>
-          <View style={styles.option}>
-            <RadioButton value="en" color={colors.lightMain} />
-            <Text style={styles.lang}>EN</Text>
-          </View>
-        </View>
-      </RadioButton.Group>
+      <Text style={styles.label}>{t('profile.chose_lang')}</Text>
+      <View style={styles.row}>
+        {LANGUAGES.map(({label, value: lang}) => (
+          <TouchableOpacity
+            key={lang}
+            style={styles.option}
+            onPress={() => handleLanguageChange(lang)}>
+            <View
+              style={[
+                styles.radioOuter,
+                {
+                  borderColor:
+                    value === lang ? colors.darkWhite : colors.lightMain,
+                },
+              ]}>
+              {value === lang && <View style={styles.radioInner} />}
+            </View>
+            <Text style={styles.lang}>{label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
-};
+});
+
