@@ -79,13 +79,13 @@ const Tabs = () => {
           return <Icon source={iconName} size={size} color={color} />;
         },
         tabBarStyle: {
-          backgroundColor: colors.violet,
+          backgroundColor: colors.darkMain,
           borderTopWidth: 1,
           borderTopColor: colors.darkGray,
           height: 60,
         },
-        tabBarActiveTintColor: colors.yellow,
-        tabBarInactiveTintColor: colors.green,
+        tabBarActiveTintColor: colors.lightMain,
+        tabBarInactiveTintColor: colors.gray,
         tabBarLabelStyle: {
           ...customTypeScale.bodyMedium,
         },
