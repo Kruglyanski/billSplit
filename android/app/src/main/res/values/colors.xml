@@ -1,3 +1,5 @@
 <resources>
-    <color name="splash_background">#FFFFFF</color> <!-- или любой другой цвет -->
+    <color name="splash_background">#1c3d54</color> 
 </resources>
+ <!-- '#1c3d54', // -->
+<!-- '#467b9e', // -->
