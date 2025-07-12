@@ -3,12 +3,7 @@ import * as apiService from '../api/apiService';
 import * as authService from '../utils/services/authService';
 import {setAuthToken, clearAuthToken} from '../api/api';
 import i18n from '../../i18n';
-
-interface IUser {
-  id: number;
-  name: string;
-  email: string;
-}
+import {IUser} from './userStore';
 
 class AuthStore {
   user: IUser | null = null;

@@ -6,4 +6,8 @@ export const styles = StyleSheet.create({
     bottom: 24,
     right: 24,
   },
+
+  userWrapper: {
+    margin: 16,
+  },
 });

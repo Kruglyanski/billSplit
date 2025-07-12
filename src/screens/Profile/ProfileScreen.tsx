@@ -13,6 +13,7 @@ import {styles} from './styles';
 import {LanguageSwitcher} from '../../components/language-switcher/LanguageSwitcher';
 import {View} from 'react-native';
 import {CustomButton} from '../../components/custom-button/CustomButton';
+import {ParticipantCard} from '../../components/participant-card/ParticipantCard';
 
 interface IProps {
   navigation: ProfileScreenNavigationProps['navigation'];
@@ -46,6 +47,16 @@ export const ProfileScreen: FC<IProps> = observer(({navigation}) => {
       title={t('profile.title')}
       gradientColors={DEFAULT_GRADIENT_COLORS}
       buttons={headerButtons}>
+      {authStore.user && (
+        <View style={styles.userWrapper}>
+          <ParticipantCard
+            item={authStore.user}
+            isSelected={false}
+            handlePress={() => null}
+            handleDeletePress={() => null}
+          />
+        </View>
+      )}
       <LanguageSwitcher />
       <View style={styles.logoutWrapper}>
         <CustomButton
