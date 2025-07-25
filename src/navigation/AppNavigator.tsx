@@ -84,8 +84,8 @@ const Tabs = () => {
           borderTopColor: colors.darkGray,
           height: 60,
         },
-        tabBarActiveTintColor: colors.lightMain,
-        tabBarInactiveTintColor: colors.gray,
+        tabBarActiveTintColor: colors.gray,
+        tabBarInactiveTintColor: colors.lightMain,
         tabBarLabelStyle: {
           ...customTypeScale.bodyMedium,
         },

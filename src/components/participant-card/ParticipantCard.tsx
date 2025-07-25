@@ -1,10 +1,11 @@
-import React, {FC, memo} from 'react';
+import React, {FC, memo, useCallback} from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import {IconButton, Text} from 'react-native-paper';
 import {colors} from '../../theme/colors';
-import {getAvatarColorByEmail} from '../../utils/helpers/get-avatar-color-by-email';
 import {styles} from './styles';
 import {IUser} from '../../stores/userStore';
+import {getColorById} from '../../utils/helpers/get-color-by-id';
+import {getInitials} from '../../utils/helpers/get-initials';
 
 interface IProps {
   item: IUser;
@@ -15,18 +16,20 @@ interface IProps {
 
 export const ParticipantCard: FC<IProps> = memo(
   ({item, isSelected, handlePress, handleDeletePress}) => {
-    const getInitials = () => item.name.slice(0, 2)?.toUpperCase() || '?';
+    const onPress = useCallback(() => {
+      handlePress(item.id);
+    }, [handlePress, item.id]);
+
+    const onDeletePress = useCallback(() => {
+      handleDeletePress(item.id);
+    }, [handleDeletePress, item.id]);
 
     return (
       <TouchableOpacity
         style={[styles.itemContainer, isSelected && styles.itemSelected]}
-        onPress={() => handlePress(item.id)}>
-        <View
-          style={[
-            styles.avatar,
-            {backgroundColor: getAvatarColorByEmail(item.email)},
-          ]}>
-          <Text style={styles.avatarText}>{getInitials()}</Text>
+        {...{onPress}}>
+        <View style={[styles.avatar, {backgroundColor: getColorById(item.id)}]}>
+          <Text style={styles.avatarText}>{getInitials(item.name)}</Text>
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.name}>{item.name}</Text>
@@ -41,7 +44,7 @@ export const ParticipantCard: FC<IProps> = memo(
             icon={'close'}
             iconColor={colors.white}
             size={16}
-            onPress={() => handleDeletePress(item.id)}
+            onPress={onDeletePress}
           />
         )}
       </TouchableOpacity>

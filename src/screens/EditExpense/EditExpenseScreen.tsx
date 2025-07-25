@@ -121,11 +121,10 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const headerButtons: IButtonSettings[] = useMemo(() => {
     return [
       {
-        icon: 'arrow-left',
-        title: t('add_expense.back'),
+        icon: 'chevron-left',
         onPress: navigation.goBack,
       },
-      {title: t('add_expense.delete'), onPress: handleDelete},
+      {icon: 'delete', onPress: handleDelete, size: 28, iconColor: colors.red},
     ];
   }, [navigation, handleSubmit, t]);
 
@@ -133,7 +132,7 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
     return <></>;
   }
 
-  const group = groupStore.groups.find(g => g.id === groupId);
+  const group = groupStore.groups.get(groupId);
   const participants = group?.members || [];
 
   return (

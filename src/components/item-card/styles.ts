@@ -3,10 +3,10 @@ import {colors} from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   card: {
-    borderRadius: 16,
+    height: 130,
     paddingHorizontal: 12,
     marginTop: -24,
-    height: 130,
+    borderRadius: 16,
     shadowColor: colors.black,
     shadowOffset: {width: 6, height: -6},
     shadowOpacity: 0.5,
@@ -16,16 +16,19 @@ export const styles = StyleSheet.create({
 
   contentWrapper: {
     height: '100%',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   cardTitle: {
+    marginTop: -24,
     color: colors.white,
+    textAlign: 'center',
   },
 
   cardDate: {
+    position: 'absolute',
+    bottom: 12,
     color: colors.white,
-    alignSelf: 'flex-end',
-    marginBottom: 12,
   },
 });

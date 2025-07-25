@@ -17,5 +17,6 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     marginTop: 24,
     paddingTop: 24,
+    paddingHorizontal: 16,
   },
 });

@@ -6,7 +6,7 @@ import {styles} from './styles';
 
 interface IProps {
   title: string;
-  createdAt: string;
+  createdAt?: string;
   color: string;
   onPress: () => void;
 }
@@ -20,12 +20,14 @@ export const ItemCard: FC<IProps> = memo(
             <Text
               numberOfLines={2}
               style={styles.cardTitle}
-              variant="titleMedium">
+              variant="titleLarge">
               {title}
             </Text>
-            <Text style={styles.cardDate} variant="labelMedium">
-              {dayjs(createdAt).format('DD.MM.YYYY HH:mm')}
-            </Text>
+            {createdAt && (
+              <Text style={styles.cardDate} variant="labelMedium">
+                {dayjs(createdAt).format('DD.MM.YYYY HH:mm')}
+              </Text>
+            )}
           </View>
         </Card.Content>
       </Card>

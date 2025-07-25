@@ -10,27 +10,14 @@ import {colors} from '../../theme/colors';
 import expenseStore, {IExpense} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
 import {ItemCard} from '../../components/item-card/ItemCard';
-import {
-  IButtonSettings,
-  ScreenWrapper,
-} from '../../components/screen-wrapper/ScreenWrapper';
+import {ScreenWrapper} from '../../components/screen-wrapper/ScreenWrapper';
 import {styles} from './styles';
-import {appStore} from '../../stores/appStore';
+import {getColorById} from '../../utils/helpers/get-color-by-id';
+import {DEFAULT_GRADIENT_COLORS} from '../../constants';
 
 interface IProps {
   navigation: HomeScreenNavigationProps['navigation'];
 }
-
-const GRADIENT_COLORS = [colors.orange, colors.white];
-
-const COLOR_PALLETE = [
-  colors.blue,
-  colors.orange,
-  colors.green,
-  colors.violet,
-  colors.lightRed,
-  colors.yellow,
-];
 
 const keyExtractor = (item: IExpense) => item.id.toString();
 
@@ -39,7 +26,6 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      //show skeleton
       await expenseStore.fetchExpensesByUser();
       userStore.fetchRelatedUsers();
       groupStore.fetchUserGroups();
@@ -48,65 +34,32 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
     fetchData();
   }, []);
 
-  // const navigateToGroupCreate = useCallback(() => {
-  //   navigation.navigate('HomeTab', {screen: 'CreateGroup'});
-  // }, [navigation]);
-
-  const navigateToGroupList = useCallback(() => {
-    navigation.navigate('GroupListTab', {screen: 'GroupList'});
-  }, [navigation]);
-
   const navigateToAddExpense = useCallback(() => {
     navigation.navigate('HomeTab', {screen: 'AddExpense', params: {}});
   }, [navigation]);
 
-  const logOut = useCallback(() => {
-    authStore.logout();
-    navigation.navigate('Auth');
-  }, [navigation]);
+  const renderItem = useCallback(({item}: {item: IExpense}) => {
+    const color = getColorById(item.id);
 
-  const showLogoutModal = useCallback(() => {
-    appStore.showInfoModal({
-      message: t('home.logout_message'),
-      title: t('home.attention'),
-      action: logOut,
-    });
-  }, [logOut]);
+    const onPress = () =>
+      navigation.navigate('HomeTab', {
+        screen: 'ExpenseDetails',
+        params: {expenseId: item.id},
+      });
 
-  const renderItem = useCallback(
-    ({item, index}: {item: IExpense; index: number}) => {
-      const color = COLOR_PALLETE[index % COLOR_PALLETE.length];
-
-      const onPress = () =>
-        navigation.navigate('HomeTab', {
-          screen: 'ExpenseDetails',
-          params: {expenseId: item.id},
-        });
-
-      return (
-        <ItemCard
-          title={item.description}
-          createdAt={item.createdAt}
-          {...{onPress, color}}
-        />
-      );
-    },
-    [],
-  );
-
-  const headerButtons: IButtonSettings[] = useMemo(() => {
-    return [
-      {icon: 'plus', title: t('home.event'), onPress: () => null},
-      // {icon: 'plus', title: t('home.event'), onPress: navigateToGroupCreate},
-      // {title: t('home.go_to_groups'), onPress: navigateToGroupList},
-    ];
-  }, [navigateToGroupList, t]);
+    return (
+      <ItemCard
+        title={item.description}
+        createdAt={item.createdAt}
+        {...{onPress, color}}
+      />
+    );
+  }, []);
 
   return (
     <ScreenWrapper
       title={`${t('home.welcome')}, ${authStore.user?.name || t('home.user')}!`}
-      gradientColors={GRADIENT_COLORS}
-      buttons={headerButtons}>
+      gradientColors={DEFAULT_GRADIENT_COLORS}>
       <Text variant="headlineSmall" style={styles.listHeader}>
         {t('home.current_expenses')}:
       </Text>

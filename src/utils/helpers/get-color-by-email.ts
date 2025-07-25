@@ -7,10 +7,6 @@ const avatarColors = [
   colors.violet,
   colors.yellow,
   colors.red,
-  colors.orange,
-  colors.green,
-  colors.yellow,
-  colors.blue,
 ];
 
 const validStartChars =
@@ -24,7 +20,7 @@ const chunkSize = Math.ceil(validStartChars.length / avatarColors.length);
   charToColorIndexMap[char] = groupIndex;
 });
 
-export const getAvatarColorByEmail = (email: string) => {
+export const getColorByEmail = (email: string) => {
   const firstChar = email.trim().charAt(0).toLowerCase();
   const index = charToColorIndexMap[firstChar] ?? 0;
   return avatarColors[index];

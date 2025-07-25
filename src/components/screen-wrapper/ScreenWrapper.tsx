@@ -10,17 +10,19 @@ import {IconSource} from 'react-native-paper/lib/typescript/components/Icon';
 export interface IButtonSettings {
   icon: IconSource;
   onPress: () => void;
+  size?: number;
+  iconColor?: string;
 }
 
 interface IProps {
   title: string;
-  buttons: IButtonSettings[];
+  buttons?: IButtonSettings[];
   gradientColors: string[];
   children: React.ReactNode;
 }
 
 export const ScreenWrapper: FC<IProps> = memo(
-  ({title, gradientColors, buttons, children}) => {
+  ({title, gradientColors, buttons = [], children}) => {
     return (
       <LinearGradient
         colors={gradientColors}
@@ -31,9 +33,9 @@ export const ScreenWrapper: FC<IProps> = memo(
           <View style={styles.buttonWrapper}>
             {!!buttons[0] && (
               <IconButton
-                {...buttons[0]}
                 iconColor={colors.darkWhite}
                 size={40}
+                {...buttons[0]}
               />
             )}
           </View>
@@ -43,9 +45,9 @@ export const ScreenWrapper: FC<IProps> = memo(
           <View style={styles.buttonWrapper}>
             {!!buttons[1] && (
               <IconButton
-                {...buttons[1]}
                 iconColor={colors.darkWhite}
                 size={40}
+                {...buttons[1]}
               />
             )}
           </View>

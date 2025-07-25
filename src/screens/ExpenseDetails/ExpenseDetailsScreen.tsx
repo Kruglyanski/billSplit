@@ -21,7 +21,7 @@ export const ExpenseDetailsScreen: FC<TProps> = observer(
   ({route, navigation}) => {
     const {expenseId} = route.params;
     const expense = expenseStore.expenses.get(expenseId);
-    const group = groupStore.groups.find(g => g.id === expense?.group.id);
+    const group = expense ? groupStore.groups.get(expense.group.id) : undefined;
     const {t} = useTranslation();
 
     const navigateToExpenseEdit = useCallback(() => {
@@ -29,22 +29,28 @@ export const ExpenseDetailsScreen: FC<TProps> = observer(
     }, [navigation, expenseId]);
 
     const headerButtons: IButtonSettings[] = useMemo(() => {
+      const backButton = {
+        icon: 'chevron-left',
+        onPress: navigation.goBack,
+      };
+
+      if (!expense) {
+        return [backButton];
+      }
+
       return [
+        backButton,
         {
-          icon: 'arrow-left',
-          title: t('details.back'),
-          onPress: navigation.goBack,
-        },
-        {
-          title: t('details.edit'),
-          onPress: expense ? navigateToExpenseEdit : undefined,
+          icon: 'pen',
+          onPress: navigateToExpenseEdit,
+          size: 28,
         },
       ];
-    }, [navigation, expense, navigateToExpenseEdit, t]);
+    }, [navigation, navigateToExpenseEdit, expense]);
 
     return (
       <ScreenWrapper
-        title={expense?.description || ''}
+        title={expense?.description || t('details.expense_not_found')}
         gradientColors={GRADIENT_COLORS}
         buttons={headerButtons}>
         {!expense ? (
@@ -59,7 +65,7 @@ export const ExpenseDetailsScreen: FC<TProps> = observer(
               {t('details.amount')}: {expense.amount}
             </Text>
             <Text style={styles.event} variant="bodyLarge">
-              {t('details.event')}: {expense.group.name}
+              {t('details.event')}: {group?.name || '—'}
             </Text>
             <ExpenseDetailsUserList
               users={group?.members || []}
