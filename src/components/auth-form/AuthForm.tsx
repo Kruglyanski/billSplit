@@ -91,6 +91,7 @@ export const AuthForm: React.FC<AuthFormProps> = memo(
             type="outlined"
             onChangeText={onChangePassword}
             width={300}
+            secureTextEntry
           />
           <View style={styles.errorWrapper}>
             {passwordError && (

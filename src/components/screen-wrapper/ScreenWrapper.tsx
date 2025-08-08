@@ -1,5 +1,5 @@
 import {FC, memo} from 'react';
-import {View} from 'react-native';
+import {StyleProp, View, ViewProps} from 'react-native';
 import {IconButton, Text} from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import {SCREEN_GRADIENT_START, SCREEN_GRADIENT_END} from '../../constants';
@@ -18,11 +18,12 @@ interface IProps {
   title: string;
   buttons?: IButtonSettings[];
   gradientColors: string[];
+  containerStyle?: StyleProp<ViewProps>;
   children: React.ReactNode;
 }
 
 export const ScreenWrapper: FC<IProps> = memo(
-  ({title, gradientColors, buttons = [], children}) => {
+  ({title, gradientColors, buttons = [], containerStyle, children}) => {
     return (
       <LinearGradient
         colors={gradientColors}
@@ -52,7 +53,7 @@ export const ScreenWrapper: FC<IProps> = memo(
             )}
           </View>
         </View>
-        <View style={styles.container}>{children}</View>
+        <View style={[styles.container, containerStyle]}>{children}</View>
       </LinearGradient>
     );
   },

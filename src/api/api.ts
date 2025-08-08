@@ -8,7 +8,8 @@ export interface AxiosRequestConfigWithMeta extends AxiosRequestConfig {
 
 export const API_BASE_URL = Platform.select({
   //TODO: вынести!!!!!!!
-  android: 'http://10.0.2.2:3000', // для Android эмулятора
+  // android: 'http://10.0.2.2:3000', // для Android эмулятора
+  android: 'http://192.168.1.7:3000', // для Android
   ios: 'http://localhost:3000', // для iOS симулятора
   default: 'http://localhost:3000', // для других случаев
 });

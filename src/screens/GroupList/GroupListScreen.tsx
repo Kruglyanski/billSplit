@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import groupStore, {IGroup} from '../../stores/groupStore';
 import {GroupListScreenNavigationProps} from '../../navigation/types';
-import {ItemCard} from '../../components/item-card/ItemCard';
+import {ColoredItemCard} from '../../components/colored-item-card/ColoredItemCard';
 import {
   IButtonSettings,
   ScreenWrapper,
@@ -17,6 +17,7 @@ import {getColorById} from '../../utils/helpers/get-color-by-id';
 interface IProps {
   navigation: GroupListScreenNavigationProps['navigation'];
 }
+
 const keyExtractor = (item: IGroup) => item.id.toString();
 
 export const GroupListScreen: FC<IProps> = observer(({navigation}) => {
@@ -36,7 +37,7 @@ export const GroupListScreen: FC<IProps> = observer(({navigation}) => {
       });
 
     return (
-      <ItemCard
+      <ColoredItemCard
         title={item?.name || ''}
         // createdAt={item?.createdAt || ''}
         {...{onPress, color}}

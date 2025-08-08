@@ -16,6 +16,8 @@ import {
   initSocket,
 } from './src/utils/services/websocket-service/websocketService';
 import {observer} from 'mobx-react-lite';
+import {StatusBar} from 'react-native';
+import {colors} from './src/theme/colors';
 
 function App(): React.JSX.Element {
   useEffect(() => {
@@ -45,6 +47,7 @@ function App(): React.JSX.Element {
 
   return (
     <PaperProvider {...{theme}}>
+      <StatusBar backgroundColor={colors.black} barStyle="light-content" />
       <AppNavigator />
       <InfoModal />
     </PaperProvider>

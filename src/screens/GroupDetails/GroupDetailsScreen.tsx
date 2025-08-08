@@ -1,191 +1,170 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Button,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import {observer} from 'mobx-react-lite';
-import groupStore from '../../stores/groupStore';
+  IButtonSettings,
+  ScreenWrapper,
+} from '../../components/screen-wrapper/ScreenWrapper';
+import {DEFAULT_GRADIENT_COLORS} from '../../constants';
+import {useTranslation} from 'react-i18next';
 import {GroupDetailsScreenNavigationProps} from '../../navigation/types';
-import {TExtraUser} from '../../stores/userStore';
+import {Text} from 'react-native-paper';
+import {observer} from 'mobx-react-lite';
+import expenseStore, {IExpense} from '../../stores/expenseStore';
+import {SplittedSwitchButton} from '../../components/splitted-switch-button/SplittedSwitchButton';
+import {TransparentItemCard} from '../../components/transparent-item-card/TransparentItemCard';
+
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
+import groupStore from '../../stores/groupStore';
 
 interface IProps {
   navigation: GroupDetailsScreenNavigationProps['navigation'];
   route: GroupDetailsScreenNavigationProps['route'];
 }
 
+const keyExtractor = (item: IExpense) =>
+  item.id.toString() + Math.random().toString();
+
 export const GroupDetailsScreen: FC<IProps> = observer(
-  ({route, navigation}) => {
+  ({navigation, route}) => {
     const {groupId} = route.params;
     const group = groupStore?.groups?.get(groupId);
+    const expenses = expenseStore?.getExpensesByGroupId(groupId);
 
-    const [name, setName] = useState(group?.name || '');
-    const [selectedUserIds, setSelectedUserIds] = useState(
-      group?.members.map(m => m.id) || [],
+    const [activeTab, setActiveTab] = useState(EActiveButton.left);
+    const {t} = useTranslation();
+
+    const headerButtons: IButtonSettings[] = useMemo(() => {
+      return [
+        {
+          icon: 'chevron-left',
+          onPress: navigation.goBack,
+        },
+      ];
+    }, [navigation, t]);
+
+    const onLeftPress = useCallback(() => {
+      setActiveTab(EActiveButton.left);
+    }, []);
+
+    const onRightPress = useCallback(() => {
+      setActiveTab(EActiveButton.right);
+    }, []);
+
+    const onExpenseCardPress = useCallback(
+      (id: number) => {
+        navigation.navigate('ExpenseDetails', {expenseId: id});
+      },
+      [navigation],
     );
-    const [extraUsers, setExtraUsers] = useState<TExtraUser[]>([]);
 
-    const [extraUserEmail, setExtraUserEmail] = useState('');
-    const [extraUserName, setExtraUserName] = useState('');
+    const renderItem = useCallback(({item}: {item: IExpense}) => {
+      const onItemPress = () => {
+        onExpenseCardPress(item.id);
+      };
 
-    const allUsers = group?.members || [];
-
-    const toggleUser = (id: number) => {
-      setSelectedUserIds(prev => {
-        console.log('prev', prev);
-        let res;
-        if (prev.includes(id)) {
-          res = prev.filter(uid => uid !== id);
-        } else {
-          res = [...prev, id];
-        }
-        console.log('user res', res);
-        return res;
-      });
-    };
-
-    const addExtraUser = () => {
-      if (!extraUserEmail || !extraUserName) {
-        Alert.alert(
-          'Ошибка',
-          'Введите имя и email для дополнительного участника',
-        );
-        return;
-      }
-      setExtraUsers(prev => [
-        ...prev,
-        {email: extraUserEmail, name: extraUserName, registered: false},
-      ]);
-      setExtraUserEmail('');
-      setExtraUserName('');
-    };
-
-    const removeExtraUser = (index: number) => {
-      setExtraUsers(prev => prev.filter((_, i) => i !== index));
-    };
-
-    const onSave = async () => {
-      if (group) {
-        try {
-          await groupStore.updateGroup(group.id, name, selectedUserIds);
-          Alert.alert('Успех', 'Группа обновлена');
-        } catch (e) {
-          Alert.alert('Ошибка', 'Не удалось обновить группу');
-        }
-      }
-    };
-
-    if (!group) {
       return (
-        <View style={styles.container}>
-          <Text>Группа не найдена</Text>
-        </View>
+        <TransparentItemCard
+          onPress={onItemPress}
+          leftText={item.description}
+          rightText={item.amount.toString()}
+          width={'80%'}
+        />
       );
-    }
+    }, []);
+
+    //Animation Logic:
+    const leftOpacity = useSharedValue(1);
+    const rightOpacity = useSharedValue(0);
+
+    useEffect(() => {
+      if (activeTab === EActiveButton.left) {
+        leftOpacity.value = withTiming(1, {duration: 250});
+        rightOpacity.value = withTiming(0, {duration: 250});
+      } else {
+        leftOpacity.value = withTiming(0, {duration: 250});
+        rightOpacity.value = withTiming(1, {duration: 250});
+      }
+    }, [activeTab]);
+
+    const leftAnimatedStyle = useAnimatedStyle(() => ({
+      opacity: leftOpacity.value,
+    }));
+
+    const rightAnimatedStyle = useAnimatedStyle(() => ({
+      opacity: rightOpacity.value,
+    }));
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Название группы:</Text>
-        <TextInput
-          value={name}
-          onChangeText={setName}
-          style={styles.input}
-          placeholder="Название группы"
-        />
-
-        <Text style={styles.label}>Участники:</Text>
-        <FlatList
-          data={allUsers}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.memberItem}
-              onPress={() => toggleUser(item.id)}>
-              <Text
-                style={{
-                  ...styles.memberName,
-                  fontWeight: selectedUserIds.includes(item.id)
-                    ? 'bold'
-                    : 'normal',
-                }}>
-                {item.name}
-              </Text>
-              <Text style={styles.checkbox}>
-                {selectedUserIds.includes(item.id) ? '☑' : '☐'}
-              </Text>
-            </TouchableOpacity>
-          )}
-          ListEmptyComponent={<Text>Нет пользователей для выбора</Text>}
-        />
-
-        <Text style={styles.label}>Дополнительные участники (email):</Text>
-        {extraUsers.map((eu, i) => (
-          <View key={i} style={styles.extraUserRow}>
-            <Text style={styles.extraUserText}>
-              {eu.name} ({eu.email})
-            </Text>
-            <Button title="Удалить" onPress={() => removeExtraUser(i)} />
-          </View>
-        ))}
-        <View style={styles.extraUserInputRow}>
-          <TextInput
-            placeholder="Email"
-            value={extraUserEmail}
-            onChangeText={setExtraUserEmail}
-            style={[styles.input, {flex: 1, marginRight: 8}]}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <TextInput
-            placeholder="Имя"
-            value={extraUserName}
-            onChangeText={setExtraUserName}
-            style={[styles.input, {flex: 1}]}
+      <ScreenWrapper
+        title={group?.name ?? "Group's name"}
+        gradientColors={DEFAULT_GRADIENT_COLORS}
+        buttons={headerButtons}>
+        <View style={styles.switchButtonWrapper}>
+          <SplittedSwitchButton
+            active={activeTab}
+            containerWidth={'80%'}
+            rigthButtonText="балансы"
+            leftButtonText="расходы"
+            {...{onLeftPress, onRightPress}}
           />
         </View>
-        <Button title="Добавить участника" onPress={addExtraUser} />
 
-        <View style={{marginVertical: 16}}>
-          <Button title="Сохранить" onPress={onSave} />
+        <View style={styles.tabsWrapper}>
+          <Animated.View
+            style={[styles.tabContent, leftAnimatedStyle]}
+            pointerEvents={activeTab === EActiveButton.left ? 'auto' : 'none'}>
+            <FlatList
+              data={new Array(20).fill(null).map(() => expenses[0])}
+              contentContainerStyle={styles.listContainer}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+            />
+          </Animated.View>
+          <Animated.View
+            style={[styles.tabContent, rightAnimatedStyle]}
+            pointerEvents={activeTab === EActiveButton.right ? 'auto' : 'none'}>
+            <Text style={styles.balancesText}>балансы</Text>
+          </Animated.View>
         </View>
-      </View>
+      </ScreenWrapper>
     );
   },
 );
 
+export enum EActiveButton {
+  left = 'left',
+  right = 'right',
+}
+
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 16},
-  label: {fontSize: 16, marginBottom: 8, fontWeight: '600'},
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    marginBottom: 16,
-  },
-  memberItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
-  },
-  memberName: {fontSize: 16},
-  checkbox: {fontSize: 18},
-  extraUserRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  listContainer: {
     alignItems: 'center',
-    marginBottom: 8,
+    gap: 4,
+    marginTop: 12,
+    paddingBottom: 36,
   },
-  extraUserText: {fontSize: 14},
-  extraUserInputRow: {
-    flexDirection: 'row',
-    marginBottom: 16,
+
+  switchButtonWrapper: {
+    alignItems: 'center',
+    marginTop: 24,
+  },
+
+  tabsWrapper: {
+    flex: 1,
+    width: '100%',
+  },
+
+  tabContent: {
+    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+  },
+
+  balancesText: {
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

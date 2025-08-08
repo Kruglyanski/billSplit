@@ -79,6 +79,12 @@ class ExpenseStore {
       this.expenses.delete(id);
     });
   }
+
+  getExpensesByGroupId(groupId: number): IExpense[] {
+    return Array.from(this.expenses.values()).filter(
+      expense => expense.group.id === groupId,
+    );
+  }
 }
 
 const expenseStore = new ExpenseStore();

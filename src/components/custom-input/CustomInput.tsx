@@ -20,6 +20,7 @@ interface IProps {
   height?: number;
   editable?: boolean;
   keyboardType?: KeyboardTypeOptions;
+  secureTextEntry?: boolean;
 }
 
 export const CustomInput: FC<IProps> = memo(
@@ -34,6 +35,7 @@ export const CustomInput: FC<IProps> = memo(
     height = 42,
     editable = true,
     keyboardType,
+    secureTextEntry = false,
   }) => {
     const isOutlined = type === 'outlined';
 
@@ -53,7 +55,14 @@ export const CustomInput: FC<IProps> = memo(
         placeholder={label}
         placeholderTextColor={error ? colors.red : colors.gray}
         style={inputStyle}
-        {...{value, onChangeText, editable, onSubmitEditing, keyboardType}}
+        {...{
+          value,
+          onChangeText,
+          editable,
+          onSubmitEditing,
+          keyboardType,
+          secureTextEntry,
+        }}
       />
     );
   },

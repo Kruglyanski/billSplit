@@ -45,6 +45,7 @@ class AuthStore {
 
   async login(email: string, password: string) {
     const res = await apiService.login({email, password});
+    console.log('asd res', res);
     const {tokens, user} = res.data;
     console.log('asd user ', user);
     authService.saveTokens(tokens.accessToken, tokens.refreshToken);

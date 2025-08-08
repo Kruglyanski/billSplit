@@ -11,7 +11,7 @@ interface IProps {
   onPress: () => void;
 }
 
-export const ItemCard: FC<IProps> = memo(
+export const ColoredItemCard: FC<IProps> = memo(
   ({title, createdAt, color, onPress}) => {
     return (
       <Card style={[styles.card, {backgroundColor: color}]} {...{onPress}}>

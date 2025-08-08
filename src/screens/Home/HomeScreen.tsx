@@ -9,7 +9,7 @@ import userStore from '../../stores/userStore';
 import {colors} from '../../theme/colors';
 import expenseStore, {IExpense} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
-import {ItemCard} from '../../components/item-card/ItemCard';
+import {ColoredItemCard} from '../../components/colored-item-card/ColoredItemCard';
 import {ScreenWrapper} from '../../components/screen-wrapper/ScreenWrapper';
 import {styles} from './styles';
 import {getColorById} from '../../utils/helpers/get-color-by-id';
@@ -48,7 +48,7 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
       });
 
     return (
-      <ItemCard
+      <ColoredItemCard
         title={item.description}
         createdAt={item.createdAt}
         {...{onPress, color}}

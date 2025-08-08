@@ -193,7 +193,7 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
         onPress: navigation.goBack,
       },
     ];
-  }, [navigation, t]);
+  }, [navigation]);
 
   return (
     <ScreenWrapper
