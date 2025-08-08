@@ -90,14 +90,16 @@
   },
   "create_group":{
     "title": "Создать событие",
+    "title_edit": "Редактировать событие",
     "event_title": "Название события",
     "add_from_list": "Добавить из списка друзей",
-    "invitee_email": "E-mail существующего пользователя",
-    "invitee_name": "Добавить нового участника по имени",
+    "invitee_email": "E-mail существ. пользователя",
+    "invitee_name": "Добавить нового уч-ка по имени",
     "add_participant": "Добавить участника",
     "participants_title": "Участники события:",
     "list_placeholder": "Нет участников",
     "create": "Создать",
+    "edit": "Редактировать",
     "errors": {
       "user_not_created": "Не удалось создать пользователя",
       "enter_email": "Введите email",

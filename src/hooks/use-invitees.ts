@@ -1,8 +1,12 @@
 import {useMemo, useState} from 'react';
-import {IUser} from '../../stores/userStore';
+import {IUser} from '../stores/userStore';
 
-export const useInvitees = () => {
-  const [invitees, setInvitees] = useState(new Map<number, IUser>());
+export const useInvitees = (initInvitees?: IUser[]) => {
+  const [invitees, setInvitees] = useState(() => {
+    return initInvitees
+      ? new Map(initInvitees.map(user => [user.id, user]))
+      : new Map<number, IUser>();
+  });
 
   const addInvitee = (user: IUser) => {
     setInvitees(prev => new Map(prev.set(user.id, user)));

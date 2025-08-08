@@ -45,6 +45,10 @@ type TEditExpense = {
 
 type TCreateGroup = undefined;
 
+type TEditGroup = {
+  groupId: number;
+};
+
 export type GroupStackParamList = {
   AddExpense: TAddExpense;
   ExpenseDetails: TExpenseDetails;
@@ -53,6 +57,7 @@ export type GroupStackParamList = {
   GroupDetails: {groupId: number};
   GroupBalance: {groupId: number};
   CreateGroup: TCreateGroup;
+  EditGroup: TEditGroup;
 };
 
 export type AuthScreenNavigationProps = NativeStackScreenProps<
@@ -98,6 +103,11 @@ export type GroupDetailsScreenNavigationProps = NativeStackScreenProps<
 export type CreateGroupScreenNavigationProps = NativeStackScreenProps<
   HomeStackParamList & GroupStackParamList,
   'CreateGroup'
+>;
+
+export type EditGroupScreenNavigationProps = NativeStackScreenProps<
+  HomeStackParamList & GroupStackParamList,
+  'EditGroup'
 >;
 
 export type ExpenseDetailsScreenNavigationProps = NativeStackScreenProps<

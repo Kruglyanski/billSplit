@@ -26,6 +26,7 @@ import {EditExpenseScreen} from '../screens/EditExpense/EditExpenseScreen';
 import {ConfirmEmailScreen} from '../screens/ConfirmEmail/ConfirmEmailScreen';
 import {setNavigator} from '../utils/services/deeplinkService';
 import {ProfileScreen} from '../screens/Profile/ProfileScreen';
+import {EditGroupScreen} from '../screens/EditGroup/EditGroupScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -38,6 +39,11 @@ const GroupListStackNavigator = () => {
       <GroupStack.Screen name="GroupList" component={GroupListScreen} />
       <GroupStack.Screen name="AddExpense" component={AddExpenseScreen} />
       <GroupStack.Screen name="CreateGroup" component={CreateGroupScreen} />
+      <GroupStack.Screen
+        name="EditGroup"
+        component={EditGroupScreen}
+        options={{keyboardHandlingEnabled: false}}
+      />
       <GroupStack.Screen name="GroupDetails" component={GroupDetailsScreen} />
       <GroupStack.Screen
         name="ExpenseDetails"
@@ -67,6 +73,7 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarIcon: ({color, size}) => {
           let iconName: string = 'home';

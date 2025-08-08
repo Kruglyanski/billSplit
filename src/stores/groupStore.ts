@@ -82,7 +82,7 @@ class GroupStore {
       runInAction(() => {
         this.groups = this.groups.set(res.data.id, res.data);
       });
-      return res.data;
+      return res.data.id;
     } catch (error) {
       console.error('Ошибка обновления группы', error);
       throw error;

@@ -2,7 +2,7 @@ import React, {FC, useCallback, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import groupStore from '../../stores/groupStore';
 import userStore, {IUser} from '../../stores/userStore';
-import {CreateGroupScreenNavigationProps} from '../../navigation/types';
+import {EditGroupScreenNavigationProps} from '../../navigation/types';
 import {
   IButtonSettings,
   ScreenWrapper,
@@ -11,19 +11,24 @@ import {useTranslation} from 'react-i18next';
 import {DEFAULT_GRADIENT_COLORS} from '../../constants';
 import {ParticipantCard} from '../../components/participant-card/ParticipantCard';
 import {appStore} from '../../stores/appStore';
-import {useInvitees} from '../../hooks/use-invitees';
+
 import {isValidEmail} from '../../utils/helpers/is-valid-email';
 import {
   EditGroupFields,
   IFriendsData,
 } from '../../components/edit-group-fields/EditGroupFields';
+import {useInvitees} from '../../hooks/use-invitees';
 
 interface IProps {
-  navigation: CreateGroupScreenNavigationProps['navigation'];
+  navigation: EditGroupScreenNavigationProps['navigation'];
+  route: EditGroupScreenNavigationProps['route'];
 }
 
-export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
-  const [groupName, setGroupName] = useState('');
+export const EditGroupScreen: FC<IProps> = observer(({navigation, route}) => {
+  const routeGroupId = route.params.groupId;
+  const group = groupStore.groups.get(routeGroupId);
+
+  const [groupName, setGroupName] = useState(group ? group.name : '');
   const [emailInput, setEmailInput] = useState('');
   const [nameInput, setNameInput] = useState('');
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -32,7 +37,7 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
   const [isFakeCreating, setIsFakeCreating] = useState(false);
 
   const {invitees, inviteeArray, addInvitee, removeInvitee, clearInvitees} =
-    useInvitees();
+    useInvitees(group?.members);
 
   const {t} = useTranslation();
 
@@ -130,21 +135,23 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
       return acc;
     }, []);
 
-    try {
-      setIsCreating(true);
-      const groupId = await groupStore.createGroup(groupName.trim(), userIds);
-
-      if (groupId) {
-        setGroupName('');
-        clearInvitees();
-        navigation.navigate('GroupList');
+    if (group?.id) {
+      try {
+        setIsCreating(true);
+        const res = await groupStore.createGroup(groupName.trim(), userIds);
+        await groupStore.updateGroup(group?.id, groupName.trim(), userIds);
+        if (res) {
+          setGroupName('');
+          clearInvitees();
+          navigation.navigate('GroupList');
+        }
+      } catch (error: any) {
+        appStore.showInfoModal({
+          message: error.response?.data?.message,
+        });
+      } finally {
+        setIsCreating(false);
       }
-    } catch (error: any) {
-      appStore.showInfoModal({
-        message: error.response?.data?.message,
-      });
-    } finally {
-      setIsCreating(false);
     }
   }, [groupName, inviteeArray, navigation]);
 
@@ -183,11 +190,11 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
 
   return (
     <ScreenWrapper
-      title={t('create_group.title')}
+      title={t('create_group.title_edit')}
       gradientColors={DEFAULT_GRADIENT_COLORS}
       buttons={headerButtons}>
       <EditGroupFields
-        createButtonTitle={t('create_group.create')}
+        createButtonTitle={t('create_group.edit')}
         groupName={groupName}
         setGroupName={setGroupName}
         setNameInput={setNameInput}

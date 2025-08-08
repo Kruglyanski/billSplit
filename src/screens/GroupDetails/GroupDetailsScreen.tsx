@@ -1,5 +1,6 @@
-import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import React, {FC, useCallback, useMemo, useState} from 'react';
+import {FlatList, View} from 'react-native';
+import Animated from 'react-native-reanimated';
 import {
   IButtonSettings,
   ScreenWrapper,
@@ -15,41 +16,28 @@ import {
   SplittedSwitchButton,
 } from '../../components/splitted-switch-button/SplittedSwitchButton';
 import {TransparentItemCard} from '../../components/transparent-item-card/TransparentItemCard';
-
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
 import groupStore from '../../stores/groupStore';
 import {colors} from '../../theme/colors';
 import {styles} from './styles';
+import {useAnimatedTabOpacity} from '../../hooks/use-animated-tab-opacity';
 
 interface IProps {
   navigation: GroupDetailsScreenNavigationProps['navigation'];
   route: GroupDetailsScreenNavigationProps['route'];
 }
 
-const keyExtractor = (item: IExpense) =>
-  item.id.toString() + Math.random().toString();
+const keyExtractor = (item: IExpense) => item.id.toString();
 
 export const GroupDetailsScreen: FC<IProps> = observer(
   ({navigation, route}) => {
+    const [activeTab, setActiveTab] = useState(EActiveButton.left);
     const {groupId} = route.params;
     const group = groupStore?.groups?.get(groupId);
     const expenses = expenseStore?.getExpensesByGroupId(groupId);
 
-    const [activeTab, setActiveTab] = useState(EActiveButton.left);
     const {t} = useTranslation();
-
-    const headerButtons: IButtonSettings[] = useMemo(() => {
-      return [
-        {
-          icon: 'chevron-left',
-          onPress: navigation.goBack,
-        },
-      ];
-    }, [navigation, t]);
+    const {leftAnimatedStyle, rightAnimatedStyle} =
+      useAnimatedTabOpacity(activeTab);
 
     const onLeftPress = useCallback(() => {
       setActiveTab(EActiveButton.left);
@@ -59,53 +47,52 @@ export const GroupDetailsScreen: FC<IProps> = observer(
       setActiveTab(EActiveButton.right);
     }, []);
 
-    const onExpenseCardPress = useCallback(
+    const navigateToExpenseDetails = useCallback(
       (id: number) => {
         navigation.navigate('ExpenseDetails', {expenseId: id});
       },
       [navigation],
     );
 
-    const onFABPress = useCallback(() => {
+    const navigateToAddExpense = useCallback(() => {
       navigation.navigate('AddExpense', {groupId});
     }, [navigation, groupId]);
 
-    const renderItem = useCallback(({item}: {item: IExpense}) => {
-      const onItemPress = () => {
-        onExpenseCardPress(item.id);
-      };
+    const navigateToGroupEdit = useCallback(() => {
+      navigation.navigate('EditGroup', {groupId});
+    }, [navigation, groupId]);
 
-      return (
-        <TransparentItemCard
-          onPress={onItemPress}
-          leftText={item.description}
-          rightText={item.amount.toString()}
-          width={'80%'}
-        />
-      );
-    }, []);
+    const renderItem = useCallback(
+      ({item}: {item: IExpense}) => {
+        const onItemPress = () => {
+          navigateToExpenseDetails(item.id);
+        };
 
-    //Animation Logic:
-    const leftOpacity = useSharedValue(1);
-    const rightOpacity = useSharedValue(0);
+        return (
+          <TransparentItemCard
+            onPress={onItemPress}
+            leftText={item.description}
+            rightText={item.amount.toString()}
+            width={'80%'}
+          />
+        );
+      },
+      [navigateToExpenseDetails],
+    );
 
-    useEffect(() => {
-      if (activeTab === EActiveButton.left) {
-        leftOpacity.value = withTiming(1, {duration: 250});
-        rightOpacity.value = withTiming(0, {duration: 250});
-      } else {
-        leftOpacity.value = withTiming(0, {duration: 250});
-        rightOpacity.value = withTiming(1, {duration: 250});
-      }
-    }, [activeTab]);
-
-    const leftAnimatedStyle = useAnimatedStyle(() => ({
-      opacity: leftOpacity.value,
-    }));
-
-    const rightAnimatedStyle = useAnimatedStyle(() => ({
-      opacity: rightOpacity.value,
-    }));
+    const headerButtons: IButtonSettings[] = useMemo(() => {
+      return [
+        {
+          icon: 'chevron-left',
+          onPress: navigation.goBack,
+        },
+        {
+          icon: 'pen',
+          onPress: navigateToGroupEdit,
+          size: 28,
+        },
+      ];
+    }, [navigation, navigateToGroupEdit]);
 
     return (
       <ScreenWrapper
@@ -118,19 +105,20 @@ export const GroupDetailsScreen: FC<IProps> = observer(
             containerWidth={'80%'}
             rigthButtonText="балансы"
             leftButtonText="расходы"
-            {...{onLeftPress, onRightPress}}
+            onLeftPress={onLeftPress}
+            onRightPress={onRightPress}
           />
         </View>
-
         <View style={styles.tabsWrapper}>
           <Animated.View
             style={[styles.tabContent, leftAnimatedStyle]}
             pointerEvents={activeTab === EActiveButton.left ? 'auto' : 'none'}>
             <FlatList
-              data={new Array(20).fill(null).map(() => expenses[0])}
-              contentContainerStyle={styles.listContainer}
+              data={expenses}
               renderItem={renderItem}
               keyExtractor={keyExtractor}
+              contentContainerStyle={styles.listContainer}
+              showsVerticalScrollIndicator={false}
             />
           </Animated.View>
           <Animated.View
@@ -142,7 +130,7 @@ export const GroupDetailsScreen: FC<IProps> = observer(
         <FAB
           icon={'plus'}
           label={t('home.create_expense')}
-          onPress={onFABPress}
+          onPress={navigateToAddExpense}
           visible={true}
           color={colors.blue}
           style={styles.fabStyle}

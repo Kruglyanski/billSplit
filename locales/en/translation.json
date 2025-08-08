@@ -90,6 +90,7 @@
   },
   "create_group":{
     "title": "Create event",
+    "title_edit": "Edit event",
     "event_title": "Event title",
     "add_from_list": "Add from friends list",
     "invitee_email": "Existing user email",
@@ -98,6 +99,7 @@
     "participants_title": "Participants:",
     "list_placeholder": "No participants",
     "create": "Create",
+    "edit": "Edit",
     "errors": {
       "user_not_created": "Failed to create user",
       "enter_email": "Enter email",
