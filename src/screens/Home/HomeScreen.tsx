@@ -74,7 +74,7 @@ export const HomeScreen: FC<IProps> = observer(({navigation}) => {
         label={t('home.create_expense')}
         onPress={navigateToAddExpense}
         visible={true}
-        color={colors.violet}
+        color={colors.blue}
         style={styles.fabStyle}
         variant="tertiary"
       />

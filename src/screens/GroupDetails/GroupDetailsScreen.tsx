@@ -7,10 +7,13 @@ import {
 import {DEFAULT_GRADIENT_COLORS} from '../../constants';
 import {useTranslation} from 'react-i18next';
 import {GroupDetailsScreenNavigationProps} from '../../navigation/types';
-import {Text} from 'react-native-paper';
+import {FAB, Text} from 'react-native-paper';
 import {observer} from 'mobx-react-lite';
 import expenseStore, {IExpense} from '../../stores/expenseStore';
-import {SplittedSwitchButton} from '../../components/splitted-switch-button/SplittedSwitchButton';
+import {
+  EActiveButton,
+  SplittedSwitchButton,
+} from '../../components/splitted-switch-button/SplittedSwitchButton';
 import {TransparentItemCard} from '../../components/transparent-item-card/TransparentItemCard';
 
 import Animated, {
@@ -19,6 +22,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import groupStore from '../../stores/groupStore';
+import {colors} from '../../theme/colors';
+import {styles} from './styles';
 
 interface IProps {
   navigation: GroupDetailsScreenNavigationProps['navigation'];
@@ -60,6 +65,10 @@ export const GroupDetailsScreen: FC<IProps> = observer(
       },
       [navigation],
     );
+
+    const onFABPress = useCallback(() => {
+      navigation.navigate('AddExpense', {groupId});
+    }, [navigation, groupId]);
 
     const renderItem = useCallback(({item}: {item: IExpense}) => {
       const onItemPress = () => {
@@ -130,41 +139,16 @@ export const GroupDetailsScreen: FC<IProps> = observer(
             <Text style={styles.balancesText}>балансы</Text>
           </Animated.View>
         </View>
+        <FAB
+          icon={'plus'}
+          label={t('home.create_expense')}
+          onPress={onFABPress}
+          visible={true}
+          color={colors.blue}
+          style={styles.fabStyle}
+          variant="tertiary"
+        />
       </ScreenWrapper>
     );
   },
 );
-
-export enum EActiveButton {
-  left = 'left',
-  right = 'right',
-}
-
-const styles = StyleSheet.create({
-  listContainer: {
-    alignItems: 'center',
-    gap: 4,
-    marginTop: 12,
-    paddingBottom: 36,
-  },
-
-  switchButtonWrapper: {
-    alignItems: 'center',
-    marginTop: 24,
-  },
-
-  tabsWrapper: {
-    flex: 1,
-    width: '100%',
-  },
-
-  tabContent: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-  },
-
-  balancesText: {
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});

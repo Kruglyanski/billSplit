@@ -1,17 +1,23 @@
 import {FC, memo} from 'react';
 import {DimensionValue, View, TouchableOpacity} from 'react-native';
-import {EActiveButton} from '../../screens/GroupDetails/GroupDetailsScreen';
 import {styles} from './styles';
 import {Text} from 'react-native-paper';
 
-export const SplittedSwitchButton: FC<{
+export enum EActiveButton {
+  left = 'left',
+  right = 'right',
+}
+
+interface IProps {
   containerWidth?: DimensionValue;
   active: EActiveButton;
   onRightPress: () => void;
   onLeftPress: () => void;
   rigthButtonText: string;
   leftButtonText: string;
-}> = memo(
+}
+
+export const SplittedSwitchButton: FC<IProps> = memo(
   ({
     containerWidth,
     active,
