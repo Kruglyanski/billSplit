@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {Text} from 'react-native-paper';
 import {styles} from './styles';
 
-export interface IOption<T> {
+export interface ISelectModalOption<T> {
   id: number | string;
   label: string;
   value: T;
@@ -15,15 +15,15 @@ export interface IOption<T> {
 interface IProps<T> {
   visible: boolean;
   onDismiss: () => void;
-  options: IOption<T>[];
-  onSelect: (selected: T[] | T) => void;
+  options: ISelectModalOption<T>[];
+  onSelect: ((selected: T[]) => void) | ((selected: T) => void);
   multiple?: boolean;
   title?: string;
   cancelLabel?: string;
   confirmLabel?: string;
 }
 
-const keyExtractor = <R,>(item: IOption<R>) => item.id.toString();
+const keyExtractor = <R,>(item: ISelectModalOption<R>) => item.id.toString();
 
 export const SelectModal = <T,>({
   visible,
@@ -53,7 +53,7 @@ export const SelectModal = <T,>({
     (value: T) => {
       if (multiple) {
         setSelectedValues(prev => {
-          if (prev.some(v => v === value)) {
+          if (prev.includes(value)) {
             return prev.filter(v => v !== value);
           } else {
             return [...prev, value];
@@ -61,7 +61,7 @@ export const SelectModal = <T,>({
         });
       } else {
         setSelectedValues([value]);
-        onSelect(value);
+        (onSelect as (selected: T) => void)(value);
         close();
       }
     },
@@ -69,12 +69,12 @@ export const SelectModal = <T,>({
   );
 
   const handleConfirm = useCallback(() => {
-    onSelect(selectedValues);
+    (onSelect as (selected: T[]) => void)(selectedValues);
     close();
   }, [close, onSelect, selectedValues]);
 
   const renderItem = useCallback(
-    ({item}: {item: IOption<T>}) => {
+    ({item}: {item: ISelectModalOption<T>}) => {
       return (
         <SelectItemCard
           selected={getIsSelected(item.value)}

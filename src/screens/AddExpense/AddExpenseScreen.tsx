@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTranslation} from 'react-i18next';
 import expenseStore, {TSplitPaidBy} from '../../stores/expenseStore';
@@ -8,13 +8,11 @@ import {
   IButtonSettings,
   ScreenWrapper,
 } from '../../components/screen-wrapper/ScreenWrapper';
-import {colors} from '../../theme/colors';
 import {appStore} from '../../stores/appStore';
 import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
+import {DEFAULT_GRADIENT_COLORS} from '../../constants';
 
 interface IProps extends AddExpenseScreenNavigationProps {}
-
-const GRADIENT_COLORS = [colors.green, colors.white];
 
 export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const {groupId: paramGroupId} = route.params;
@@ -22,23 +20,22 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [groupId, setGroupId] = useState(paramGroupId || null);
+  const [splits, setSplits] = useState<TSplitPaidBy[]>([]);
+  const [paidBy, setPaidBy] = useState<TSplitPaidBy[]>([]);
 
-  const group =  groupStore.groups.get(groupId || -1);
+  const group = groupStore.groups.get(groupId || -1);
+  const participants = useMemo(() => group?.members ?? [], [group?.members]);
 
   const {t} = useTranslation();
 
-  const participants = group?.members || [];
-
-  const [splits, setSplits] = useState<TSplitPaidBy[]>(() =>
-    participants.map(p => ({userId: p.id, amount: 0})),
-  );
-  const [paidBy, setPaidBy] = useState<TSplitPaidBy[]>(() =>
-    participants.map(p => ({userId: p.id, amount: 0})),
-  );
+  useEffect(() => {
+    setSplits(participants.map(p => ({userId: p.id, amount: 0})));
+    setPaidBy(participants.map(p => ({userId: p.id, amount: 0})));
+  }, [participants]);
 
   const handleAmountChange = useCallback(
     (userId: number, value: string, type: 'paid' | 'split') => {
-      const amount = +value;
+      const amount = Number(value);
 
       const setters = {
         paid: setPaidBy,
@@ -46,8 +43,7 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       };
 
       setters[type](prev => {
-        const existing = prev.find(s => s.userId === userId);
-        return existing
+        return prev.some(s => s.userId === userId)
           ? prev.map(s => (s.userId === userId ? {...s, amount} : s))
           : [...prev, {userId, amount}];
       });
@@ -60,15 +56,17 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       appStore.showInfoModal({
         message: t('add_expense.fill_all_fields'),
       });
+
       return;
     }
 
-    const numericAmount = +amount;
+    const numericAmount = Number(amount);
 
     if (isNaN(numericAmount) || numericAmount <= 0) {
       appStore.showInfoModal({
         message: t('add_expense.sum_must_be_positive'),
       });
+
       return;
     }
 
@@ -109,31 +107,31 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
     return [
       {
         icon: 'arrow-left',
-        title: t('add_expense.back'),
         onPress: navigation.goBack,
       },
-      {title: t('add_expense.add'), onPress: handleSubmit},
-    ];
-  }, [navigation, handleSubmit, t]);
+      {
+        icon: 'check',
+        onPress: handleSubmit,
+      },
+    ] satisfies IButtonSettings[];
+  }, [navigation, handleSubmit]);
 
   return (
     <ScreenWrapper
       title={t('add_expense.create_expense')}
-      gradientColors={GRADIENT_COLORS}
+      gradientColors={DEFAULT_GRADIENT_COLORS}
       buttons={headerButtons}>
       <EditExpenseForm
         groupName={group?.name || ''}
         users={participants}
-        {...{
-          handleAmountChange,
-          setGroupId,
-          setAmount,
-          setDescription,
-          splits,
-          paidBy,
-          amount,
-          description,
-        }}
+        amount={amount}
+        description={description}
+        setAmount={setAmount}
+        setDescription={setDescription}
+        setGroupId={setGroupId}
+        splits={splits}
+        paidBy={paidBy}
+        handleAmountChange={handleAmountChange}
       />
     </ScreenWrapper>
   );

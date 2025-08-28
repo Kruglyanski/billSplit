@@ -15,8 +15,8 @@ import {useInvitees} from '../../hooks/use-invitees';
 import {isValidEmail} from '../../utils/helpers/is-valid-email';
 import {
   EditGroupFields,
-  IFriendsData,
 } from '../../components/edit-group-fields/EditGroupFields';
+import { ISelectModalOption } from '../../components/select-modal/SelectModal';
 
 interface IProps {
   navigation: CreateGroupScreenNavigationProps['navigation'];
@@ -153,7 +153,8 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
       const isSelected = item.id === selectedId;
       return (
         <ParticipantCard
-          {...{isSelected, item}}
+          isSelected={isSelected}
+          item={item}
           handlePress={handlePressItem}
           handleDeletePress={deleteFromInvitees}
         />
@@ -162,7 +163,7 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
     [selectedId, handlePressItem],
   );
 
-  const friendsData: IFriendsData[] = useMemo(
+  const friendsData: ISelectModalOption<IUser>[] = useMemo(
     () =>
       [...userStore.users.values()].map(friend => ({
         id: friend.id ?? friend.email,
@@ -178,7 +179,7 @@ export const CreateGroupScreen: FC<IProps> = observer(({navigation}) => {
         icon: 'chevron-left',
         onPress: navigation.goBack,
       },
-    ];
+    ] satisfies IButtonSettings[];
   }, [navigation]);
 
   return (

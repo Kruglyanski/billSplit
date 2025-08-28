@@ -1,13 +1,13 @@
-import React, {FC, memo, useCallback, useState} from 'react';
+import React, {FC, memo, useCallback, useMemo, useState} from 'react';
 import {ScrollView, Pressable} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {TSplitPaidBy} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
-import {GroupSelectModal} from '../../components/group-select-modal/GroupSelectModal';
 import {styles} from './styles';
 import {IUser} from '../../stores/userStore';
 import {EditExpenseFormUsersList} from './EditExpenseFormUsersList';
+import {CustomInput} from '../custom-input/CustomInput';
+import {ISelectModalOption, SelectModal} from '../select-modal/SelectModal';
 
 interface IProps {
   handleAmountChange: (
@@ -51,39 +51,55 @@ export const EditExpenseForm: FC<IProps> = memo(
       setModalVisible(false);
     }, []);
 
+    const groupData: ISelectModalOption<number>[] = useMemo(
+      () =>
+        [...groupStore.groups.values()].map(group => ({
+          id: group.id ?? group.name,
+          label: group.name,
+          value: group.id,
+        })),
+      [groupStore.groups],
+    );
+
     return (
       <ScrollView
         contentContainerStyle={styles.scrollview}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Pressable onPress={openGroupsList} style={styles.input}>
-          <TextInput
+        <Pressable onPress={openGroupsList}>
+          <CustomInput
             label={t('add_expense.group')}
             value={groupName}
+            type="outlined"
             editable={false}
-            pointerEvents="none"
+            height={52}
           />
         </Pressable>
-        <TextInput
+        <CustomInput
           label={t('add_expense.description')}
           value={description}
           onChangeText={setDescription}
-          style={styles.input}
+          type="outlined"
+          height={52}
         />
-        <TextInput
+        <CustomInput
           label={t('add_expense.sum')}
-          keyboardType="numeric"
           value={amount}
           onChangeText={setAmount}
-          style={styles.input}
+          type="outlined"
+          keyboardType="numeric"
+          height={52}
         />
         <EditExpenseFormUsersList
-          {...{handleAmountChange, paidBy, splits, users}}
+          handleAmountChange={handleAmountChange}
+          splits={splits}
+          paidBy={paidBy}
+          users={users}
         />
-        <GroupSelectModal
+        <SelectModal
           visible={modalVisible}
+          options={groupData}
           onDismiss={closeGroupsList}
-          groups={[...groupStore.groups.values()]}
           onSelect={setGroupId}
         />
       </ScrollView>

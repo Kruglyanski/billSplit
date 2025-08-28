@@ -11,13 +11,10 @@ import {useTranslation} from 'react-i18next';
 import {DEFAULT_GRADIENT_COLORS} from '../../constants';
 import {ParticipantCard} from '../../components/participant-card/ParticipantCard';
 import {appStore} from '../../stores/appStore';
-
 import {isValidEmail} from '../../utils/helpers/is-valid-email';
-import {
-  EditGroupFields,
-  IFriendsData,
-} from '../../components/edit-group-fields/EditGroupFields';
+import {EditGroupFields} from '../../components/edit-group-fields/EditGroupFields';
 import {useInvitees} from '../../hooks/use-invitees';
+import {ISelectModalOption} from '../../components/select-modal/SelectModal';
 
 interface IProps {
   navigation: EditGroupScreenNavigationProps['navigation'];
@@ -160,7 +157,8 @@ export const EditGroupScreen: FC<IProps> = observer(({navigation, route}) => {
       const isSelected = item.id === selectedId;
       return (
         <ParticipantCard
-          {...{isSelected, item}}
+          item={item}
+          isSelected={isSelected}
           handlePress={handlePressItem}
           handleDeletePress={deleteFromInvitees}
         />
@@ -169,7 +167,7 @@ export const EditGroupScreen: FC<IProps> = observer(({navigation, route}) => {
     [selectedId, handlePressItem],
   );
 
-  const friendsData: IFriendsData[] = useMemo(
+  const friendsData: ISelectModalOption<IUser>[] = useMemo(
     () =>
       [...userStore.users.values()].map(friend => ({
         id: friend.id ?? friend.email,

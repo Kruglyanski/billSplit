@@ -5,15 +5,12 @@ import {CustomInput} from '../../components/custom-input/CustomInput';
 import {Icon, IconButton, Text} from 'react-native-paper';
 import {colors} from '../../theme/colors';
 import {CustomButton} from '../../components/custom-button/CustomButton';
-import {SelectModal} from '../../components/select-modal/SelectModal';
+import {
+  ISelectModalOption,
+  SelectModal,
+} from '../../components/select-modal/SelectModal';
 import {styles} from './styles';
 import {useTranslation} from 'react-i18next';
-
-export interface IFriendsData {
-  id: number;
-  label: string;
-  value: IUser;
-}
 
 interface IProps {
   groupName: string;
@@ -28,7 +25,7 @@ interface IProps {
   isGettingByEmail: boolean;
   isFakeCreating: boolean;
   inviteeArray: IUser[];
-  friendsData: IFriendsData[];
+  friendsData: ISelectModalOption<IUser>[];
   isCreating: boolean;
   renderItem: ({item}: {item: IUser}) => JSX.Element;
   selectedId: number | null;

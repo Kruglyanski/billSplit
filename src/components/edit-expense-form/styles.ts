@@ -7,11 +7,8 @@ export const styles = StyleSheet.create({
   },
 
   scrollview: {
-    marginTop: 12,
-  },
-
-  input: {
-    marginBottom: 12,
+    margin: 16,
+    gap: 16,
   },
 
   label: {
@@ -23,13 +20,11 @@ export const styles = StyleSheet.create({
   splitRow: {
     marginBottom: 12,
     paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderColor: colors.violet,
   },
 
   userName: {
     marginBottom: 4,
-    color: colors.darkGray,
+    color: colors.white,
   },
 
   inputsContainer: {
@@ -42,19 +37,7 @@ export const styles = StyleSheet.create({
   },
 
   inputLabel: {
-    color: colors.violet,
+    color: colors.white,
     marginBottom: 4,
-  },
-
-  groupSelector: {
-    padding: 12,
-    marginVertical: 10,
-    borderRadius: 6,
-  },
-
-  saveButton: {
-    marginBottom: 16,
-    width: 200,
-    alignSelf: 'center',
   },
 });

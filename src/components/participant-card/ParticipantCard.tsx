@@ -10,18 +10,18 @@ import {getInitials} from '../../utils/helpers/get-initials';
 interface IProps {
   item: IUser;
   isSelected: boolean;
-  handlePress: (itemId: number) => void;
-  handleDeletePress: (itemId: number) => void;
+  handlePress?: (itemId: number) => void;
+  handleDeletePress?: (itemId: number) => void;
 }
 
 export const ParticipantCard: FC<IProps> = memo(
   ({item, isSelected, handlePress, handleDeletePress}) => {
     const onPress = useCallback(() => {
-      handlePress(item.id);
+      handlePress?.(item.id);
     }, [handlePress, item.id]);
 
     const onDeletePress = useCallback(() => {
-      handleDeletePress(item.id);
+      handleDeletePress?.(item.id);
     }, [handleDeletePress, item.id]);
 
     return (

@@ -49,12 +49,7 @@ export const ProfileScreen: FC<IProps> = observer(({navigation}) => {
       buttons={headerButtons}>
       {authStore.user && (
         <View style={styles.userWrapper}>
-          <ParticipantCard
-            item={authStore.user}
-            isSelected={false}
-            handlePress={() => null}
-            handleDeletePress={() => null}
-          />
+          <ParticipantCard item={authStore.user} isSelected={false} />
         </View>
       )}
       <LanguageSwitcher />
