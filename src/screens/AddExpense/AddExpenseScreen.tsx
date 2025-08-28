@@ -11,8 +11,11 @@ import {
 import {appStore} from '../../stores/appStore';
 import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
 import {DEFAULT_GRADIENT_COLORS} from '../../constants';
+import {updateAmounts} from './helper';
 
 interface IProps extends AddExpenseScreenNavigationProps {}
+
+export type TSplitPaidByExtended = TSplitPaidBy & {edited: boolean};
 
 export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const {groupId: paramGroupId} = route.params;
@@ -20,8 +23,8 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [groupId, setGroupId] = useState(paramGroupId || null);
-  const [splits, setSplits] = useState<TSplitPaidBy[]>([]);
-  const [paidBy, setPaidBy] = useState<TSplitPaidBy[]>([]);
+  const [splits, setSplits] = useState<TSplitPaidByExtended[]>([]);
+  const [paidBy, setPaidBy] = useState<TSplitPaidByExtended[]>([]);
 
   const group = groupStore.groups.get(groupId || -1);
   const participants = useMemo(() => group?.members ?? [], [group?.members]);
@@ -29,26 +32,40 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    setSplits(participants.map(p => ({userId: p.id, amount: 0})));
-    setPaidBy(participants.map(p => ({userId: p.id, amount: 0})));
+    setSplits(
+      participants.map(p => ({userId: p.id, amount: 0, edited: false})),
+    );
+    setPaidBy(
+      participants.map(p => ({userId: p.id, amount: 0, edited: false})),
+    );
   }, [participants]);
 
-  const handleAmountChange = useCallback(
+  const handleTotalAmountChange = useCallback((value: string) => {
+    const numericValue = Number(value);
+    if (isNaN(numericValue)) return;
+
+    setAmount(value);
+
+    setSplits(prev => updateAmounts(prev, numericValue));
+    setPaidBy(prev => updateAmounts(prev, numericValue));
+  }, []);
+
+  const handleParticipantAmountChange = useCallback(
     (userId: number, value: string, type: 'paid' | 'split') => {
-      const amount = Number(value);
+      const numericValue = Number(value);
+      if (isNaN(numericValue)) return;
 
-      const setters = {
-        paid: setPaidBy,
-        split: setSplits,
-      };
-
-      setters[type](prev => {
-        return prev.some(s => s.userId === userId)
-          ? prev.map(s => (s.userId === userId ? {...s, amount} : s))
-          : [...prev, {userId, amount}];
-      });
+      if (type === 'split') {
+        setSplits(prev =>
+          updateAmounts(prev, Number(amount), userId, numericValue),
+        );
+      } else {
+        setPaidBy(prev =>
+          updateAmounts(prev, Number(amount), userId, numericValue),
+        );
+      }
     },
-    [setPaidBy, setSplits],
+    [amount],
   );
 
   const handleSubmit = useCallback(async () => {
@@ -72,11 +89,24 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
 
     if (paidBy && splits) {
       const paidSum = paidBy.reduce((sum, p) => sum + p.amount, 0);
-
+      
       if (paidSum !== numericAmount) {
         appStore.showInfoModal({
           message: t('add_expense.sums_must_be equal', {
             paidSum,
+            numericAmount,
+          }),
+        });
+        
+        return;
+      }
+      
+      const splitSum = splits.reduce((sum, s) => sum + s.amount, 0);
+
+      if (splitSum !== numericAmount) {
+        appStore.showInfoModal({
+          message: t('add_expense.sums_must_be equal', {
+            splitSum,
             numericAmount,
           }),
         });
@@ -126,12 +156,12 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
         users={participants}
         amount={amount}
         description={description}
-        setAmount={setAmount}
+        setAmount={handleTotalAmountChange}
         setDescription={setDescription}
         setGroupId={setGroupId}
         splits={splits}
         paidBy={paidBy}
-        handleAmountChange={handleAmountChange}
+        handleAmountChange={handleParticipantAmountChange}
       />
     </ScreenWrapper>
   );

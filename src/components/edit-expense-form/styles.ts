@@ -40,4 +40,8 @@ export const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: 4,
   },
+
+  highlight: {
+    color: colors.yellow,
+  },
 });

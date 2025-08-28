@@ -2,14 +2,14 @@ import React, {FC, memo} from 'react';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {TSplitPaidBy} from '../../stores/expenseStore';
 import {styles} from './styles';
 import {IUser} from '../../stores/userStore';
-import {getUserAmount} from '../../utils/helpers/get-user-amount-helper';
+import { getUserAmountData} from '../../utils/helpers/get-user-amount-helper';
+import { TSplitPaidByExtended } from '../../screens/AddExpense/AddExpenseScreen';
 
 interface IProps {
-  splits: TSplitPaidBy[];
-  paidBy: TSplitPaidBy[];
+  splits: TSplitPaidByExtended[];
+  paidBy: TSplitPaidByExtended[];
   users: IUser[];
 }
 
@@ -25,9 +25,9 @@ export const ExpenseDetailsUserList: FC<IProps> = memo(
             </Text>
             <View style={styles.textContainer}>
               <Text style={styles.label}>{t('add_expense.paid')}: </Text>
-              <Text style={styles.label}>{getUserAmount(paidBy, user.id)}</Text>
+              <Text style={styles.label}>{getUserAmountData(paidBy, user.id).value}</Text>
               <Text style={styles.label}>{t('add_expense.must_pay')}:</Text>
-              <Text style={styles.label}>{getUserAmount(splits, user.id)}</Text>
+              <Text style={styles.label}>{getUserAmountData(splits, user.id).value}</Text>
             </View>
           </View>
         ))}

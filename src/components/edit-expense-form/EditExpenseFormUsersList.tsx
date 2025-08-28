@@ -2,12 +2,13 @@ import React, {FC, memo, useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {TSplitPaidBy} from '../../stores/expenseStore';
 import {styles} from './styles';
 import {IUser} from '../../stores/userStore';
-import {getUserAmount} from '../../utils/helpers/get-user-amount-helper';
+import {getUserAmountData} from '../../utils/helpers/get-user-amount-helper';
 import {CustomInput} from '../custom-input/CustomInput';
 import {ParticipantCard} from '../participant-card/ParticipantCard';
+import {TSplitPaidByExtended} from '../../screens/AddExpense/AddExpenseScreen';
+import {colors} from '../../theme/colors';
 
 interface IProps {
   handleAmountChange: (
@@ -15,8 +16,8 @@ interface IProps {
     value: string,
     type: 'paid' | 'split',
   ) => void;
-  splits: TSplitPaidBy[];
-  paidBy: TSplitPaidBy[];
+  splits: TSplitPaidByExtended[];
+  paidBy: TSplitPaidByExtended[];
   users: IUser[];
 }
 
@@ -60,43 +61,58 @@ const UserItem: FC<IUserItemProps> = memo(
       [user.id, handleAmountChange],
     );
 
-    const paidValue = useMemo(
-      () => getUserAmount(paidBy, user.id),
+    const userPaidData = useMemo(
+      () => getUserAmountData(paidBy, user.id),
       [paidBy, user.id],
     );
 
-    const splitValue = useMemo(
-      () => getUserAmount(splits, user.id),
+    const userSplitData = useMemo(
+      () => getUserAmountData(splits, user.id),
       [splits, user.id],
     );
 
     return (
       <View style={styles.splitRow}>
-        <ParticipantCard
-          item={user}
-          isSelected={false}
-        />
+        <ParticipantCard item={user} isSelected={false} />
         <View style={styles.inputsContainer}>
           <View style={styles.inputWrapper}>
-            <Text style={styles.inputLabel}>{t('add_expense.paid')}:</Text>
+            <Text
+              style={[
+                styles.inputLabel,
+                !userPaidData.edited && styles.highlight,
+              ]}>
+              {!userPaidData.edited && <Text style={styles.highlight}>! </Text>}
+              {t('add_expense.paid')}:
+            </Text>
             <CustomInput
               label={'0'}
-              value={paidValue}
+              value={userPaidData.value}
               onChangeText={handlePaidChange}
               type="outlined"
               keyboardType="numeric"
               height={52}
+              borderColor={!userPaidData.edited ? colors.yellow : undefined}
             />
           </View>
           <View style={styles.inputWrapper}>
-            <Text style={styles.inputLabel}>{t('add_expense.must_pay')}:</Text>
+            <Text
+              style={[
+                styles.inputLabel,
+                !userSplitData.edited && styles.highlight,
+              ]}>
+              {!userSplitData.edited && (
+                <Text style={styles.highlight}>! </Text>
+              )}
+              {t('add_expense.must_pay')}:
+            </Text>
             <CustomInput
               label={'0'}
-              value={splitValue}
+              value={userSplitData.value}
               onChangeText={handleSplitChange}
               type="outlined"
               keyboardType="numeric"
               height={52}
+              borderColor={!userSplitData.edited ? colors.yellow : undefined}
             />
           </View>
         </View>

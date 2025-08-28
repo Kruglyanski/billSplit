@@ -39,8 +39,10 @@ export const ProfileScreen: FC<IProps> = observer(({navigation}) => {
   }, [logOut]);
 
   const headerButtons: IButtonSettings[] = useMemo(() => {
-    return [{icon: 'chevron-left', onPress: navigation.goBack}];
-  }, [navigation, t]);
+    return [
+      {icon: 'chevron-left', onPress: navigation.goBack},
+    ] satisfies IButtonSettings[];
+  }, [navigation]);
 
   return (
     <ScreenWrapper

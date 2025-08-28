@@ -1,13 +1,13 @@
 import React, {FC, memo, useCallback, useMemo, useState} from 'react';
 import {ScrollView, Pressable} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {TSplitPaidBy} from '../../stores/expenseStore';
 import groupStore from '../../stores/groupStore';
 import {styles} from './styles';
 import {IUser} from '../../stores/userStore';
 import {EditExpenseFormUsersList} from './EditExpenseFormUsersList';
 import {CustomInput} from '../custom-input/CustomInput';
 import {ISelectModalOption, SelectModal} from '../select-modal/SelectModal';
+import {TSplitPaidByExtended} from '../../screens/AddExpense/AddExpenseScreen';
 
 interface IProps {
   handleAmountChange: (
@@ -18,8 +18,8 @@ interface IProps {
   setGroupId: (groupId: number) => void;
   setAmount: (amount: string) => void;
   setDescription: (description: string) => void;
-  splits: TSplitPaidBy[];
-  paidBy: TSplitPaidBy[];
+  splits: TSplitPaidByExtended[];
+  paidBy: TSplitPaidByExtended[];
   groupName: string;
   amount: string;
   description: string;

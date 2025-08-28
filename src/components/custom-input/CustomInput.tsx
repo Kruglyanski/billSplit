@@ -21,6 +21,7 @@ interface IProps {
   editable?: boolean;
   keyboardType?: KeyboardTypeOptions;
   secureTextEntry?: boolean;
+  borderColor?: string;
 }
 
 export const CustomInput: FC<IProps> = memo(
@@ -36,18 +37,18 @@ export const CustomInput: FC<IProps> = memo(
     editable = true,
     keyboardType,
     secureTextEntry = false,
+    borderColor,
   }) => {
-    const isOutlined = type === 'outlined';
-
     const inputStyle = useMemo<StyleProp<TextStyle | ViewStyle>>(
       () => [
         styles.inputBase,
-        isOutlined ? styles.outlined : styles.filled,
+        type === 'outlined' ? styles.outlined : styles.filled,
         {width, height},
+        borderColor && {borderColor},
         error && styles.errorBorder,
         {color: error ? colors.red : colors.gray},
       ],
-      [isOutlined, width, height, error],
+      [type, width, height, error, borderColor],
     );
 
     return (
