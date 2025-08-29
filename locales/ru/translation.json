@@ -121,5 +121,14 @@
   "profile":{
     "title": "Профиль",
     "chose_lang": "Выбрать язык:"
+  },
+  "balances":{
+    "my_position": "Моя позиция",
+    "you_are_owed_the_amount": "Вам должны",
+    "you_owe_the_amount": "Вы должны",
+    "total_balance": "Итог",
+    "balances_of_others": "Балансы других участников",
+    "who_owes_whoom": "Кто должен кому"
+
   }
 }

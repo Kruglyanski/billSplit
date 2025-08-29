@@ -121,6 +121,14 @@
   "profile":{
     "title": "Profile",
     "chose_lang": "Choose the language:"
+  },
+  "balances":{
+    "my_position": "My position",
+    "you_are_owed_the_amount": "You are owed the amount",
+    "you_owe_the_amount": "You owe the amount",
+    "total_balance": "Total balance",
+    "balances_of_others": "Balances of other participants",
+    "who_owes_whoom": "Who owes whom"
   }
 }
   

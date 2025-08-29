@@ -8,7 +8,7 @@ import {
 import {DEFAULT_GRADIENT_COLORS} from '../../constants';
 import {useTranslation} from 'react-i18next';
 import {GroupDetailsScreenNavigationProps} from '../../navigation/types';
-import {FAB, Text} from 'react-native-paper';
+import {FAB} from 'react-native-paper';
 import {observer} from 'mobx-react-lite';
 import expenseStore, {IExpense} from '../../stores/expenseStore';
 import {
@@ -20,6 +20,7 @@ import groupStore from '../../stores/groupStore';
 import {colors} from '../../theme/colors';
 import {styles} from './styles';
 import {useAnimatedTabOpacity} from '../../hooks/use-animated-tab-opacity';
+import {Balances} from '../../components/balances/Balances';
 
 interface IProps {
   navigation: GroupDetailsScreenNavigationProps['navigation'];
@@ -73,7 +74,7 @@ export const GroupDetailsScreen: FC<IProps> = observer(
             onPress={onItemPress}
             leftText={item.description}
             rightText={item.amount.toString()}
-            width={'80%'}
+            width={'100%'}
           />
         );
       },
@@ -91,7 +92,7 @@ export const GroupDetailsScreen: FC<IProps> = observer(
           onPress: navigateToGroupEdit,
           size: 28,
         },
-      ];
+      ] satisfies IButtonSettings[];
     }, [navigation, navigateToGroupEdit]);
 
     return (
@@ -102,7 +103,6 @@ export const GroupDetailsScreen: FC<IProps> = observer(
         <View style={styles.switchButtonWrapper}>
           <SplittedSwitchButton
             active={activeTab}
-            containerWidth={'80%'}
             rigthButtonText="балансы"
             leftButtonText="расходы"
             onLeftPress={onLeftPress}
@@ -124,7 +124,7 @@ export const GroupDetailsScreen: FC<IProps> = observer(
           <Animated.View
             style={[styles.tabContent, rightAnimatedStyle]}
             pointerEvents={activeTab === EActiveButton.right ? 'auto' : 'none'}>
-            <Text style={styles.balancesText}>балансы</Text>
+            <Balances groupId={groupId} />
           </Animated.View>
         </View>
         <FAB

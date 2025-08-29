@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     gap: 8,
     padding: 8,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 12,
     borderColor: colors.blue,
     width: '80%',
   },

@@ -49,6 +49,7 @@ const GroupListStackNavigator = () => {
         name="ExpenseDetails"
         component={ExpenseDetailsScreen}
       />
+      <GroupStack.Screen name="EditExpense" component={EditExpenseScreen} />
       <GroupStack.Screen name="GroupBalance" component={GroupBalanceScreen} />
     </GroupStack.Navigator>
   );

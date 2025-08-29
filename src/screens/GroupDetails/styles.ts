@@ -7,11 +7,13 @@ export const styles = StyleSheet.create({
     gap: 4,
     marginTop: 12,
     paddingBottom: 72,
+    paddingHorizontal: 16,
   },
 
   switchButtonWrapper: {
     alignItems: 'center',
     marginTop: 24,
+    paddingHorizontal: 16,
   },
 
   tabsWrapper: {
