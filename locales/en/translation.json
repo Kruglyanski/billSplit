@@ -59,10 +59,10 @@
     "fill_all_fields": "Fill in all fields",
     "sum_must_be_positive": "The amount must be a positive number.",
     "sums_must_be equal" : "The amount from payers ({{paidSum}}) must be equal to the total amount ({{numericAmount}})",
-    "description": "Description",
-    "sum": "Amount",
-    "select_group": "Select the group",
-    "group": "Group",
+    "description": "Enter expense title",
+    "sum": "Enter amount",
+    "select_group": "Select group",
+    "group": "Select event",
     "paid": "Paid",
     "must_pay": "Must pay",
     "close": "Close",
@@ -70,7 +70,11 @@
     "delete": "Delete",
     "delete_expense": "Delete expense?",
     "delete_expense_description": "Expense will be deleted irrevocably!",
-    "delete_expense_error": "An error occurred while deleting!"
+    "delete_expense_error": "An error occurred while deleting!",
+    "event_title": "Event title",
+    "expense_title": "Expense title",
+    "total_sum": "Total amount",
+    "participants": "Participants:"
   },
   "details" : {
     "details_header": "Expense details",

@@ -58,11 +58,11 @@
     "expense_not_created": "Не удалось создать расход",
     "fill_all_fields": "Заполните все поля",
     "sum_must_be_positive": "Сумма должна быть положительным числом",
-    "sums_must_be equal" : "Сумма от плательщиков ({{paidSum}}) должна равняться общей сумме ({{numericAmount}})",
-    "description": "Описание",
-    "sum": "Сумма",
+    "sums_must_be_equal" : "Сумма от плательщиков ({{paidSum}}) должна равняться общей сумме ({{numericAmount}})",
+    "description": "Введите название расхода",
+    "sum": "Введите сумму",
     "select_group": "Выберите группу",
-    "group": "Группа",
+    "group": "Выберите  событие",
     "paid": "Заплатил",
     "must_pay": "Должен",
     "close": "Закрыть",
@@ -70,7 +70,11 @@
     "delete": "Удалить",
     "delete_expense": "Удалить расход?",
     "delete_expense_description": "Расход будет безвозвратно удален!",
-    "delete_expense_error": "При ударении расхода произошла ошибка!"
+    "delete_expense_error": "При ударении расхода произошла ошибка!",
+    "event_title": "Название события",
+    "expense_title": "Название расхода",
+    "total_sum": "Общая сумма",
+    "participants": "Участники:"
   },
   "details" : {
     "details_header": "Детали расхода",

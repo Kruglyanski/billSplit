@@ -9,17 +9,19 @@ export const styles = StyleSheet.create({
     color: colors.white,
   },
 
+  scrollview: {
+    marginHorizontal: 16,
+    paddingBottom: 24,
+    gap: 8,
+  },
+
   textWhite: {
     color: colors.white,
   },
 
-  amount: {
+  sectionTitle: {
+    marginTop: 8,
     color: colors.white,
-    marginTop: 16,
-  },
-
-  event: {
-    color: colors.white,
-    marginVertical: 16,
+    textAlign: 'center',
   },
 });

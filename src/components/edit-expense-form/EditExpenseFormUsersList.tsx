@@ -9,22 +9,26 @@ import {CustomInput} from '../custom-input/CustomInput';
 import {ParticipantCard} from '../participant-card/ParticipantCard';
 import {TSplitPaidByExtended} from '../../screens/AddExpense/AddExpenseScreen';
 import {colors} from '../../theme/colors';
+import {TSplitPaidBy} from '../../stores/expenseStore';
 
 interface IProps {
-  handleAmountChange: (
+  handleAmountChange?: (
     userId: number,
     value: string,
     type: 'paid' | 'split',
   ) => void;
-  splits: TSplitPaidByExtended[];
-  paidBy: TSplitPaidByExtended[];
+  splits: TSplitPaidByExtended[] | TSplitPaidBy[];
+  paidBy: TSplitPaidByExtended[] | TSplitPaidBy[];
   users: IUser[];
 }
 
 export const EditExpenseFormUsersList: FC<IProps> = memo(
   ({users, handleAmountChange, paidBy, splits}) => {
+    const {t} = useTranslation();
+
     return (
       <>
+        <Text style={styles.listLabel}>{t('add_expense.participants')}</Text>
         {users.map(user => (
           <UserItem
             key={user.id}
@@ -49,14 +53,14 @@ const UserItem: FC<IUserItemProps> = memo(
 
     const handlePaidChange = useCallback(
       (value: string) => {
-        handleAmountChange(user.id, value, 'paid');
+        handleAmountChange?.(user.id, value, 'paid');
       },
       [user.id, handleAmountChange],
     );
 
     const handleSplitChange = useCallback(
       (value: string) => {
-        handleAmountChange(user.id, value, 'split');
+        handleAmountChange?.(user.id, value, 'split');
       },
       [user.id, handleAmountChange],
     );
@@ -92,6 +96,7 @@ const UserItem: FC<IUserItemProps> = memo(
               keyboardType="numeric"
               height={52}
               borderColor={!userPaidData.edited ? colors.yellow : undefined}
+              editable={!!handleAmountChange}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -113,6 +118,7 @@ const UserItem: FC<IUserItemProps> = memo(
               keyboardType="numeric"
               height={52}
               borderColor={!userSplitData.edited ? colors.yellow : undefined}
+              editable={!!handleAmountChange}
             />
           </View>
         </View>

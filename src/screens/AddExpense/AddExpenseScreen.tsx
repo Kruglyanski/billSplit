@@ -89,23 +89,23 @@ export const AddExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
 
     if (paidBy && splits) {
       const paidSum = paidBy.reduce((sum, p) => sum + p.amount, 0);
-      
+
       if (paidSum !== numericAmount) {
         appStore.showInfoModal({
-          message: t('add_expense.sums_must_be equal', {
+          message: t('add_expense.sums_must_be_equal', {
             paidSum,
             numericAmount,
           }),
         });
-        
+
         return;
       }
-      
+
       const splitSum = splits.reduce((sum, s) => sum + s.amount, 0);
 
       if (splitSum !== numericAmount) {
         appStore.showInfoModal({
-          message: t('add_expense.sums_must_be equal', {
+          message: t('add_expense.sums_must_be_equal', {
             splitSum,
             numericAmount,
           }),

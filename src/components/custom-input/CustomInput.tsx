@@ -46,7 +46,7 @@ export const CustomInput: FC<IProps> = memo(
         {width, height},
         borderColor && {borderColor},
         error && styles.errorBorder,
-        {color: error ? colors.red : colors.gray},
+        {color: error ? colors.red : colors.white},
       ],
       [type, width, height, error, borderColor],
     );
@@ -54,16 +54,14 @@ export const CustomInput: FC<IProps> = memo(
     return (
       <TextInput
         placeholder={label}
-        placeholderTextColor={error ? colors.red : colors.gray}
+        placeholderTextColor={error ? colors.red : colors.white}
         style={inputStyle}
-        {...{
-          value,
-          onChangeText,
-          editable,
-          onSubmitEditing,
-          keyboardType,
-          secureTextEntry,
-        }}
+        value={value}
+        onChangeText={onChangeText}
+        editable={editable}
+        onSubmitEditing={onSubmitEditing}
+        keyboardType={keyboardType}
+        secureTextEntry={secureTextEntry}
       />
     );
   },

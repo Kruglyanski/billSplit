@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   },
 
   buttonWrapper: {
-    width: 60,
+    width: 80,
     alignItems: 'center',
   },
 

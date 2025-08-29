@@ -27,7 +27,8 @@ export const ParticipantCard: FC<IProps> = memo(
     return (
       <TouchableOpacity
         style={[styles.itemContainer, isSelected && styles.itemSelected]}
-        {...{onPress}}>
+        onPress={onPress}
+        disabled={!handlePress}>
         <View style={[styles.avatar, {backgroundColor: getColorById(item.id)}]}>
           <Text style={styles.avatarText}>{getInitials(item.name)}</Text>
         </View>

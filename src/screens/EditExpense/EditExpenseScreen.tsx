@@ -11,13 +11,13 @@ import {
 import {appStore} from '../../stores/appStore';
 import {colors} from '../../theme/colors';
 import {EditExpenseForm} from '../../components/edit-expense-form/EditExpenseForm';
-
-const GRADIENT_COLORS = [colors.green, colors.white];
+import {DEFAULT_GRADIENT_COLORS} from '../../constants';
 
 interface IProps extends EditExpenseScreenNavigationProps {}
 
 export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   const {expenseId} = route.params;
+
   const {t} = useTranslation();
 
   const expense = expenseStore.expenses.get(expenseId);
@@ -40,7 +40,7 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
 
   const handleAmountChange = useCallback(
     (userId: number, value: string, type: 'paid' | 'split') => {
-      const amountValue = +value;
+      const amountValue = Number(value);
       const setters = {
         paid: setPaidBy,
         split: setSplits,
@@ -60,7 +60,7 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
       return;
     }
 
-    const numAmount = +amount;
+    const numAmount = Number(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
       appStore.showInfoModal({
         message: t('add_expense.sum_must_be_positive'),
@@ -69,6 +69,7 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
     }
 
     const paidSum = paidBy.reduce((sum, p) => sum + p.amount, 0);
+
     if (paidSum !== numAmount) {
       appStore.showInfoModal({
         message: t('add_expense.sums_must_be_equal', {
@@ -76,6 +77,20 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
           amount,
         }),
       });
+
+      return;
+    }
+
+    const splitSum = splits.reduce((sum, s) => sum + s.amount, 0);
+
+    if (splitSum !== numAmount) {
+      appStore.showInfoModal({
+        message: t('add_expense.sums_must_be_equal', {
+          splitSum,
+          numAmount,
+        }),
+      });
+
       return;
     }
 
@@ -125,10 +140,11 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
         onPress: navigation.goBack,
       },
       {icon: 'delete', onPress: handleDelete, size: 28, iconColor: colors.red},
-    ];
-  }, [navigation, handleSubmit, t]);
+      {icon: 'check', onPress: handleSubmit},
+    ] satisfies IButtonSettings[];
+  }, [navigation, handleSubmit]);
 
-  if (!expense || groupId === null) {
+  if (!expense || typeof groupId !== 'number') {
     return <></>;
   }
 
@@ -138,22 +154,21 @@ export const EditExpenseScreen: FC<IProps> = observer(({route, navigation}) => {
   return (
     <ScreenWrapper
       title={t('add_expense.edit_expense')}
-      gradientColors={GRADIENT_COLORS}
+      gradientColors={DEFAULT_GRADIENT_COLORS}
       buttons={headerButtons}>
       <EditExpenseForm
         groupName={group?.name || ''}
         users={participants}
-        {...{
-          amount,
-          splits,
-          paidBy,
-          description,
-          setDescription,
-          setAmount,
-          setGroupId,
-          handleAmountChange,
-          handleSubmit,
-        }}
+        enableGroupSelector={false}
+        handleAmountChange={handleAmountChange}
+        splits={splits}
+        paidBy={paidBy}
+        description={description}
+        amount={amount}
+        setGroupId={setGroupId}
+        setDescription={setDescription}
+        setAmount={setAmount}
+        onSaveButtonPress={handleSubmit}
       />
     </ScreenWrapper>
   );

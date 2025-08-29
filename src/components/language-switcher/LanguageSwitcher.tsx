@@ -1,10 +1,9 @@
 import React, {memo, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import i18n from '../../../i18n';
 import {useTranslation} from 'react-i18next';
 import {colors} from '../../theme/colors';
-import { styles } from './styles';
-import { changeLanguage } from '../../api/apiService';
+import {styles} from './styles';
+import {changeLanguage} from '../../api/apiService';
 
 const LANGUAGES = [
   {label: 'RU', value: 'ru'},
@@ -12,8 +11,8 @@ const LANGUAGES = [
 ];
 
 export const LanguageSwitcher = memo(() => {
+  const {t, i18n} = useTranslation();
   const [value, setValue] = useState<string>(i18n.language || 'en');
-  const {t} = useTranslation();
 
   const handleLanguageChange = async (lang: string) => {
     setValue(lang);
@@ -52,4 +51,3 @@ export const LanguageSwitcher = memo(() => {
     </View>
   );
 });
-

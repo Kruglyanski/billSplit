@@ -8,13 +8,12 @@ export const styles = StyleSheet.create({
 
   scrollview: {
     margin: 16,
-    gap: 16,
+    paddingBottom: 24,
+    gap: 8,
   },
 
   label: {
-    color: colors.violet,
-    marginBottom: 8,
-    marginTop: 16,
+    color: colors.white,
   },
 
   splitRow: {
@@ -22,8 +21,9 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
   },
 
-  userName: {
-    marginBottom: 4,
+  listLabel: {
+    marginTop: 8,
+    textAlign: 'center',
     color: colors.white,
   },
 
