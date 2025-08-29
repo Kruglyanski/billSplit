@@ -6,7 +6,6 @@ import {observer} from 'mobx-react-lite';
 import {AuthScreen} from '../screens/Auth/AuthScreen';
 import {HomeScreen} from '../screens/Home/HomeScreen';
 import {GroupListScreen} from '../screens/GroupList/GroupListScreen';
-import {GroupBalanceScreen} from '../screens/GroupBalance/GroupBalanceScreen';
 import authStore from '../stores/authStore';
 import {
   GroupStackParamList,
@@ -50,7 +49,6 @@ const GroupListStackNavigator = () => {
         component={ExpenseDetailsScreen}
       />
       <GroupStack.Screen name="EditExpense" component={EditExpenseScreen} />
-      <GroupStack.Screen name="GroupBalance" component={GroupBalanceScreen} />
     </GroupStack.Navigator>
   );
 };
